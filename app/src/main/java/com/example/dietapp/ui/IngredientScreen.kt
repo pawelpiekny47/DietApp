@@ -1,6 +1,11 @@
 package com.example.dietapp.ui
 
+import android.graphics.drawable.shapes.Shape
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
@@ -9,26 +14,40 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.dietapp.data.Ingredient
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.Shapes
 import com.example.dietapp.data.FoodCategory
+import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 @Composable
 fun IngredientScreen(ingredients: List<Ingredient>) {
-
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
+    Column(
+        verticalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier.fillMaxSize()
     ) {
-        FoodCategory.values().forEach { foodCategory ->
-            if (ingredients.any { it.foodCategory == foodCategory }) item {
-                Text(
-                    text = "${foodCategory}"
-                )
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            FoodCategory.values().forEach { foodCategory ->
+                if (ingredients.any { it.foodCategory == foodCategory }) item {
+                    Text(
+                        text = "${foodCategory}"
+                    )
+                }
+                items(ingredients.filter { it.foodCategory == foodCategory }) { ingredient ->
+                    IngredientItem(
+                        ingredient = ingredient
+                    )
+                }
             }
-            items(ingredients.filter { it.foodCategory == foodCategory }) { ingredient ->
-                IngredientItem(
-                    ingredient = ingredient
-                )
-            }
+        }
+        Button(
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            shape = CircleShape,
+            onClick = { }) {
+            Text("Add ingredient")
         }
     }
 }
