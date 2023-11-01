@@ -10,11 +10,11 @@ data class Ingredient(
     val id: Int = 0,
 
     val name: String,
-    val protein: BigDecimal,
-    val carbohydrates: BigDecimal,
-    val fats: BigDecimal,
-    val polyunsaturatedFats: BigDecimal,
-    val soil: BigDecimal,
-    val fiber: BigDecimal,
+    val protein: Double,
+    val carbohydrates: Double,
+    val fats: Double,
+    val polyunsaturatedFats: Double,
+    val soil: Double,
+    val fiber: Double,
     val foodCategory: FoodCategory
 )
