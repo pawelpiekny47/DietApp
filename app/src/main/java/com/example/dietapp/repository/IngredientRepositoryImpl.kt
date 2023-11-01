@@ -8,4 +8,7 @@ class IngredientRepositoryImpl(private val ingredientDao: IngredientDao) : Ingre
     override fun getAll(): Flow<List<Ingredient>> = ingredientDao.getAll()
 
     override suspend fun insertItem(ingredient: Ingredient) = ingredientDao.insert(ingredient)
+
+    override suspend fun delete(ingredient: Ingredient) = ingredientDao.delete(ingredient)
+
 }

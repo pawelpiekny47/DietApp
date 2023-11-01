@@ -1,6 +1,7 @@
 package com.example.dietapp.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import com.example.dietapp.data.Ingredient
@@ -13,4 +14,9 @@ interface IngredientDao {
 
     @Insert
     suspend fun insert(ingredient: Ingredient)
+
+    @Delete
+    suspend fun delete(ingredient: Ingredient)
+
+
 }

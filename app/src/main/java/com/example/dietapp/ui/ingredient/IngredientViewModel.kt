@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import java.math.BigDecimal
+import kotlin.math.roundToInt
 import kotlin.random.Random
 
 class IngredientViewModel(private val ingredientRepository: IngredientRepository) : ViewModel() {
@@ -22,20 +23,27 @@ class IngredientViewModel(private val ingredientRepository: IngredientRepository
             )
 
     suspend fun saveItem() {
-            ingredientRepository.insertItem(
-                Ingredient(
-                    Random.Default.nextInt(0,40),
-                    Random.Default.nextInt(0,40).toString(),
-                    Random.Default.nextDouble(0.0,40.0),
-                    Random.Default.nextDouble(0.0,40.0),
-                    Random.Default.nextDouble(0.0,40.0),
-                    Random.Default.nextDouble(0.0,40.0),
-                    Random.Default.nextDouble(0.0,40.0),
-                    Random.Default.nextDouble(0.0,40.0),
-                    FoodCategory.Vegetable
-    )
+        ingredientRepository.insertItem(
+            Ingredient(
+                Random.Default.nextInt(0, 40),
+                Random.Default.nextInt(0, 40).toString(),
+                Random.Default.nextDouble(0.0, 40.0).format(2),
+                Random.Default.nextDouble(0.0, 40.0).format(2),
+                Random.Default.nextDouble(0.0, 40.0).format(2),
+                Random.Default.nextDouble(0.0, 40.0).format(2),
+                Random.Default.nextDouble(0.0, 40.0).format(2),
+                Random.Default.nextDouble(0.0, 40.0).format(2),
+                FoodCategory.Vegetable
             )
+        )
     }
+
+    suspend fun deleteItem(ingredient: Ingredient) {
+        ingredientRepository.delete(ingredient)
+    }
+
+    fun Double.format(scale: Int) = "%.${scale}f".format(this).toDouble()
+
     companion object {
         private const val TIMEOUT_MILLIS = 5_000L
     }
