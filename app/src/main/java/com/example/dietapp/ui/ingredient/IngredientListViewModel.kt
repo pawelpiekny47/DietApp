@@ -9,8 +9,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import java.math.BigDecimal
-import kotlin.math.roundToInt
 import kotlin.random.Random
 
 class IngredientViewModel(private val ingredientRepository: IngredientRepository) : ViewModel() {
@@ -25,7 +23,7 @@ class IngredientViewModel(private val ingredientRepository: IngredientRepository
     suspend fun saveItem() {
         ingredientRepository.insertItem(
             Ingredient(
-                Random.Default.nextInt(0, 40),
+                Random.Default.nextInt(0, 9000000),
                 Random.Default.nextInt(0, 40).toString(),
                 Random.Default.nextDouble(0.0, 40.0).format(2),
                 Random.Default.nextDouble(0.0, 40.0).format(2),
@@ -33,7 +31,7 @@ class IngredientViewModel(private val ingredientRepository: IngredientRepository
                 Random.Default.nextDouble(0.0, 40.0).format(2),
                 Random.Default.nextDouble(0.0, 40.0).format(2),
                 Random.Default.nextDouble(0.0, 40.0).format(2),
-                FoodCategory.Vegetable
+                FoodCategory.values().get(Random.nextInt(0, 4))
             )
         )
     }
