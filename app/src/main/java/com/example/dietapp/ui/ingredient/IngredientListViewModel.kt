@@ -12,12 +12,12 @@ import kotlinx.coroutines.flow.stateIn
 import kotlin.random.Random
 
 class IngredientViewModel(private val ingredientRepository: IngredientRepository) : ViewModel() {
-    val ingredientUiState: StateFlow<IngredientUiState> =
-        ingredientRepository.getAll().map { IngredientUiState(it) }
+    val ingredientUiState: StateFlow<IngredientListUiState> =
+        ingredientRepository.getAll().map { IngredientListUiState(it) }
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-                initialValue = IngredientUiState()
+                initialValue = IngredientListUiState()
             )
 
     suspend fun saveItem() {
@@ -31,7 +31,7 @@ class IngredientViewModel(private val ingredientRepository: IngredientRepository
                 Random.Default.nextDouble(0.0, 40.0).format(2),
                 Random.Default.nextDouble(0.0, 40.0).format(2),
                 Random.Default.nextDouble(0.0, 40.0).format(2),
-                FoodCategory.values().get(Random.nextInt(0, 4))
+                FoodCategory.values()[Random.nextInt(0, 4)]
             )
         )
     }
@@ -47,4 +47,4 @@ class IngredientViewModel(private val ingredientRepository: IngredientRepository
     }
 }
 
-data class IngredientUiState(val ingredientList: List<Ingredient> = listOf())
+data class IngredientListUiState(val ingredientList: List<Ingredient> = listOf())
