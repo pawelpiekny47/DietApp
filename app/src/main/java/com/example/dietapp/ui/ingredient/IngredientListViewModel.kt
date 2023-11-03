@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlin.random.Random
 
-class IngredientViewModel(private val ingredientRepository: IngredientRepository) : ViewModel() {
+class IngredientListViewModel(private val ingredientRepository: IngredientRepository) : ViewModel() {
     val ingredientUiState: StateFlow<IngredientListUiState> =
         ingredientRepository.getAll().map { IngredientListUiState(it) }
             .stateIn(
@@ -19,22 +19,6 @@ class IngredientViewModel(private val ingredientRepository: IngredientRepository
                 started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
                 initialValue = IngredientListUiState()
             )
-
-    suspend fun saveItem() {
-        ingredientRepository.insertItem(
-            Ingredient(
-                Random.Default.nextInt(0, 9000000),
-                Random.Default.nextInt(0, 40).toString(),
-                Random.Default.nextDouble(0.0, 40.0).format(2),
-                Random.Default.nextDouble(0.0, 40.0).format(2),
-                Random.Default.nextDouble(0.0, 40.0).format(2),
-                Random.Default.nextDouble(0.0, 40.0).format(2),
-                Random.Default.nextDouble(0.0, 40.0).format(2),
-                Random.Default.nextDouble(0.0, 40.0).format(2),
-                FoodCategory.values()[Random.nextInt(0, 4)]
-            )
-        )
-    }
 
     suspend fun deleteItem(ingredient: Ingredient) {
         ingredientRepository.delete(ingredient)

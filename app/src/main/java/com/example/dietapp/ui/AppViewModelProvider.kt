@@ -6,11 +6,17 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.dietapp.DietAppApplication
+import com.example.dietapp.ui.ingredient.IngredientListViewModel
 import com.example.dietapp.ui.ingredient.IngredientViewModel
 
 object AppViewModelProvider {
     val Factory = viewModelFactory {
         // Initializer for ItemEditViewModel
+        initializer {
+            IngredientListViewModel(
+                dietAppApplication().container.ingredientRepository
+            )
+        }
         initializer {
             IngredientViewModel(
                 dietAppApplication().container.ingredientRepository

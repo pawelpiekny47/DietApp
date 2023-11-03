@@ -22,12 +22,13 @@ import kotlinx.coroutines.launch
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun IngredientListScreen(
-    viewModel: IngredientViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    modifier: Modifier,
+    viewModel: IngredientListViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val ingredientUiState by viewModel.ingredientUiState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
     LazyColumn(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         FoodCategory.values().forEach { foodCategory ->
