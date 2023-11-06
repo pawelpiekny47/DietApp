@@ -8,6 +8,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.dietapp.DietAppApplication
 import com.example.dietapp.ui.ingredient.IngredientListViewModel
 import com.example.dietapp.ui.ingredient.IngredientViewModel
+import com.example.dietapp.ui.mainscreen.MainScreenViewModel
 
 object AppViewModelProvider {
     val Factory = viewModelFactory {
@@ -21,6 +22,9 @@ object AppViewModelProvider {
             IngredientViewModel(
                 dietAppApplication().container.ingredientRepository
             )
+        }
+        initializer {
+            MainScreenViewModel()
         }
     }
 }

@@ -10,5 +10,6 @@ class IngredientRepositoryImpl(private val ingredientDao: IngredientDao) : Ingre
     override suspend fun insertItem(ingredient: Ingredient) = ingredientDao.insert(ingredient)
 
     override suspend fun delete(ingredient: Ingredient) = ingredientDao.delete(ingredient)
+    override suspend fun updateItem(ingredient: Ingredient) = ingredientDao.update(ingredient)
 
 }

@@ -7,5 +7,6 @@ interface IngredientRepository {
     fun getAll(): Flow<List<Ingredient>>
     suspend fun insertItem(ingredient: Ingredient)
     suspend fun delete(ingredient: Ingredient)
+    suspend fun updateItem(ingredient: Ingredient)
 
 }

@@ -2,7 +2,6 @@ package com.example.dietapp.ui.ingredient
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
@@ -17,11 +16,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import com.example.dietapp.data.FoodCategory
 import com.example.dietapp.ui.AppViewModelProvider
-import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun IngredientListScreen(
+    onListItemClick: (Ingredient) -> Unit,
     modifier: Modifier,
     viewModel: IngredientListViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
@@ -40,11 +39,8 @@ fun IngredientListScreen(
             items(ingredientUiState.ingredientList.filter { it.foodCategory == foodCategory }) { ingredient ->
                 IngredientItem(
                     ingredient = ingredient,
-                    onItemClick = {
-                        coroutineScope.launch {
-                            viewModel.deleteItem(ingredient)
-                        }
-                    }
+                    onItemClick =  onListItemClick
+
                 )
             }
         }
@@ -52,9 +48,9 @@ fun IngredientListScreen(
 }
 
 @Composable
-fun IngredientItem(ingredient: Ingredient, onItemClick: () -> Unit) {
+fun IngredientItem(ingredient: Ingredient, onItemClick: (Ingredient) -> Unit) {
     Card(modifier = Modifier
-        .clickable { onItemClick() }) {
+        .clickable { onItemClick(ingredient) }) {
         Text(
             text = "${ingredient.name}     b :${ingredient.protein} / w: ${ingredient.carbohydrates} / t: ${ingredient.fats}"
         )

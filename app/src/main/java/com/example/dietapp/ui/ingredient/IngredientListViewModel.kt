@@ -2,14 +2,12 @@ package com.example.dietapp.ui.ingredient
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.dietapp.data.FoodCategory
 import com.example.dietapp.data.Ingredient
 import com.example.dietapp.repository.IngredientRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlin.random.Random
 
 class IngredientListViewModel(private val ingredientRepository: IngredientRepository) : ViewModel() {
     val ingredientUiState: StateFlow<IngredientListUiState> =
@@ -23,8 +21,6 @@ class IngredientListViewModel(private val ingredientRepository: IngredientReposi
     suspend fun deleteItem(ingredient: Ingredient) {
         ingredientRepository.delete(ingredient)
     }
-
-    fun Double.format(scale: Int) = "%.${scale}f".format(this).toDouble()
 
     companion object {
         private const val TIMEOUT_MILLIS = 5_000L

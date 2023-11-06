@@ -1,4 +1,4 @@
-package com.example.dietapp
+package com.example.dietapp.ui.mainscreen
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.padding
@@ -18,11 +18,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.dietapp.ui.AppViewModelProvider
 import com.example.dietapp.ui.ingredient.IngredientListScreen
 import com.example.dietapp.ui.ingredient.IngredientScreen
 
@@ -61,11 +63,11 @@ fun DietAppTopBar(
 @Composable
 fun FloatButton(
     visibleActionButton: Boolean,
-    addButtonRoute: () -> Unit,
+    onClick: () -> Unit,
 ) {
     if (visibleActionButton) {
         FloatingActionButton(
-            onClick = addButtonRoute,
+            onClick = onClick,
             shape = MaterialTheme.shapes.medium,
             modifier = Modifier.padding(Dp(20F))
         ) {
@@ -82,9 +84,13 @@ fun FloatButton(
 @Composable
 fun DietAppScreen(
     navController: NavHostController = rememberNavController(),
-) {
-    var visibleFloatButton = true
-    var floatButtonRoute = { navController.navigate(DietAppScreen.NewIngredientScreen.name) }
+    viewModel: MainScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    ) {
+
+    val floatButtonOnClick = {
+        viewModel.ingredient = null
+        navController.navigate(DietAppScreen.NewIngredientScreen.name)
+    }
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = DietAppScreen.valueOf(
         backStackEntry?.destination?.route ?: DietAppScreen.IngredientListScreen.name
@@ -99,7 +105,7 @@ fun DietAppScreen(
             )
         },
         floatingActionButton = {
-            FloatButton(visibleFloatButton, floatButtonRoute)
+            FloatButton(viewModel.visibleFloatButton, floatButtonOnClick)
         },
     ) { innerPadding ->
         NavHost(
@@ -107,17 +113,23 @@ fun DietAppScreen(
             startDestination = DietAppScreen.IngredientListScreen.name
         ) {
             composable(route = DietAppScreen.IngredientListScreen.name) {
-                IngredientListScreen(modifier = Modifier.padding(innerPadding))
-                floatButtonRoute =
-                    { navController.navigate(DietAppScreen.NewIngredientScreen.name) }
-                visibleFloatButton = true
+                IngredientListScreen(
+                    onListItemClick = {
+                        viewModel.ingredient = it
+                        navController.navigate(DietAppScreen.NewIngredientScreen.name)
+                    },
+                    modifier = Modifier.padding(innerPadding)
+                )
+                viewModel.visibleFloatButton = true
+
             }
             composable(route = DietAppScreen.NewIngredientScreen.name) {
+                viewModel.visibleFloatButton = false
                 IngredientScreen(
+                    ingredient = viewModel.ingredient,
                     visibleCancelButton = true,
                     modifier = Modifier.padding(innerPadding)
                 )
-                visibleFloatButton = false
             }
         }
     }
