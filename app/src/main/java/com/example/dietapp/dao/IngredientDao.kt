@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface IngredientDao {
-    @Query("SELECT * FROM ingredients")
+    @Query("SELECT * FROM ingredient")
     fun getAll(): Flow<List<Ingredient>>
 
     @Insert

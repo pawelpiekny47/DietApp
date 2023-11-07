@@ -7,9 +7,10 @@ import androidx.room.RoomDatabase
 import com.example.dietapp.dao.DishDao
 import com.example.dietapp.dao.IngredientDao
 import com.example.dietapp.data.Dish
+import com.example.dietapp.data.DishIngredientCrossRef
 import com.example.dietapp.data.Ingredient
 
-@Database(entities = [Ingredient::class, Dish::class], version = 1, exportSchema = false)
+@Database(entities = [Ingredient::class, Dish::class, DishIngredientCrossRef::class], version = 1, exportSchema = true)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun ingredientDao(): IngredientDao
     abstract fun dishDao(): DishDao
@@ -26,6 +27,7 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "DietApp_database"
                 )
+                    .createFromAsset("DietApp_database.db")
                     .build()
                     .also { Instance = it }
             }

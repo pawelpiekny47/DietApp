@@ -4,10 +4,10 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.math.BigDecimal
 
-@Entity(tableName = "ingredients")
+@Entity(tableName = "ingredient")
 data class Ingredient(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    val ingredientId: Int = 0,
 
     val name: String,
     val protein: Double,

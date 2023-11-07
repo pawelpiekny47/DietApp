@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.Junction
 import androidx.room.Relation
 
-@Entity(primaryKeys = ["dishId", "ingredientId"])
+@Entity(primaryKeys = ["dishId", "ingredientId"], tableName = "dish_ingredient_cross_ref")
 data class DishIngredientCrossRef (
     val dishId: Int,
     val ingredientId: Int,

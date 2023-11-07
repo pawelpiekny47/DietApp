@@ -69,7 +69,7 @@ data class IngredientDetails(
 
 fun IngredientDetails.toIngredient(): Ingredient {
     return Ingredient(
-        id = id,
+        ingredientId = id,
         name,
         protein.toDoubleOrNull() ?: 0.0,
         carbohydrates.toDoubleOrNull() ?: 0.0,
@@ -83,7 +83,7 @@ fun IngredientDetails.toIngredient(): Ingredient {
 
 fun Ingredient.toIngredientDetails(): IngredientDetails {
     return IngredientDetails(
-        this.id,
+        this.ingredientId,
         this.name,
         this.protein.toString(),
         this.carbohydrates.toString(),

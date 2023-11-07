@@ -5,6 +5,7 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.dietapp.DietAppApplication
+import com.example.dietapp.ui.dish.viewmodel.DishViewModel
 import com.example.dietapp.ui.ingredient.viewmodel.IngredientViewModel
 import com.example.dietapp.ui.mainscreen.viewmodel.MainScreenViewModel
 
@@ -14,6 +15,11 @@ object AppViewModelProvider {
         initializer {
             IngredientViewModel(
                 dietAppApplication().container.ingredientRepository
+            )
+        }
+        initializer {
+            DishViewModel(
+                dietAppApplication().container.dishRepository
             )
         }
         initializer {
