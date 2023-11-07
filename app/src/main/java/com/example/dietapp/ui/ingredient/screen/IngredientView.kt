@@ -38,12 +38,12 @@ fun IngredientView(
         modifier = modifier
     ) {
         IngredientForm(
-            viewModel.ingredientUiState.ingredientDetails,
-            viewModel::updateUiState
+            ingredientDetailsState = viewModel.ingredientUiState.ingredientDetails,
+            onValueChange = viewModel::updateUiState
         )
         FoodCategoryDropdownMenu(
-            viewModel.ingredientUiState.ingredientDetails,
-            viewModel::updateUiState
+            ingredientDetailsState = viewModel.ingredientUiState.ingredientDetails,
+            onValueChange = viewModel::updateUiState
         )
         Row()
         {
