@@ -1,14 +1,15 @@
-package com.example.dietapp.ui.mainscreen
+package com.example.dietapp.ui.mainscreen.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.example.dietapp.ui.ingredient.screen.IngredientScreenList
 
 class MainScreenViewModel : ViewModel() {
     var visibleFloatButton by mutableStateOf(true)
     var canNavigateBack by mutableStateOf(false)
-    var topBarName by mutableStateOf(DietAppScreen.IngredientListScreen)
+    var topBarName by mutableStateOf(com.example.dietapp.ui.ingredient.screen.IngredientScreenList.IngredientListScreen)
     var navigateUp by mutableStateOf({ })
     var floatButtonOnClick by mutableStateOf({ })
 
@@ -20,7 +21,7 @@ class MainScreenViewModel : ViewModel() {
         this.canNavigateBack = canNavigateBack
     }
 
-    fun updateTopBarName(topBarName: DietAppScreen) {
+    fun updateTopBarName(topBarName: IngredientScreenList) {
         this.topBarName = topBarName
     }
 

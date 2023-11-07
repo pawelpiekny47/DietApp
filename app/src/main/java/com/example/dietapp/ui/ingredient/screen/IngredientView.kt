@@ -26,7 +26,7 @@ import java.util.Currency
 import java.util.Locale
 
 @Composable
-fun IngredientScreen(
+fun IngredientView(
     modifier: Modifier,
     viewModel: IngredientViewModel,
     saveButton: () -> Unit,
@@ -41,7 +41,10 @@ fun IngredientScreen(
             viewModel.ingredientUiState.ingredientDetails,
             viewModel::updateUiState
         )
-
+        FoodCategoryDropdownMenu(
+            viewModel.ingredientUiState.ingredientDetails,
+            viewModel::updateUiState
+        )
         Row()
         {
             Button(
@@ -51,7 +54,6 @@ fun IngredientScreen(
                 Text(text = "Save")
             }
             if (deleteButtonVisible) {
-
                 Button(
                     onClick = deleteButtonOnClick,
                     shape = MaterialTheme.shapes.small,
@@ -128,14 +130,13 @@ fun IngredientForm(
         enabled = true,
         singleLine = true
     )
-    FoodCategoryDropdownMenu(onValueChange, ingredientDetailsState)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FoodCategoryDropdownMenu(
-    onValueChange: (IngredientDetails) -> Unit,
     ingredientDetailsState: IngredientDetails,
+    onValueChange: (IngredientDetails) -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
 

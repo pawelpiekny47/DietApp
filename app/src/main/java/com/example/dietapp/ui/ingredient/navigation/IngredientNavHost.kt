@@ -10,17 +10,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.dietapp.ui.AppViewModelProvider
+import com.example.dietapp.ui.ingredient.screen.IngredientScreenList
 import com.example.dietapp.ui.ingredient.screen.IngredientListScreen
-import com.example.dietapp.ui.ingredient.screen.IngredientScreen
+import com.example.dietapp.ui.ingredient.screen.IngredientView
 import com.example.dietapp.ui.ingredient.viewmodel.IngredientViewModel
-import com.example.dietapp.ui.mainscreen.DietAppScreen
 import kotlinx.coroutines.launch
 
 @Composable
 fun IngredientNavHost(
     innerPadding: PaddingValues,
     visibleFloatButton: (Boolean) -> Unit,
-    updateTopBarName: (DietAppScreen) -> Unit,
+    updateTopBarName: (IngredientScreenList) -> Unit,
     updateCanNavigateBack: (Boolean) -> Unit,
     updateNavigateUp: (() -> Unit) -> Unit,
     updateFloatButtonOnClick: (() -> Unit) -> Unit,
@@ -31,35 +31,35 @@ fun IngredientNavHost(
 
     NavHost(
         navController = navController,
-        startDestination = DietAppScreen.IngredientListScreen.name
+        startDestination = IngredientScreenList.IngredientListScreen.name
     ) {
-        composable(route = DietAppScreen.IngredientListScreen.name) {
+        composable(route = IngredientScreenList.IngredientListScreen.name) {
             visibleFloatButton(true)
-            updateTopBarName(DietAppScreen.IngredientListScreen)
+            updateTopBarName(IngredientScreenList.IngredientListScreen)
             updateCanNavigateBack(false)
             updateNavigateUp { navController.navigateUp() }
             updateFloatButtonOnClick {
                 viewModel.resetUiState()
                 viewModel.deleteButtonVisible = false
-                navController.navigate(DietAppScreen.NewIngredientScreen.name)
+                navController.navigate(IngredientScreenList.NewIngredientScreen.name)
             }
             IngredientListScreen(
                 onListItemClick = { ingredientDetails ->
                     viewModel.updateUiState(ingredientDetails)
                     viewModel.deleteButtonVisible = true
-                    navController.navigate(DietAppScreen.NewIngredientScreen.name)
+                    navController.navigate(IngredientScreenList.NewIngredientScreen.name)
                 },
                 modifier = androidx.compose.ui.Modifier.padding(innerPadding),
                 viewModel
             )
         }
-        composable(route = DietAppScreen.NewIngredientScreen.name) {
+        composable(route = IngredientScreenList.NewIngredientScreen.name) {
             visibleFloatButton(false)
-            updateTopBarName(DietAppScreen.NewIngredientScreen)
+            updateTopBarName(IngredientScreenList.NewIngredientScreen)
             updateCanNavigateBack(true)
             updateNavigateUp { navController.navigateUp() }
             updateFloatButtonOnClick { }
-            IngredientScreen(
+            IngredientView(
                 modifier = androidx.compose.ui.Modifier.padding(innerPadding),
                 viewModel,
                 saveButton = {

@@ -97,6 +97,4 @@ fun Ingredient.toIngredientDetails(): IngredientDetails {
         this.fiber.toString(),
         this.foodCategory
     )
-
-
 }
