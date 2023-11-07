@@ -1,13 +1,16 @@
 package com.example.dietapp.ui.mainscreen.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.dietapp.ui.AppViewModelProvider
+import com.example.dietapp.ui.dish.navigation.DishNavHost
 import com.example.dietapp.ui.ingredient.navigation.IngredientNavHost
 import com.example.dietapp.ui.mainscreen.viewmodel.MainScreenViewModel
 
@@ -25,18 +28,21 @@ fun MainHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = MenuCategories.Ingredient.name
+        startDestination = MenuCategories.Ingredient.name,
+        modifier = Modifier.padding(innerPadding)
     )
     {
         composable(route = MenuCategories.Ingredient.name) {
             IngredientNavHost(
-                innerPadding,
                 viewModel::updateVisibleFloatButton,
                 viewModel::updateTopBarName,
                 viewModel::updateCanNavigateBack,
                 viewModel::updateNavigateUp,
                 viewModel::updateFloatButtonOnClick
             )
+        }
+        composable(route = MenuCategories.Dish.name) {
+            DishNavHost()
         }
     }
 }

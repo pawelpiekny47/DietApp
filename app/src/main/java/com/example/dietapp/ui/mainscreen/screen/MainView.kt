@@ -31,7 +31,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.dietapp.ui.AppViewModelProvider
-import com.example.dietapp.ui.ingredient.screen.IngredientScreenList
 import com.example.dietapp.ui.mainscreen.navigation.MainHost
 import com.example.dietapp.ui.mainscreen.navigation.MenuCategories
 import com.example.dietapp.ui.mainscreen.viewmodel.MainScreenViewModel

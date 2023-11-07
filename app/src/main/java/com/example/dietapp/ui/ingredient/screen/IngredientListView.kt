@@ -21,12 +21,10 @@ import com.example.dietapp.ui.ingredient.viewmodel.toIngredientDetails
 @Composable
 fun IngredientListScreen(
     onListItemClick: (IngredientDetails) -> Unit,
-    modifier: Modifier,
     viewModel: IngredientViewModel
 ) {
     val ingredientUiState by viewModel.ingredientListUiState.collectAsState()
     LazyColumn(
-        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         FoodCategory.values().forEach { foodCategory ->

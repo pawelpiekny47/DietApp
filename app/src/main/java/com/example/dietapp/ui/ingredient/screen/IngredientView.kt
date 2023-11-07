@@ -27,7 +27,6 @@ import java.util.Locale
 
 @Composable
 fun IngredientView(
-    modifier: Modifier,
     viewModel: IngredientViewModel,
     saveButton: () -> Unit,
     deleteButtonVisible: Boolean,
@@ -35,7 +34,6 @@ fun IngredientView(
 ) {
 
     Column(
-        modifier = modifier
     ) {
         IngredientForm(
             ingredientDetailsState = viewModel.ingredientUiState.ingredientDetails,

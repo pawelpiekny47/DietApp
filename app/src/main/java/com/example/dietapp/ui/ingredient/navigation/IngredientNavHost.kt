@@ -18,7 +18,6 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun IngredientNavHost(
-    innerPadding: PaddingValues,
     visibleFloatButton: (Boolean) -> Unit,
     updateTopBarName: (IngredientScreenList) -> Unit,
     updateCanNavigateBack: (Boolean) -> Unit,
@@ -49,7 +48,6 @@ fun IngredientNavHost(
                     viewModel.deleteButtonVisible = true
                     navController.navigate(IngredientScreenList.NewIngredientScreen.name)
                 },
-                modifier = androidx.compose.ui.Modifier.padding(innerPadding),
                 viewModel
             )
         }
@@ -60,7 +58,6 @@ fun IngredientNavHost(
             updateNavigateUp { navController.navigateUp() }
             updateFloatButtonOnClick { }
             IngredientView(
-                modifier = androidx.compose.ui.Modifier.padding(innerPadding),
                 viewModel,
                 saveButton = {
                     coroutineScope.launch { viewModel.saveItem() }
