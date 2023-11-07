@@ -4,17 +4,24 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
+import com.example.dietapp.data.FoodCategory
 import com.example.dietapp.ui.ingredient.viewmodel.IngredientDetails
 import com.example.dietapp.ui.ingredient.viewmodel.IngredientViewModel
-import kotlinx.coroutines.launch
 import java.util.Currency
 import java.util.Locale
 
@@ -63,7 +70,6 @@ fun IngredientForm(
     ingredientDetailsState: IngredientDetails,
     onValueChange: (IngredientDetails) -> Unit,
 ) {
-
     OutlinedTextField(
         value = ingredientDetailsState.name,
         onValueChange = { onValueChange(ingredientDetailsState.copy(name = it)) },
@@ -122,4 +128,52 @@ fun IngredientForm(
         enabled = true,
         singleLine = true
     )
+    FoodCategoryDropdownMenu(onValueChange, ingredientDetailsState)
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun FoodCategoryDropdownMenu(
+    onValueChange: (IngredientDetails) -> Unit,
+    ingredientDetailsState: IngredientDetails,
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = { expanded = !expanded },
+    ) {
+        TextField(
+            readOnly = true,
+            modifier = Modifier.menuAnchor(),
+            value = ingredientDetailsState.foodCategory.name,
+            onValueChange = { },
+            label = { Text("Food Category") },
+            trailingIcon = {
+                ExposedDropdownMenuDefaults.TrailingIcon(
+                    expanded = expanded
+                )
+            },
+            colors = ExposedDropdownMenuDefaults.textFieldColors()
+        )
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        )
+        {
+            FoodCategory.values().toList().forEach { label ->
+                DropdownMenuItem(
+                    text = { Text(text = label.name) },
+                    onClick = {
+                        expanded = false
+                        onValueChange(
+                            ingredientDetailsState.copy(
+                                foodCategory = FoodCategory.valueOf(label.name)
+                            )
+                        )
+                    }
+                )
+            }
+        }
+    }
 }
