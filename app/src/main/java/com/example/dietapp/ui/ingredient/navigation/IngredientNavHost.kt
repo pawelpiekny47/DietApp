@@ -40,11 +40,13 @@ fun IngredientNavHost(
             updateNavigateUp { navController.navigateUp() }
             updateFloatButtonOnClick {
                 viewModel.resetUiState()
+                viewModel.deleteButtonVisible = false
                 navController.navigate(DietAppScreen.NewIngredientScreen.name)
             }
             IngredientListScreen(
                 onListItemClick = { ingredientDetails ->
                     viewModel.updateUiState(ingredientDetails)
+                    viewModel.deleteButtonVisible = true
                     navController.navigate(DietAppScreen.NewIngredientScreen.name)
                 },
                 modifier = androidx.compose.ui.Modifier.padding(innerPadding),
@@ -62,6 +64,11 @@ fun IngredientNavHost(
                 viewModel,
                 saveButton = {
                     coroutineScope.launch { viewModel.saveItem() }
+                    navController.navigateUp()
+                },
+                deleteButtonVisible = viewModel.deleteButtonVisible,
+                deleteButtonOnClick = {
+                    coroutineScope.launch { viewModel.deleteItem() }
                     navController.navigateUp()
                 }
             )

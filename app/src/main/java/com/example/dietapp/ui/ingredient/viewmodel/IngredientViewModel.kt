@@ -2,6 +2,7 @@ package com.example.dietapp.ui.ingredient.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
 class IngredientViewModel(private val ingredientRepository: IngredientRepository) : ViewModel() {
+    var deleteButtonVisible by mutableStateOf(true)
     var ingredientUiState by mutableStateOf(IngredientUiState())
         private set
 
@@ -41,8 +43,8 @@ class IngredientViewModel(private val ingredientRepository: IngredientRepository
 
     }
 
-    suspend fun deleteItem(ingredient: Ingredient) {
-        ingredientRepository.delete(ingredient)
+    suspend fun deleteItem() {
+        ingredientRepository.delete(ingredientUiState.ingredientDetails.toIngredient())
     }
 
     companion object {

@@ -22,8 +22,11 @@ import java.util.Locale
 fun IngredientScreen(
     modifier: Modifier,
     viewModel: IngredientViewModel,
-    saveButton: () -> Unit
+    saveButton: () -> Unit,
+    deleteButtonVisible: Boolean,
+    deleteButtonOnClick: () -> Unit
 ) {
+
     Column(
         modifier = modifier
     ) {
@@ -40,6 +43,16 @@ fun IngredientScreen(
             ) {
                 Text(text = "Save")
             }
+            if (deleteButtonVisible) {
+
+                Button(
+                    onClick = deleteButtonOnClick,
+                    shape = MaterialTheme.shapes.small,
+                ) {
+                    Text(text = "Delete")
+                }
+            }
+
         }
     }
 }
@@ -50,7 +63,6 @@ fun IngredientForm(
     ingredientDetailsState: IngredientDetails,
     onValueChange: (IngredientDetails) -> Unit,
 ) {
-
 
     OutlinedTextField(
         value = ingredientDetailsState.name,
