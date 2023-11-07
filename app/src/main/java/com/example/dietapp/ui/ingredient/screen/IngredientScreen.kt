@@ -1,4 +1,4 @@
-package com.example.dietapp.ui.ingredient
+package com.example.dietapp.ui.ingredient.screen
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,30 +12,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.dietapp.data.Ingredient
-import com.example.dietapp.ui.AppViewModelProvider
+import com.example.dietapp.ui.ingredient.viewmodel.IngredientDetails
+import com.example.dietapp.ui.ingredient.viewmodel.IngredientViewModel
 import kotlinx.coroutines.launch
 import java.util.Currency
 import java.util.Locale
 
 @Composable
 fun IngredientScreen(
-    ingredient: Ingredient?,
     visibleCancelButton: Boolean,
     modifier: Modifier,
-    viewModel: IngredientViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    viewModel: IngredientViewModel,
 ) {
-    if (ingredient != null) {
-        viewModel.updateUiState(ingredient.toIngredientDetails())
-    }
-    val ingredientUiState = viewModel.ingredientUiState
     val coroutineScope = rememberCoroutineScope()
     Column(
         modifier = modifier
     ) {
         IngredientForm(
-            ingredientUiState.ingredientDetails,
+            viewModel.ingredientUiState.ingredientDetails,
             viewModel::updateUiState
         )
 
