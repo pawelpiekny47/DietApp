@@ -22,8 +22,8 @@ import java.util.Locale
 fun IngredientScreen(
     modifier: Modifier,
     viewModel: IngredientViewModel,
+    saveButton: () -> Unit
 ) {
-    val coroutineScope = rememberCoroutineScope()
     Column(
         modifier = modifier
     ) {
@@ -35,7 +35,7 @@ fun IngredientScreen(
         Row()
         {
             Button(
-                onClick = { coroutineScope.launch { viewModel.saveItem() } },
+                onClick = saveButton,
                 shape = MaterialTheme.shapes.small,
             ) {
                 Text(text = "Save")

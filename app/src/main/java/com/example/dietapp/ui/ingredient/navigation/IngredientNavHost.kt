@@ -3,6 +3,7 @@ package com.example.dietapp.ui.ingredient.navigation
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -13,6 +14,7 @@ import com.example.dietapp.ui.ingredient.screen.IngredientListScreen
 import com.example.dietapp.ui.ingredient.screen.IngredientScreen
 import com.example.dietapp.ui.ingredient.viewmodel.IngredientViewModel
 import com.example.dietapp.ui.mainscreen.DietAppScreen
+import kotlinx.coroutines.launch
 
 @Composable
 fun IngredientNavHost(
@@ -25,6 +27,8 @@ fun IngredientNavHost(
     viewModel: IngredientViewModel = viewModel(factory = AppViewModelProvider.Factory),
     navController: NavHostController = rememberNavController(),
 ) {
+    val coroutineScope = rememberCoroutineScope()
+
     NavHost(
         navController = navController,
         startDestination = DietAppScreen.IngredientListScreen.name
@@ -55,7 +59,11 @@ fun IngredientNavHost(
             updateFloatButtonOnClick { }
             IngredientScreen(
                 modifier = androidx.compose.ui.Modifier.padding(innerPadding),
-                viewModel
+                viewModel,
+                saveButton = {
+                    coroutineScope.launch { viewModel.saveItem() }
+                    navController.navigateUp()
+                }
             )
         }
     }
