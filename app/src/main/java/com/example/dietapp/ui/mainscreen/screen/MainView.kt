@@ -35,6 +35,7 @@ import com.example.dietapp.ui.ingredient.screen.IngredientScreenList
 import com.example.dietapp.ui.mainscreen.navigation.MainHost
 import com.example.dietapp.ui.mainscreen.navigation.MenuCategories
 import com.example.dietapp.ui.mainscreen.viewmodel.MainScreenViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -43,9 +44,9 @@ import kotlinx.coroutines.launch
 fun MainView(
     viewModel: MainScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
     navController: NavHostController = rememberNavController(),
-    drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
+    scope: CoroutineScope = rememberCoroutineScope()
 ) {
-    val scope = rememberCoroutineScope()
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
@@ -82,18 +83,12 @@ fun MainView(
         Scaffold(
             topBar = {
                 DietAppTopBar(
-                    menuButtonAction = {
-                        scope.launch {
-                            drawerState.open()
-                        }
-                    },
-                    currentScreen = viewModel.topBarName,
-                    canNavigateBack = viewModel.canNavigateBack,
-                    navigateUp = viewModel.navigateUp
+                    menuButtonAction = { scope.launch { drawerState.open() } },
+                    viewModel = viewModel
                 )
             },
             floatingActionButton = {
-                FloatButton(viewModel.visibleFloatButton, viewModel.floatButtonOnClick)
+                FloatButton(viewModel)
             },
         ) { innerPadding ->
             MainHost(innerPadding, navController)
@@ -105,20 +100,18 @@ fun MainView(
 @Composable
 fun DietAppTopBar(
     menuButtonAction: () -> Unit,
-    currentScreen: IngredientScreenList,
-    canNavigateBack: Boolean,
-    navigateUp: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: MainScreenViewModel
 ) {
     TopAppBar(
-        title = { Text(currentScreen.title) },
+        title = { Text(viewModel.topBarName.title) },
         colors = TopAppBarDefaults.mediumTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer
         ),
         modifier = modifier,
         navigationIcon = {
-            if (canNavigateBack) {
-                IconButton(onClick = navigateUp) {
+            if (viewModel.canNavigateBack) {
+                IconButton(onClick = viewModel.navigateUp) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
                         contentDescription = "Back"
@@ -139,12 +132,11 @@ fun DietAppTopBar(
 
 @Composable
 fun FloatButton(
-    visibleActionButton: Boolean,
-    onClick: () -> Unit,
+    viewModel: MainScreenViewModel
 ) {
-    if (visibleActionButton) {
+    if (viewModel.visibleFloatButton) {
         FloatingActionButton(
-            onClick = onClick,
+            onClick = viewModel.floatButtonOnClick,
             shape = MaterialTheme.shapes.medium,
             modifier = Modifier.padding(Dp(20F))
         ) {
