@@ -54,7 +54,6 @@ fun IngredientNavHost(
             updateNavigateUp { navController.navigateUp() }
             updateFloatButtonOnClick { }
             IngredientScreen(
-                visibleCancelButton = true,
                 modifier = androidx.compose.ui.Modifier.padding(innerPadding),
                 viewModel
             )

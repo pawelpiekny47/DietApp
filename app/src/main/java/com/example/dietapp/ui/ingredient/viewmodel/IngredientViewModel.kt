@@ -35,14 +35,10 @@ class IngredientViewModel(private val ingredientRepository: IngredientRepository
     }
 
     suspend fun saveItem() {
-        if (ingredientUiState.ingredientDetails.id != 0 || ingredientUiState.ingredientDetails.id != 0)
+        if (ingredientUiState.ingredientDetails.id == 0)
             ingredientRepository.insertItem(ingredientUiState.ingredientDetails.toIngredient())
         else ingredientRepository.updateItem(ingredientUiState.ingredientDetails.toIngredient())
 
-    }
-
-    suspend fun updateItem() {
-        ingredientRepository.insertItem(ingredientUiState.ingredientDetails.toIngredient())
     }
 
     suspend fun deleteItem(ingredient: Ingredient) {

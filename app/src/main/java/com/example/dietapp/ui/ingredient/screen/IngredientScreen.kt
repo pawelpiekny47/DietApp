@@ -20,7 +20,6 @@ import java.util.Locale
 
 @Composable
 fun IngredientScreen(
-    visibleCancelButton: Boolean,
     modifier: Modifier,
     viewModel: IngredientViewModel,
 ) {
@@ -35,14 +34,6 @@ fun IngredientScreen(
 
         Row()
         {
-            if (visibleCancelButton) {
-                Button(
-                    onClick = { coroutineScope.launch { viewModel.saveItem() } },
-                    shape = MaterialTheme.shapes.small,
-                ) {
-                    Text(text = "Cancel")
-                }
-            }
             Button(
                 onClick = { coroutineScope.launch { viewModel.saveItem() } },
                 shape = MaterialTheme.shapes.small,
