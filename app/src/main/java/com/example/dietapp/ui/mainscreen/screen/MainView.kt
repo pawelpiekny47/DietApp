@@ -103,14 +103,14 @@ fun DietAppTopBar(
     viewModel: MainScreenViewModel
 ) {
     TopAppBar(
-        title = { Text(viewModel.topBarName.title) },
+        title = { Text(viewModel.topBarName) },
         colors = TopAppBarDefaults.mediumTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer
         ),
         modifier = modifier,
         navigationIcon = {
-            if (viewModel.canNavigateBack) {
-                IconButton(onClick = viewModel.navigateUp) {
+            if (viewModel.isNavigateBackVisible) {
+                IconButton(onClick = viewModel.navigateBackAction) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
                         contentDescription = "Back"
@@ -133,9 +133,9 @@ fun DietAppTopBar(
 fun FloatButton(
     viewModel: MainScreenViewModel
 ) {
-    if (viewModel.visibleFloatButton) {
+    if (viewModel.isFloatButtonVisible) {
         FloatingActionButton(
-            onClick = viewModel.floatButtonOnClick,
+            onClick = viewModel.floatButtonAction,
             shape = MaterialTheme.shapes.medium,
             modifier = Modifier.padding(Dp(20F))
         ) {

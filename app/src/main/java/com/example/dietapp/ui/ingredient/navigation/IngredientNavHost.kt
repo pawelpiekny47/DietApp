@@ -18,11 +18,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun IngredientNavHost(
-    visibleFloatButton: (Boolean) -> Unit,
-    updateTopBarName: (IngredientScreenList) -> Unit,
-    updateCanNavigateBack: (Boolean) -> Unit,
-    updateNavigateUp: (() -> Unit) -> Unit,
-    updateFloatButtonOnClick: (() -> Unit) -> Unit,
+    setMainScreen: ((isFloatButtonVisible: Boolean, floatButtonAction: () -> Unit, isNavigateBackVisible: Boolean, navigateBackAction: () -> Unit, topBarName: String) -> Unit),
     viewModel: IngredientViewModel = viewModel(factory = AppViewModelProvider.Factory),
     navController: NavHostController = rememberNavController(),
 ) {
@@ -33,15 +29,18 @@ fun IngredientNavHost(
         startDestination = IngredientScreenList.IngredientListScreen.name
     ) {
         composable(route = IngredientScreenList.IngredientListScreen.name) {
-            visibleFloatButton(true)
-            updateTopBarName(IngredientScreenList.IngredientListScreen)
-            updateCanNavigateBack(false)
-            updateNavigateUp { navController.navigateUp() }
-            updateFloatButtonOnClick {
-                viewModel.resetUiState()
-                viewModel.deleteButtonVisible = false
-                navController.navigate(IngredientScreenList.NewIngredientScreen.name)
-            }
+            setMainScreen(
+                true,
+                {
+                    viewModel.resetUiState()
+                    viewModel.deleteButtonVisible = false
+                    navController.navigate(IngredientScreenList.NewIngredientScreen.name)
+                },
+                false,
+                {},
+                IngredientScreenList.IngredientListScreen.title
+            )
+
             IngredientListScreen(
                 onListItemClick = { ingredientDetails ->
                     viewModel.updateUiState(ingredientDetails)
@@ -52,11 +51,13 @@ fun IngredientNavHost(
             )
         }
         composable(route = IngredientScreenList.NewIngredientScreen.name) {
-            visibleFloatButton(false)
-            updateTopBarName(IngredientScreenList.NewIngredientScreen)
-            updateCanNavigateBack(true)
-            updateNavigateUp { navController.navigateUp() }
-            updateFloatButtonOnClick { }
+            setMainScreen(
+                false,
+                { },
+                true,
+                { navController.navigateUp() },
+                IngredientScreenList.NewIngredientScreen.title
+            )
             IngredientView(
                 viewModel,
                 saveButton = {

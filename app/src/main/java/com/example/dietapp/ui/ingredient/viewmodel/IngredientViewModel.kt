@@ -81,10 +81,6 @@ fun IngredientDetails.toIngredient(): Ingredient {
     )
 }
 
-fun Ingredient.toIngredientUiState(): IngredientUiState {
-    return IngredientUiState(IngredientDetails())
-}
-
 fun Ingredient.toIngredientDetails(): IngredientDetails {
     return IngredientDetails(
         this.id,

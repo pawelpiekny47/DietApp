@@ -34,11 +34,7 @@ fun MainHost(
     {
         composable(route = MenuCategories.Ingredient.name) {
             IngredientNavHost(
-                viewModel::updateVisibleFloatButton,
-                viewModel::updateTopBarName,
-                viewModel::updateCanNavigateBack,
-                viewModel::updateNavigateUp,
-                viewModel::updateFloatButtonOnClick
+                viewModel::setMainScreen
             )
         }
         composable(route = MenuCategories.Dish.name) {
