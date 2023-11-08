@@ -15,7 +15,6 @@ fun DishView(
         IngredientList(
             viewModel
         )
-
     }
 }
 

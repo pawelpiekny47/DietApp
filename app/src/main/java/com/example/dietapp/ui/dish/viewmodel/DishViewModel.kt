@@ -27,6 +27,10 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel() {
                 initialValue = DishListUiState()
             )
 
+    fun resetUiState() {
+        dishUiState = DishUiState()
+    }
+
     fun updateUiState(dishDetails: DishDetails) {
         dishUiState =
             DishUiState(dishDetails = dishDetails)

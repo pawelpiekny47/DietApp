@@ -38,7 +38,9 @@ fun MainHost(
             )
         }
         composable(route = MenuCategories.Dish.name) {
-            DishNavHost()
+            DishNavHost(
+                viewModel::setMainScreen
+            )
         }
     }
 }
