@@ -15,6 +15,7 @@ import com.example.dietapp.ui.dish.screen.DishListView
 import com.example.dietapp.ui.dish.screen.DishScreenList
 import com.example.dietapp.ui.dish.screen.DishView
 import com.example.dietapp.ui.dish.viewmodel.DishViewModel
+import com.example.dietapp.ui.ingredient.screen.IngredientScreenList
 
 @Composable
 fun DishNavHost(
@@ -28,10 +29,17 @@ fun DishNavHost(
         startDestination = DishScreenList.DishList.name,
     ) {
         composable(route = DishScreenList.DishList.name) {
-            DishListView(viewModel)
+            DishListView(
+                onItemClick = { dishDetails ->
+                    viewModel.updateUiState(dishDetails)
+                    viewModel.deleteButtonVisible = true
+                    navController.navigate(DishScreenList.Dish.name)
+                },
+                viewModel
+            )
         }
         composable(route = DishScreenList.Dish.name) {
-            DishView()
+            DishView(viewModel = viewModel)
         }
     }
 }
