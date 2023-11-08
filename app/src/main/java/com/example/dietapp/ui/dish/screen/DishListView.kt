@@ -11,20 +11,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.example.dietapp.data.DishWithIngredients
-import com.example.dietapp.data.FoodCategory
-import com.example.dietapp.ui.dish.viewmodel.DishDetails
 import com.example.dietapp.ui.dish.viewmodel.DishViewModel
 import com.example.dietapp.ui.dish.viewmodel.toDishDetails
-import com.example.dietapp.ui.ingredient.viewmodel.IngredientDetails
-import com.example.dietapp.ui.ingredient.viewmodel.IngredientViewModel
-import com.example.dietapp.ui.ingredient.viewmodel.toIngredientDetails
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun DishListView(
-    onItemClick: (DishDetails) -> Unit,
+    onItemClick: (com.example.dietapp.ui.dish.viewmodel.DishWithIngredientsDetails) -> Unit,
     viewModel: DishViewModel
 ) {
     val dishUiState by viewModel.dishListUiState.collectAsState()
@@ -47,8 +41,8 @@ fun DishListView(
 
 @Composable
 fun DishItem(
-    onItemClick: (DishDetails) -> Unit,
-    dish: DishWithIngredients,
+    onItemClick: (com.example.dietapp.ui.dish.viewmodel.DishWithIngredientsDetails) -> Unit,
+    dish: com.example.dietapp.data.DishWithIngredients,
 ) {
     Card(modifier = Modifier
         .clickable { onItemClick(dish.toDishDetails()) }) {

@@ -10,7 +10,7 @@ import com.example.dietapp.data.Dish
 import com.example.dietapp.data.DishIngredientCrossRef
 import com.example.dietapp.data.Ingredient
 
-@Database(entities = [Ingredient::class, Dish::class, DishIngredientCrossRef::class], version = 1, exportSchema = true)
+@Database(entities = [Ingredient::class, Dish::class, DishIngredientCrossRef::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun ingredientDao(): IngredientDao
     abstract fun dishDao(): DishDao

@@ -8,7 +8,7 @@ import androidx.room.Relation
 @Entity(primaryKeys = ["dishId", "ingredientId"], tableName = "dish_ingredient_cross_ref")
 data class DishIngredientCrossRef (
     val dishId: Int,
-    val ingredientId: Int,
+    val ingredientId: Int
 )
 data class DishWithIngredients(
     @Embedded val dish: Dish,

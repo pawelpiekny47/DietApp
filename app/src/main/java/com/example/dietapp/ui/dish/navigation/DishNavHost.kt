@@ -12,7 +12,8 @@ import com.example.dietapp.ui.dish.screen.DishListView
 import com.example.dietapp.ui.dish.screen.DishScreenList
 import com.example.dietapp.ui.dish.screen.DishView
 import com.example.dietapp.ui.dish.viewmodel.DishViewModel
-import com.example.dietapp.ui.ingredient.screen.IngredientScreenList
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
 fun DishNavHost(
@@ -55,7 +56,12 @@ fun DishNavHost(
                 { navController.navigateUp() },
                 DishScreenList.Dish.title
             )
-            DishView(viewModel = viewModel)
+            DishView(
+                saveButtonOnClick = {
+                    coroutineScope.launch(Dispatchers.IO) { viewModel.saveDishWithIngredients() }
+                },
+                viewModel = viewModel
+            )
         }
     }
 }

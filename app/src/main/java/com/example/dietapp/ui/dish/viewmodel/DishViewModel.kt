@@ -6,17 +6,21 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.dietapp.data.Dish
+import com.example.dietapp.data.DishIngredientCrossRef
 import com.example.dietapp.data.DishWithIngredients
-import com.example.dietapp.data.Ingredient
 import com.example.dietapp.repository.DishRepository
+import com.example.dietapp.ui.ingredient.viewmodel.IngredientDetails
+import com.example.dietapp.ui.ingredient.viewmodel.toIngredient
+import com.example.dietapp.ui.ingredient.viewmodel.toIngredientDetails
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlin.streams.toList
 
 class DishViewModel(private val dishRepository: DishRepository) : ViewModel() {
     var deleteButtonVisible by mutableStateOf(true)
-    var dishUiState by mutableStateOf(DishUiState())
+    var dishWithIngredientsUiState by mutableStateOf(DishWithIngredientsDetailsUiState())
         private set
 
     val dishListUiState: StateFlow<DishListUiState> =
@@ -28,12 +32,44 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel() {
             )
 
     fun resetUiState() {
-        dishUiState = DishUiState()
+        dishWithIngredientsUiState = DishWithIngredientsDetailsUiState()
     }
 
-    fun updateUiState(dishDetails: DishDetails) {
-        dishUiState =
-            DishUiState(dishDetails = dishDetails)
+    fun updateUiState(dishDetails: DishWithIngredientsDetails) {
+        dishWithIngredientsUiState =
+            DishWithIngredientsDetailsUiState(dishDetails = dishDetails)
+    }
+
+    fun deleteIngredientFromDish(
+        ingredientDetails: IngredientDetails
+    ) {
+        dishWithIngredientsUiState.dishIngredientCrossRefToDelete
+        dishWithIngredientsUiState =
+            DishWithIngredientsDetailsUiState(
+                dishDetails = DishWithIngredientsDetails(
+                    dish = dishWithIngredientsUiState.dishDetails.dish,
+                    ingredientList = dishWithIngredientsUiState.dishDetails.ingredientList.stream()
+                        .peek {}
+                        .filter { (it != ingredientDetails) }
+                        .toList()),
+                dishIngredientCrossRefToDelete = mutableListOf<DishIngredientCrossRef>().also {
+                    it.addAll(
+                        dishWithIngredientsUiState.dishIngredientCrossRefToDelete,
+                    )
+                }.also {
+                    it.add(
+                        DishIngredientCrossRef(
+                            dishId = dishWithIngredientsUiState.dishDetails.dish.dishId,
+                            ingredientId = ingredientDetails.id
+                        )
+                    )
+                }
+            )
+    }
+
+    suspend fun saveDishWithIngredients() {
+        dishRepository.saveAll(dishWithIngredientsUiState.toDishIngredientCrossRefList())
+        dishRepository.deleteAll(dishWithIngredientsUiState.dishIngredientCrossRefToDelete)
     }
 
     companion object {
@@ -41,18 +77,28 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel() {
     }
 }
 
-data class DishUiState(val dishDetails: DishDetails = DishDetails())
+data class DishWithIngredientsDetailsUiState(
+    val dishDetails: DishWithIngredientsDetails = DishWithIngredientsDetails(),
+    val dishIngredientCrossRefToDelete: List<DishIngredientCrossRef> = mutableListOf()
+)
 
-data class DishDetails(
+fun DishWithIngredientsDetailsUiState.toDishIngredientCrossRefList(): List<DishIngredientCrossRef> {
+    return dishDetails.ingredientList
+        .stream()
+        .map { DishIngredientCrossRef(dishDetails.dish.dishId, it.id) }
+        .toList()
+}
+
+data class DishWithIngredientsDetails(
     val dish: Dish = Dish(name = "", description = ""),
-    val ingredientList: List<Ingredient> = mutableListOf()
+    var ingredientList: List<IngredientDetails> = mutableListOf()
 )
 
 data class DishListUiState(val dishList: List<DishWithIngredients> = listOf())
 
-fun DishWithIngredients.toDishDetails(): DishDetails {
-    return DishDetails(
-        this.dish,
-        this.ingredientList
+fun DishWithIngredients.toDishDetails(): DishWithIngredientsDetails {
+    return DishWithIngredientsDetails(
+        dish,
+        ingredientList.map { it.toIngredientDetails() }
     )
 }
