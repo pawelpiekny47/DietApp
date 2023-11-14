@@ -8,6 +8,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.dietapp.data.Dish
 import com.example.dietapp.data.DishIngredientCrossRef
 import com.example.dietapp.data.DishWithIngredients
+import com.example.dietapp.data.FoodCategory
+import com.example.dietapp.data.Ingredient
+import com.example.dietapp.data.IngredientWithAmount
 import com.example.dietapp.repository.DishRepository
 import com.example.dietapp.ui.ingredient.viewmodel.IngredientDetails
 import com.example.dietapp.ui.ingredient.viewmodel.toIngredient
@@ -41,7 +44,7 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel() {
     }
 
     fun deleteIngredientFromDish(
-        ingredientDetails: IngredientDetails
+        ingredientWithAmountDetails: IngredientWithAmountDetails
     ) {
         dishWithIngredientsUiState.dishIngredientCrossRefToDelete
         dishWithIngredientsUiState =
@@ -50,7 +53,7 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel() {
                     dish = dishWithIngredientsUiState.dishDetails.dish,
                     ingredientList = dishWithIngredientsUiState.dishDetails.ingredientList.stream()
                         .peek {}
-                        .filter { (it != ingredientDetails) }
+                        .filter { (it != ingredientWithAmountDetails) }
                         .toList()),
                 dishIngredientCrossRefToDelete = mutableListOf<DishIngredientCrossRef>().also {
                     it.addAll(
@@ -60,7 +63,8 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel() {
                     it.add(
                         DishIngredientCrossRef(
                             dishId = dishWithIngredientsUiState.dishDetails.dish.dishId,
-                            ingredientId = ingredientDetails.id
+                            ingredientId = ingredientWithAmountDetails.ingredientDetails.id,
+                            amount = 0.0
                         )
                     )
                 }
@@ -85,13 +89,13 @@ data class DishWithIngredientsDetailsUiState(
 fun DishWithIngredientsDetailsUiState.toDishIngredientCrossRefList(): List<DishIngredientCrossRef> {
     return dishDetails.ingredientList
         .stream()
-        .map { DishIngredientCrossRef(dishDetails.dish.dishId, it.id) }
+        .map { DishIngredientCrossRef(dishDetails.dish.dishId, it.ingredientDetails.id, it.amount) }
         .toList()
 }
 
 data class DishWithIngredientsDetails(
     val dish: Dish = Dish(name = "", description = ""),
-    var ingredientList: List<IngredientDetails> = mutableListOf()
+    var ingredientList: List<IngredientWithAmountDetails> = mutableListOf()
 )
 
 data class DishListUiState(val dishList: List<DishWithIngredients> = listOf())
@@ -99,6 +103,29 @@ data class DishListUiState(val dishList: List<DishWithIngredients> = listOf())
 fun DishWithIngredients.toDishDetails(): DishWithIngredientsDetails {
     return DishWithIngredientsDetails(
         dish,
-        ingredientList.map { it.toIngredientDetails() }
+        ingredientList.map { it.toIngredientWithAmountDetails() },
+
+        )
+}
+
+data class IngredientWithAmountDetails(
+    val ingredientDetails: IngredientDetails,
+    val amount: Double = 0.0
+)
+
+fun IngredientWithAmount.toIngredientWithAmountDetails(): IngredientWithAmountDetails {
+    return IngredientWithAmountDetails(
+        IngredientDetails(
+            this.ingredient.ingredientId,
+            this.ingredient.name,
+            this.ingredient.protein.toString(),
+            this.ingredient.carbohydrates.toString(),
+            this.ingredient.fats.toString(),
+            this.ingredient.polyunsaturatedFats.toString(),
+            this.ingredient.soil.toString(),
+            this.ingredient.fiber.toString(),
+            this.ingredient.foodCategory
+        ),
+        this.amount
     )
 }

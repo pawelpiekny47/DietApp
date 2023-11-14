@@ -47,7 +47,7 @@ fun DishItem(
     Card(modifier = Modifier
         .clickable { onItemClick(dish.toDishDetails()) }) {
         Text(
-            text = "${dish.dish.name}  protein:${dish.ingredientList.sumOf { it.protein }} carbs:${dish.ingredientList.sumOf { it.carbohydrates }}"
+            text = "${dish.dish.name}  protein:${dish.ingredientList.sumOf { it.ingredient.protein }} carbs:${dish.ingredientList.sumOf { it.ingredient.carbohydrates }}"
         )
     }
 }

@@ -36,7 +36,7 @@ fun IngredientList(
     viewModel.dishWithIngredientsUiState.dishDetails.ingredientList.forEach {
         Text(
             modifier = Modifier.clickable { viewModel.deleteIngredientFromDish(it) },
-            text = it.name
+            text = "name: ${it.ingredientDetails.name}, amount: ${it.amount}"
         )
     }
 }

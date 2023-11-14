@@ -15,10 +15,10 @@ interface DishDao {
     @Query("SELECT * FROM dish")
     fun getAll(): Flow<List<DishWithIngredients>>
 
-
     @Upsert
     fun saveAll(dishIngredientCrossRef: List<DishIngredientCrossRef>)
 
     @Delete
     fun deleteAll(dishIngredientCrossRef: List<DishIngredientCrossRef>)
+
 }
