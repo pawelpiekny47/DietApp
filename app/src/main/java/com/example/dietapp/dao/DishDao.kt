@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Upsert
+import com.example.dietapp.data.Dish
 import com.example.dietapp.data.DishIngredientCrossRef
 import com.example.dietapp.data.DishWithIngredients
 import kotlinx.coroutines.flow.Flow
@@ -14,6 +15,9 @@ interface DishDao {
     @Transaction
     @Query("SELECT * FROM dish")
     fun getAll(): Flow<List<DishWithIngredients>>
+
+    @Upsert
+    fun saveDish(dish: Dish)
 
     @Upsert
     fun saveAll(dishIngredientCrossRef: List<DishIngredientCrossRef>)

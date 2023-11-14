@@ -8,10 +8,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.dietapp.ui.AppViewModelProvider
+import com.example.dietapp.ui.dish.screen.AddIngredient
 import com.example.dietapp.ui.dish.screen.DishListView
 import com.example.dietapp.ui.dish.screen.DishScreenList
 import com.example.dietapp.ui.dish.screen.DishView
 import com.example.dietapp.ui.dish.viewmodel.DishViewModel
+import com.example.dietapp.ui.ingredient.viewmodel.toIngredientWithAmountDetails
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -41,7 +43,7 @@ fun DishNavHost(
             )
             DishListView(
                 onItemClick = { dishDetails ->
-                    viewModel.updateUiState(dishDetails)
+                    viewModel.updateDishWithIngredientUiState(dishDetails)
                     viewModel.deleteButtonVisible = true
                     navController.navigate(DishScreenList.Dish.name)
                 },
@@ -50,8 +52,8 @@ fun DishNavHost(
         }
         composable(route = DishScreenList.Dish.name) {
             setMainScreen(
-                false,
-                {},
+                true,
+                { navController.navigate(DishScreenList.AddIngredientToDish.name) },
                 true,
                 { navController.navigateUp() },
                 DishScreenList.Dish.title
@@ -61,6 +63,21 @@ fun DishNavHost(
                     coroutineScope.launch(Dispatchers.IO) { viewModel.saveDishWithIngredients() }
                 },
                 viewModel = viewModel
+            )
+        }
+        composable(route = DishScreenList.AddIngredientToDish.name) {
+            setMainScreen(
+                false,
+                {},
+                true,
+                { navController.navigateUp() },
+                DishScreenList.Dish.title
+            )
+            AddIngredient(
+                {
+                    viewModel.addToIngredientWithAmountList(it.toIngredientWithAmountDetails())
+                    navController.navigateUp()
+                }
             )
         }
     }

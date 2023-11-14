@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.dietapp.data.FoodCategory
 import com.example.dietapp.data.Ingredient
 import com.example.dietapp.repository.IngredientRepository
+import com.example.dietapp.ui.dish.viewmodel.IngredientWithAmountDetails
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -79,6 +80,10 @@ fun IngredientDetails.toIngredient(): Ingredient {
         fiber.toDoubleOrNull() ?: 0.0,
         foodCategory
     )
+}
+
+fun IngredientDetails.toIngredientWithAmountDetails(): IngredientWithAmountDetails {
+    return IngredientWithAmountDetails(this, 0.0)
 }
 
 fun Ingredient.toIngredientDetails(): IngredientDetails {
