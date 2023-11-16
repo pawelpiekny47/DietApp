@@ -32,8 +32,7 @@ fun AddIngredient(
             items(ingredientUiState.ingredientList.filter { it.foodCategory == foodCategory }) { ingredient ->
                 IngredientItem(
                     ingredient = ingredient,
-                    onItemClick =  onListItemClick ,
-                    viewModel = viewModel
+                    onItemClick =  onListItemClick
                 )
             }
         }

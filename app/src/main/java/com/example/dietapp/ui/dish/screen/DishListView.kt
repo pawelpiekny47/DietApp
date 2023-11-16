@@ -11,14 +11,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.example.dietapp.data.DishWithIngredients
 import com.example.dietapp.ui.dish.viewmodel.DishViewModel
-import com.example.dietapp.ui.dish.viewmodel.toDishDetails
+import com.example.dietapp.ui.dish.viewmodel.DishWithIngredientsDetails
+import com.example.dietapp.ui.dish.viewmodel.toDishWithIngredientDetails
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun DishListView(
-    onItemClick: (com.example.dietapp.ui.dish.viewmodel.DishWithIngredientsDetails) -> Unit,
+    onItemClick: (DishWithIngredientsDetails) -> Unit,
     viewModel: DishViewModel
 ) {
     val dishUiState by viewModel.dishListUiState.collectAsState()
@@ -41,11 +43,11 @@ fun DishListView(
 
 @Composable
 fun DishItem(
-    onItemClick: (com.example.dietapp.ui.dish.viewmodel.DishWithIngredientsDetails) -> Unit,
-    dish: com.example.dietapp.data.DishWithIngredients,
+    onItemClick: (DishWithIngredientsDetails) -> Unit,
+    dish: DishWithIngredients,
 ) {
     Card(modifier = Modifier
-        .clickable { onItemClick(dish.toDishDetails()) }) {
+        .clickable { onItemClick(dish.toDishWithIngredientDetails()) }) {
         Text(
             text = "${dish.dish.name}  protein:${dish.ingredientList.sumOf { it.ingredient.protein }} carbs:${dish.ingredientList.sumOf { it.ingredient.carbohydrates }}"
         )

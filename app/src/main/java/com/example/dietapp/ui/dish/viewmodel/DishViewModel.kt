@@ -162,7 +162,7 @@ data class DishWithIngredientsDetails(
 
 data class DishListUiState(val dishList: List<DishWithIngredients> = listOf())
 
-fun DishWithIngredients.toDishDetails(): DishWithIngredientsDetails {
+fun DishWithIngredients.toDishWithIngredientDetails(): DishWithIngredientsDetails {
     return DishWithIngredientsDetails(
         dish,
         ingredientList.map { it.toIngredientWithAmountDetails() },
@@ -173,6 +173,12 @@ fun DishWithIngredients.toDishDetails(): DishWithIngredientsDetails {
 data class IngredientWithAmountDetails(
     val ingredientDetails: IngredientDetails,
     var amount: Double = 0.0
+)
+
+data class DishDetails(
+    val dishId: Int = 0,
+    val name: String = "",
+    val description: String = ""
 )
 
 fun IngredientWithAmount.toIngredientWithAmountDetails(): IngredientWithAmountDetails {

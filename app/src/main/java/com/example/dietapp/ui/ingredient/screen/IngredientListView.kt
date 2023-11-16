@@ -36,8 +36,7 @@ fun IngredientListScreen(
             items(ingredientUiState.ingredientList.filter { it.foodCategory == foodCategory }) { ingredient ->
                 IngredientItem(
                     ingredient = ingredient,
-                    onItemClick = onListItemClick,
-                    viewModel = viewModel
+                    onItemClick = onListItemClick
                 )
             }
         }
@@ -45,7 +44,7 @@ fun IngredientListScreen(
 }
 
 @Composable
-fun IngredientItem(ingredient: Ingredient, onItemClick: (IngredientDetails) -> Unit, viewModel: IngredientViewModel) {
+fun IngredientItem(ingredient: Ingredient, onItemClick: (IngredientDetails) -> Unit) {
     Card(modifier = Modifier
         .clickable { onItemClick(ingredient.toIngredientDetails()) }) {
         Text(
