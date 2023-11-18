@@ -13,6 +13,7 @@ import com.example.dietapp.data.DishWithAmount
 import com.example.dietapp.repository.DayRepository
 import com.example.dietapp.ui.dish.viewmodel.DishDetails
 import com.example.dietapp.ui.dish.viewmodel.DishWithIngredientsDetails
+import com.example.dietapp.ui.dish.viewmodel.toDishWithIngredientDetails
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -49,7 +50,7 @@ class DayViewModel(private val dayRepository: DayRepository) : ViewModel() {
                     day = dayWithDishesUiState.dayDetails.day,
                     dishList = dayWithDishesUiState.dayDetails.dishList.stream()
                         .map {
-                            if (it.dishDetails.dishId == dishId)
+                            if (it.dishDetails.dish.dishId == dishId)
                                 DishWithAmountDetails(it.dishDetails, string.toInt())
                             else it
                         }
@@ -119,7 +120,7 @@ class DayViewModel(private val dayRepository: DayRepository) : ViewModel() {
                     it.add(
                         DayDishCrossRef(
                             dayId = dayWithDishesUiState.dayDetails.day.dayId,
-                            dishId = dishWithAmountDetails.dishDetails.dishId,
+                            dishId = dishWithAmountDetails.dishDetails.dish.dishId,
                             amount = 0
                         )
                     )
@@ -149,7 +150,7 @@ fun DayWithDishesDetailsUiState.toDayDishCrossRefList(): List<DayDishCrossRef> {
         .map {
             DayDishCrossRef(
                 dayDetails.day.dayId,
-                it.dishDetails.dishId,
+                it.dishDetails.dish.dishId,
                 it.amount
             )
         }
@@ -172,23 +173,19 @@ fun DayWithDishes.toDayDetails(): DayWithDishesDetails {
 }
 
 data class DishWithAmountDetails(
-    val dishDetails: DishDetails,
+    val dishDetails: DishWithIngredientsDetails,
     var amount: Int = 0
 )
 
 fun DishWithAmount.toDishWithAmountDetails(): DishWithAmountDetails {
     return DishWithAmountDetails(
-        DishDetails(
-            this.dishWithIngredients.dish.dishId,
-            this.dishWithIngredients.dish.name,
-            this.dishWithIngredients.dish.description
-        ),
+        dishWithIngredients.toDishWithIngredientDetails(),
         this.amount
     )
 }
 
 fun DishWithIngredientsDetails.toDishWithAmountDetails(): DishWithAmountDetails {
-    return DishWithAmountDetails(this.dish.toDishDetails(), 0)
+    return DishWithAmountDetails(this, 0)
 }
 fun Dish.toDishDetails(): DishDetails{
     return DishDetails(

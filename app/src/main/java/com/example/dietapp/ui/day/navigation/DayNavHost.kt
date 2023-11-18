@@ -14,12 +14,14 @@ import com.example.dietapp.ui.day.screen.DayView
 import com.example.dietapp.ui.day.viewmodel.DayViewModel
 import com.example.dietapp.ui.day.screen.AddDish
 import com.example.dietapp.ui.day.viewmodel.toDishWithAmountDetails
+import com.example.dietapp.ui.dietsettings.viewmodel.DietSettingsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 @Composable
 fun DayNavHost(
     setMainScreen: ((isFloatButtonVisible: Boolean, floatButtonAction: () -> Unit, isNavigateBackVisible: Boolean, navigateBackAction: () -> Unit, topBarName: String) -> Unit),
-    viewModel: DayViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    dayViewModel: DayViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    dietSettingsViewModel: DietSettingsViewModel = viewModel(factory = AppViewModelProvider.Factory),
     navController: NavHostController = rememberNavController(),
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -33,8 +35,8 @@ fun DayNavHost(
             setMainScreen(
                 true,
                 {
-                    viewModel.resetUiState()
-                    viewModel.deleteButtonVisible = false
+                    dayViewModel.resetUiState()
+                    dayViewModel.deleteButtonVisible = false
                     navController.navigate(DayScreenList.Day.name)
                 },
                 false,
@@ -43,11 +45,11 @@ fun DayNavHost(
             )
             DayListView(
                 onItemClick = { dayDetails ->
-                    viewModel.updateDayWithDishesUiState(dayDetails)
-                    viewModel.deleteButtonVisible = true
+                    dayViewModel.updateDayWithDishesUiState(dayDetails)
+                    dayViewModel.deleteButtonVisible = true
                     navController.navigate(DayScreenList.Day.name)
                 },
-                viewModel
+                dayViewModel
             )
         }
         composable(route = DayScreenList.Day.name) {
@@ -60,9 +62,10 @@ fun DayNavHost(
             )
             DayView(
                 saveButtonOnClick = {
-                    coroutineScope.launch(Dispatchers.IO) { viewModel.saveDayWithDishes() }
+                    coroutineScope.launch(Dispatchers.IO) { dayViewModel.saveDayWithDishes() }
                 },
-                viewModel = viewModel
+                dayViewModel = dayViewModel,
+                dietSettingsViewModel = dietSettingsViewModel
             )
         }
         composable(route = DayScreenList.AddDishToDay.name) {
@@ -75,7 +78,7 @@ fun DayNavHost(
             )
             AddDish(
                 {
-                    viewModel.addToDishWithAmountList(it.toDishWithAmountDetails())
+                    dayViewModel.addToDishWithAmountList(it.toDishWithAmountDetails())
                     navController.navigateUp()
                 }
             )

@@ -1,26 +1,20 @@
 package com.example.dietapp.ui.dietsettings.viewmodel
 
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
-import androidx.lifecycle.viewmodel.compose.saveable
 import com.example.dietapp.data.DietSettings
 import com.example.dietapp.repository.DietSettingsRepository
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.io.Serializable
 
 class DietSettingsViewModel(private var dietSettingsRepository: DietSettingsRepository) :
     ViewModel() {
+
     var dietSettingsUiState by mutableStateOf(DietSettingsUiState())
 
     init {
