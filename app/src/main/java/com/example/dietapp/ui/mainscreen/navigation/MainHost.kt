@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.dietapp.ui.AppViewModelProvider
 import com.example.dietapp.ui.day.navigation.DayNavHost
+import com.example.dietapp.ui.dietsettings.navigation.DietSettingsNavHost
 import com.example.dietapp.ui.dish.navigation.DishNavHost
 import com.example.dietapp.ui.ingredient.navigation.IngredientNavHost
 import com.example.dietapp.ui.mainscreen.viewmodel.MainScreenViewModel
@@ -17,7 +18,8 @@ import com.example.dietapp.ui.mainscreen.viewmodel.MainScreenViewModel
 enum class MenuCategories(val title: String) {
     Ingredient(title = " Ingredient"),
     Dish(title = " Dish"),
-    Day(title = "Day")
+    Day(title = "Day"),
+    DietSettings(title = "Diet Settings")
 }
 
 @Composable
@@ -40,6 +42,9 @@ fun MainHost(
         }
         composable(route = MenuCategories.Day.name) {
             DayNavHost(viewModel::setMainScreen)
+        }
+        composable(route = MenuCategories.DietSettings.name) {
+            DietSettingsNavHost(viewModel::setMainScreen)
         }
     }
 }

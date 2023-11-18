@@ -63,6 +63,5 @@ fun DishList(
                 singleLine = true
             )
         }
-
     }
 }

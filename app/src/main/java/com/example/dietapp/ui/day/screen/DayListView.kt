@@ -11,10 +11,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.example.dietapp.data.DayWithDishes
 import com.example.dietapp.ui.day.viewmodel.DayViewModel
 import com.example.dietapp.ui.day.viewmodel.DayWithDishesDetails
 import com.example.dietapp.ui.day.viewmodel.toDayDetails
-
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -28,7 +28,7 @@ fun DayListView(
     ) {
         item {
             Text(
-                text = " Days"
+                text = "Days"
             )
         }
         items(dayUiState.dayList) { day ->
@@ -43,7 +43,7 @@ fun DayListView(
 @Composable
 fun DayItem(
     onItemClick: (DayWithDishesDetails) -> Unit,
-    day: com.example.dietapp.data.DayWithDishes,
+    day: DayWithDishes,
 ) {
     Card(modifier = Modifier
         .clickable { onItemClick(day.toDayDetails()) }) {

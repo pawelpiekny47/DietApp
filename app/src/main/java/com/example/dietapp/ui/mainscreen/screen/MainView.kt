@@ -76,6 +76,14 @@ fun MainView(
                         navController.navigate(MenuCategories.Day.name)
                     }
                 )
+                NavigationDrawerItem(
+                    label = { Text(text = MenuCategories.DietSettings.title) },
+                    selected = false,
+                    onClick = {
+                        scope.launch { drawerState.close() }
+                        navController.navigate(MenuCategories.DietSettings.name)
+                    }
+                )
             }
         },
     ) {
