@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.dietapp.ui.AppViewModelProvider
+import com.example.dietapp.ui.dietsettings.viewmodel.DietSettingsViewModel
 import com.example.dietapp.ui.dish.screen.AddIngredient
 import com.example.dietapp.ui.dish.screen.DishListView
 import com.example.dietapp.ui.dish.screen.DishScreenList
@@ -20,7 +21,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun DishNavHost(
     setMainScreen: ((isFloatButtonVisible: Boolean, floatButtonAction: () -> Unit, isNavigateBackVisible: Boolean, navigateBackAction: () -> Unit, topBarName: String) -> Unit),
-    viewModel: DishViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    dishViewModel: DishViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    dietSettingsViewModel: DietSettingsViewModel = viewModel(factory = AppViewModelProvider.Factory),
     navController: NavHostController = rememberNavController(),
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -33,8 +35,8 @@ fun DishNavHost(
             setMainScreen(
                 true,
                 {
-                    viewModel.resetUiState()
-                    viewModel.deleteButtonVisible = false
+                    dishViewModel.resetUiState()
+                    dishViewModel.deleteButtonVisible = false
                     navController.navigate(DishScreenList.Dish.name)
                 },
                 false,
@@ -43,11 +45,11 @@ fun DishNavHost(
             )
             DishListView(
                 onItemClick = { dishDetails ->
-                    viewModel.updateDishWithIngredientUiState(dishDetails)
-                    viewModel.deleteButtonVisible = true
+                    dishViewModel.updateDishWithIngredientUiState(dishDetails)
+                    dishViewModel.deleteButtonVisible = true
                     navController.navigate(DishScreenList.Dish.name)
                 },
-                viewModel
+                dishViewModel
             )
         }
         composable(route = DishScreenList.Dish.name) {
@@ -60,9 +62,10 @@ fun DishNavHost(
             )
             DishView(
                 saveButtonOnClick = {
-                    coroutineScope.launch(Dispatchers.IO) { viewModel.saveDishWithIngredients() }
+                    coroutineScope.launch(Dispatchers.IO) { dishViewModel.saveDishWithIngredients() }
                 },
-                viewModel = viewModel
+                dishViewModel = dishViewModel,
+                dietSettingsViewModel = dietSettingsViewModel
             )
         }
         composable(route = DishScreenList.AddIngredientToDish.name) {
@@ -75,7 +78,7 @@ fun DishNavHost(
             )
             AddIngredient(
                 {
-                    viewModel.addToIngredientWithAmountList(it.toIngredientWithAmountDetails())
+                    dishViewModel.addToIngredientWithAmountList(it.toIngredientWithAmountDetails())
                     navController.navigateUp()
                 }
             )
