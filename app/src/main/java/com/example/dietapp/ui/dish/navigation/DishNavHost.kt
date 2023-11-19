@@ -1,7 +1,15 @@
 package com.example.dietapp.ui.dish.navigation
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -10,6 +18,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.dietapp.ui.AppViewModelProvider
 import com.example.dietapp.ui.dietsettings.viewmodel.DietSettingsViewModel
 import com.example.dietapp.ui.dish.screen.AddIngredient
+import com.example.dietapp.ui.dish.screen.DietSettingsStatistic
 import com.example.dietapp.ui.dish.screen.DishListView
 import com.example.dietapp.ui.dish.screen.DishScreenList
 import com.example.dietapp.ui.dish.screen.DishView
@@ -60,13 +69,13 @@ fun DishNavHost(
                 { navController.navigateUp() },
                 DishScreenList.Dish.title
             )
-            DishView(
-                saveButtonOnClick = {
-                    coroutineScope.launch(Dispatchers.IO) { dishViewModel.saveDishWithIngredients() }
-                },
-                dishViewModel = dishViewModel,
-                dietSettingsViewModel = dietSettingsViewModel
-            )
+                        DishView(
+                            saveButtonOnClick = {
+                                coroutineScope.launch(Dispatchers.IO) { dishViewModel.saveDishWithIngredients() }
+                            },
+                            dishViewModel = dishViewModel,
+                            dietSettingsViewModel = dietSettingsViewModel
+                        )
         }
         composable(route = DishScreenList.AddIngredientToDish.name) {
             setMainScreen(

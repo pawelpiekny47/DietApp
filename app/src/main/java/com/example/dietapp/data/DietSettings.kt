@@ -14,11 +14,10 @@ data class DietSettings(
     var kcalFromProteinSource: Int = 0,
     var kcalFromMilkProducts: Int = 0,
     var kcalFromGrain: Int = 0,
+    var kcalFromAddedFat: Int = 0,
     val protein: Int = 0,
     val carbohydrates: Int = 0,
     val fats: Int = 0,
     val polyunsaturatedFats: Int = 0,
     val soil: Int = 0,
-    val fiber: Int = 0,
-    val foodCategory: Int = 0
-)
+    val fiber: Int = 0)

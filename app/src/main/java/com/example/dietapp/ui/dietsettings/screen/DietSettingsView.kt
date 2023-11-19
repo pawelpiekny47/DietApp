@@ -87,6 +87,13 @@ fun DietSettingsForm(
         singleLine = true
     )
     OutlinedTextField(
+        value = dietSettingsDetails.kcalFromAddedFat,
+        onValueChange = { onValueChange(dietSettingsDetails.copy(kcalFromAddedFat = it)) },
+        label = { Text("kcalFromAddedFat") },
+        enabled = true,
+        singleLine = true
+    )
+    OutlinedTextField(
         value = dietSettingsDetails.protein,
         onValueChange = { onValueChange(dietSettingsDetails.copy(protein = it)) },
         label = { Text("protein") },
@@ -104,6 +111,13 @@ fun DietSettingsForm(
         value = dietSettingsDetails.fats,
         onValueChange = { onValueChange(dietSettingsDetails.copy(fats = it)) },
         label = { Text("fats") },
+        enabled = true,
+        singleLine = true
+    )
+    OutlinedTextField(
+        value = dietSettingsDetails.fiber,
+        onValueChange = { onValueChange(dietSettingsDetails.copy(fiber = it)) },
+        label = { Text("fiber") },
         enabled = true,
         singleLine = true
     )

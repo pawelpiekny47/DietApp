@@ -10,6 +10,7 @@ data class Ingredient(
     val ingredientId: Int = 0,
 
     val name: String,
+    val totalKcal: Double,
     val protein: Double,
     val carbohydrates: Double,
     val fats: Double,

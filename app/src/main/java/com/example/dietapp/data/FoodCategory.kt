@@ -5,5 +5,6 @@ enum class FoodCategory {
     Vegetable,
     ProteinSource,
     Wheet,
-    MilkAndReplacement
+    MilkAndReplacement,
+    AddedFat
 }

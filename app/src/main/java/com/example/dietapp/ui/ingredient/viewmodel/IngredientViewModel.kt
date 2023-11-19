@@ -59,6 +59,7 @@ data class IngredientListUiState(val ingredientList: List<Ingredient> = listOf()
 data class IngredientDetails(
     val id: Int = 0,
     val name: String = "",
+    val totalKcal: String = "",
     val protein: String = "",
     val carbohydrates: String = "",
     val fats: String = "",
@@ -72,6 +73,7 @@ fun IngredientDetails.toIngredient(): Ingredient {
     return Ingredient(
         ingredientId = id,
         name,
+        totalKcal.toDoubleOrNull() ?:0.0,
         protein.toDoubleOrNull() ?: 0.0,
         carbohydrates.toDoubleOrNull() ?: 0.0,
         fats.toDoubleOrNull() ?: 0.0,
@@ -90,6 +92,7 @@ fun Ingredient.toIngredientDetails(): IngredientDetails {
     return IngredientDetails(
         this.ingredientId,
         this.name,
+        this.totalKcal.toString(),
         this.protein.toString(),
         this.carbohydrates.toString(),
         this.fats.toString(),

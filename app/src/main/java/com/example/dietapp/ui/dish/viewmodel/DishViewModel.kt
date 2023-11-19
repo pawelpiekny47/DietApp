@@ -23,7 +23,8 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel() {
         private set
 
     val dishListUiState: StateFlow<DishListUiState> =
-        dishRepository.getAll().map { DishListUiState(it) }
+        dishRepository.getAll()
+            .map { DishListUiState(it) }
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
@@ -186,6 +187,7 @@ fun IngredientWithAmount.toIngredientWithAmountDetails(): IngredientWithAmountDe
         IngredientDetails(
             this.ingredient.ingredientId,
             this.ingredient.name,
+            this.ingredient.totalKcal.toString(),
             this.ingredient.protein.toString(),
             this.ingredient.carbohydrates.toString(),
             this.ingredient.fats.toString(),
