@@ -26,17 +26,18 @@ data class DayWithDishes(
     @Embedded val day: Day,
     @Relation(
         parentColumn = "dayId",
-        entityColumn = "dishId",
+        entityColumn = "dayId",
         associateBy = Junction(DayDishCrossRef::class)
     )
-    val dishWithAmountList: List<DishWithAmount>
+    val dishWithAmountList: Set<DishWithAmount>
 )
 
 @DatabaseView(
-    "SELECT dish.dishId, dish.name, dish.description, day.amount FROM Dish dish " +
+    "SELECT dish.dishId, dish.name, dish.description, day.amount, day.dayId FROM Dish dish " +
             "INNER JOIN day_dish_cross_ref day ON dish.dishId = day.dishId"
 )
 data class DishWithAmount(
+    val dayId: Int,
     @Embedded val dishWithIngredients: DishWithIngredients,
     val amount: Int
 )

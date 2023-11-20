@@ -49,7 +49,7 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel() {
                     ingredientList = dishWithIngredientsUiState.dishDetails.ingredientList.stream()
                         .map {
                             if (it.ingredientDetails.id == ingredientId)
-                                IngredientWithAmountDetails(it.ingredientDetails, string.toDouble())
+                                IngredientWithAmountDetails(it.ingredientDetails, string)
                             else it
                         }
                         .toList()),
@@ -150,7 +150,7 @@ fun DishWithIngredientsDetailsUiState.toDishIngredientCrossRefList(): List<DishI
             DishIngredientCrossRef(
                 dishDetails.dish.dishId,
                 it.ingredientDetails.id,
-                it.amount
+                it.amount.toDouble()
             )
         }
         .toList()
@@ -167,17 +167,16 @@ fun DishWithIngredients.toDishWithIngredientDetails(): DishWithIngredientsDetail
     return DishWithIngredientsDetails(
         dish,
         ingredientList.map { it.toIngredientWithAmountDetails() },
-
         )
 }
 
 data class IngredientWithAmountDetails(
     val ingredientDetails: IngredientDetails,
-    var amount: Double = 0.0
+    var amount: String = "0.0"
 )
 
 data class DishDetails(
-    val dishId: Int = 0,
+    val dishId: String = "0",
     val name: String = "",
     val description: String = ""
 )
@@ -196,6 +195,6 @@ fun IngredientWithAmount.toIngredientWithAmountDetails(): IngredientWithAmountDe
             this.ingredient.fiber.toString(),
             this.ingredient.foodCategory
         ),
-        this.amount
+        this.amount.toString()
     )
 }

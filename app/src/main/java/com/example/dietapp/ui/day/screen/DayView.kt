@@ -59,7 +59,7 @@ fun DishList(
                 text = "name: ${dish.dishDetails.dish.name}"
             )
             OutlinedTextField(
-                value = dish.amount.toString(),
+                value = dish.amount,
                 onValueChange = {
                     viewModel.updateDayWithDishUiState(
                         dish.dishDetails.dish.dishId,
@@ -81,8 +81,8 @@ fun DietSettingsStatistic(
 ) {
     val totalKcal = dayViewModel.dayWithDishesUiState.dayDetails.dishList.stream().map { it ->
         it.dishDetails.ingredientList.stream()
-            .map { ((it.ingredientDetails.totalKcal.toDouble() * it.amount) / (100)) }
-            .collect(Collectors.summingDouble { d -> d }) * it.amount
+            .map { ((it.ingredientDetails.totalKcal.toDouble() * it.amount.toDouble()) / (100)) }
+            .collect(Collectors.summingDouble { d -> d }) * (it.amount.toIntOrNull()?:0)
     }.collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
         2,
         RoundingMode.HALF_DOWN
@@ -90,8 +90,8 @@ fun DietSettingsStatistic(
     val kcalFromFruits = dayViewModel.dayWithDishesUiState.dayDetails.dishList.stream().map { it ->
         it.dishDetails.ingredientList.stream()
             .filter { it.ingredientDetails.foodCategory == FoodCategory.Fruit }
-            .map { ((it.ingredientDetails.totalKcal.toDouble() * it.amount) / (100)) }
-            .collect(Collectors.summingDouble { d -> d }) * it.amount
+            .map { ((it.ingredientDetails.totalKcal.toDouble() * it.amount.toDouble()) / (100)) }
+            .collect(Collectors.summingDouble { d -> d }) * (it.amount.toIntOrNull()?:0)
     }.collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
         2,
         RoundingMode.HALF_DOWN
@@ -100,8 +100,8 @@ fun DietSettingsStatistic(
         dayViewModel.dayWithDishesUiState.dayDetails.dishList.stream().map { it ->
             it.dishDetails.ingredientList.stream()
                 .filter { it.ingredientDetails.foodCategory == FoodCategory.Vegetable }
-                .map { ((it.ingredientDetails.totalKcal.toDouble() * it.amount) / (100)) }
-                .collect(Collectors.summingDouble { d -> d }) * it.amount
+                .map { ((it.ingredientDetails.totalKcal.toDouble() * it.amount.toDouble()) / (100)) }
+                .collect(Collectors.summingDouble { d -> d }) * (it.amount.toIntOrNull()?:0)
         }.collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
             2,
             RoundingMode.HALF_DOWN
@@ -110,8 +110,8 @@ fun DietSettingsStatistic(
         dayViewModel.dayWithDishesUiState.dayDetails.dishList.stream().map { it ->
             it.dishDetails.ingredientList.stream()
                 .filter { it.ingredientDetails.foodCategory == FoodCategory.ProteinSource }
-                .map { ((it.ingredientDetails.totalKcal.toDouble() * it.amount) / (100)) }
-                .collect(Collectors.summingDouble { d -> d }) * it.amount
+                .map { ((it.ingredientDetails.totalKcal.toDouble() * it.amount.toDouble()) / (100)) }
+                .collect(Collectors.summingDouble { d -> d }) * (it.amount.toIntOrNull()?:0)
         }.collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
             2,
             RoundingMode.HALF_DOWN
@@ -120,8 +120,8 @@ fun DietSettingsStatistic(
         dayViewModel.dayWithDishesUiState.dayDetails.dishList.stream().map { it ->
             it.dishDetails.ingredientList.stream()
                 .filter { it.ingredientDetails.foodCategory == FoodCategory.MilkAndReplacement }
-                .map { ((it.ingredientDetails.totalKcal.toDouble() * it.amount) / (100)) }
-                .collect(Collectors.summingDouble { d -> d }) * it.amount
+                .map { ((it.ingredientDetails.totalKcal.toDouble() * it.amount.toDouble()) / (100)) }
+                .collect(Collectors.summingDouble { d -> d }) * (it.amount.toIntOrNull()?:0)
         }.collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
             2,
             RoundingMode.HALF_DOWN
@@ -129,8 +129,8 @@ fun DietSettingsStatistic(
     val kcalFromGrain = dayViewModel.dayWithDishesUiState.dayDetails.dishList.stream().map { it ->
         it.dishDetails.ingredientList.stream()
             .filter { it.ingredientDetails.foodCategory == FoodCategory.Wheet }
-            .map { ((it.ingredientDetails.totalKcal.toDouble() * it.amount) / (100)) }
-            .collect(Collectors.summingDouble { d -> d }) * it.amount
+            .map { ((it.ingredientDetails.totalKcal.toDouble() * it.amount.toDouble()) / (100)) }
+            .collect(Collectors.summingDouble { d -> d }) * (it.amount.toIntOrNull()?:0)
     }.collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
         2,
         RoundingMode.HALF_DOWN
@@ -138,32 +138,32 @@ fun DietSettingsStatistic(
     val kcalFromAddedFat = dayViewModel.dayWithDishesUiState.dayDetails.dishList.stream().map { it ->
         it.dishDetails.ingredientList.stream()
             .filter { it.ingredientDetails.foodCategory == FoodCategory.AddedFat }
-            .map { ((it.ingredientDetails.totalKcal.toDouble() * it.amount) / (100)) }
-            .collect(Collectors.summingDouble { d -> d }) * it.amount
+            .map { ((it.ingredientDetails.totalKcal.toDouble() * it.amount.toDouble()) / (100)) }
+            .collect(Collectors.summingDouble { d -> d }) * (it.amount.toIntOrNull()?:0)
     }.collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
         2,
         RoundingMode.HALF_DOWN
     ).toDouble()
     val protein = dayViewModel.dayWithDishesUiState.dayDetails.dishList.stream().map { it ->
         it.dishDetails.ingredientList.stream()
-            .map { ((it.ingredientDetails.protein.toDouble() * it.amount) / (100)) }
-            .collect(Collectors.summingDouble { d -> d }) * it.amount
+            .map { ((it.ingredientDetails.protein.toDouble() * it.amount.toDouble()) / (100)) }
+            .collect(Collectors.summingDouble { d -> d }) * (it.amount.toIntOrNull()?:0)
     }.collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
         2,
         RoundingMode.HALF_DOWN
     ).toDouble()
     val carbohydrates = dayViewModel.dayWithDishesUiState.dayDetails.dishList.stream().map { it ->
         it.dishDetails.ingredientList.stream()
-            .map { ((it.ingredientDetails.carbohydrates.toDouble() * it.amount) / (100)) }
-            .collect(Collectors.summingDouble { d -> d }) * it.amount
+            .map { ((it.ingredientDetails.carbohydrates.toDouble() * it.amount.toDouble()) / (100)) }
+            .collect(Collectors.summingDouble { d -> d }) * (it.amount.toIntOrNull()?:0)
     }.collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
         2,
         RoundingMode.HALF_DOWN
     ).toDouble()
     val fats = dayViewModel.dayWithDishesUiState.dayDetails.dishList.stream().map { it ->
         it.dishDetails.ingredientList.stream()
-            .map { ((it.ingredientDetails.fats.toDouble() * it.amount) / (100)) }
-            .collect(Collectors.summingDouble { d -> d }) * it.amount
+            .map { ((it.ingredientDetails.fats.toDouble() * it.amount.toDouble()) / (100)) }
+            .collect(Collectors.summingDouble { d -> d }) * (it.amount.toIntOrNull()?:0)
     }.collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
         2,
         RoundingMode.HALF_DOWN
@@ -171,24 +171,24 @@ fun DietSettingsStatistic(
     val polyunsaturatedFats =
         dayViewModel.dayWithDishesUiState.dayDetails.dishList.stream().map { it ->
             it.dishDetails.ingredientList.stream()
-                .map { ((it.ingredientDetails.polyunsaturatedFats.toDouble() * it.amount) / (100)) }
-                .collect(Collectors.summingDouble { d -> d }) * it.amount
+                .map { ((it.ingredientDetails.polyunsaturatedFats.toDouble() * it.amount.toDouble()) / (100)) }
+                .collect(Collectors.summingDouble { d -> d }) * (it.amount.toIntOrNull()?:0)
         }.collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
             2,
             RoundingMode.HALF_DOWN
         ).toDouble()
     val soil = dayViewModel.dayWithDishesUiState.dayDetails.dishList.stream().map { it ->
         it.dishDetails.ingredientList.stream()
-            .map { ((it.ingredientDetails.soil.toDouble() * it.amount) / (100)) }
-            .collect(Collectors.summingDouble { d -> d }) * it.amount
+            .map { ((it.ingredientDetails.soil.toDouble() * it.amount.toDouble()) / (100)) }
+            .collect(Collectors.summingDouble { d -> d }) * (it.amount.toIntOrNull()?:0)
     }.collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
         2,
         RoundingMode.HALF_DOWN
     ).toDouble()
     val fiber = dayViewModel.dayWithDishesUiState.dayDetails.dishList.stream().map { it ->
         it.dishDetails.ingredientList.stream()
-            .map { ((it.ingredientDetails.fiber.toDouble() * it.amount) / (100)) }
-            .collect(Collectors.summingDouble { d -> d }) * it.amount
+            .map { ((it.ingredientDetails.fiber.toDouble() * it.amount.toDouble()) / (100)) }
+            .collect(Collectors.summingDouble { d -> d }) * (it.amount.toIntOrNull()?:0)
     }.collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
         2,
         RoundingMode.HALF_DOWN

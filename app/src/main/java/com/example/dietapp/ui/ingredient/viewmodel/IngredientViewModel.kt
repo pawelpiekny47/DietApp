@@ -85,7 +85,7 @@ fun IngredientDetails.toIngredient(): Ingredient {
 }
 
 fun IngredientDetails.toIngredientWithAmountDetails(): IngredientWithAmountDetails {
-    return IngredientWithAmountDetails(this, 0.0)
+    return IngredientWithAmountDetails(this, "0.0")
 }
 
 fun Ingredient.toIngredientDetails(): IngredientDetails {

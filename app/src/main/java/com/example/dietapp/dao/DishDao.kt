@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface DishDao {
     @Transaction
-    @Query("SELECT * FROM dish")
+    @Query("SELECT * FROM dish WHERE dishId = dishId")
     fun getAll(): Flow<List<DishWithIngredients>>
 
     @Upsert

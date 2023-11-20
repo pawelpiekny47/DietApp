@@ -87,7 +87,7 @@ fun DietSettingsStatistic(
 ) {
     val totalKcal =
         dishViewModel.dishWithIngredientsUiState.dishDetails.ingredientList.stream().map {
-            (it.ingredientDetails.totalKcal.toDouble() * it.amount) / (100)
+            (it.ingredientDetails.totalKcal.toDouble() * (it.amount.toDoubleOrNull()?:0.0)) / (100)
         }
             .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
                 2,
@@ -98,7 +98,7 @@ fun DietSettingsStatistic(
         dishViewModel.dishWithIngredientsUiState.dishDetails.ingredientList.stream().filter {
             (it.ingredientDetails.foodCategory == FoodCategory.Fruit)
         }.map {
-            (it.ingredientDetails.totalKcal.toDouble() * it.amount) / (100)
+            (it.ingredientDetails.totalKcal.toDouble() * (it.amount.toDoubleOrNull()?:0.0)) / (100)
         }
             .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
                 2,
@@ -109,7 +109,7 @@ fun DietSettingsStatistic(
         dishViewModel.dishWithIngredientsUiState.dishDetails.ingredientList.stream().filter {
             (it.ingredientDetails.foodCategory == FoodCategory.Vegetable)
         }.map {
-            (it.ingredientDetails.totalKcal.toDouble() * it.amount) / (100)
+            (it.ingredientDetails.totalKcal.toDouble() * (it.amount.toDoubleOrNull()?:0.0)) / (100)
         }
             .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
                 2,
@@ -120,7 +120,7 @@ fun DietSettingsStatistic(
         dishViewModel.dishWithIngredientsUiState.dishDetails.ingredientList.stream().filter {
             (it.ingredientDetails.foodCategory == FoodCategory.ProteinSource)
         }.map {
-            (it.ingredientDetails.totalKcal.toDouble() * it.amount) / (100)
+            (it.ingredientDetails.totalKcal.toDouble() * (it.amount.toDoubleOrNull()?:0.0)) / (100)
         }
             .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
                 2,
@@ -131,7 +131,7 @@ fun DietSettingsStatistic(
         dishViewModel.dishWithIngredientsUiState.dishDetails.ingredientList.stream().filter {
             (it.ingredientDetails.foodCategory == FoodCategory.MilkAndReplacement)
         }.map {
-            (it.ingredientDetails.totalKcal.toDouble() * it.amount) / (100)
+            (it.ingredientDetails.totalKcal.toDouble() * (it.amount.toDoubleOrNull()?:0.0)) / (100)
         }
             .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
                 2,
@@ -142,7 +142,7 @@ fun DietSettingsStatistic(
         dishViewModel.dishWithIngredientsUiState.dishDetails.ingredientList.stream().filter {
             (it.ingredientDetails.foodCategory == FoodCategory.Wheet)
         }.map {
-            (it.ingredientDetails.totalKcal.toDouble() * it.amount) / (100)
+            (it.ingredientDetails.totalKcal.toDouble() * (it.amount.toDoubleOrNull()?:0.0)) / (100)
         }
             .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
                 2,
@@ -152,7 +152,7 @@ fun DietSettingsStatistic(
         dishViewModel.dishWithIngredientsUiState.dishDetails.ingredientList.stream().filter {
             (it.ingredientDetails.foodCategory == FoodCategory.AddedFat)
         }.map {
-            (it.ingredientDetails.totalKcal.toDouble() * it.amount) / (100)
+            (it.ingredientDetails.totalKcal.toDouble() * (it.amount.toDoubleOrNull()?:0.0)) / (100)
         }
             .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
                 2,
@@ -161,7 +161,7 @@ fun DietSettingsStatistic(
 
     val protein =
         dishViewModel.dishWithIngredientsUiState.dishDetails.ingredientList.stream().map {
-            (it.ingredientDetails.protein.toDouble() * it.amount) / (100)
+            (it.ingredientDetails.protein.toDouble() * (it.amount.toDoubleOrNull()?:0.0)) / (100)
         }
             .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
                 2,
@@ -170,7 +170,7 @@ fun DietSettingsStatistic(
 
     val carbohydrates =
         dishViewModel.dishWithIngredientsUiState.dishDetails.ingredientList.stream().map {
-            (it.ingredientDetails.carbohydrates.toDouble() * it.amount) / (100)
+            (it.ingredientDetails.carbohydrates.toDouble() * (it.amount.toDoubleOrNull()?:0.0)) / (100)
         }
             .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
                 2,
@@ -179,7 +179,7 @@ fun DietSettingsStatistic(
 
     val fats =
         dishViewModel.dishWithIngredientsUiState.dishDetails.ingredientList.stream().map {
-            (it.ingredientDetails.fats.toDouble() * it.amount) / (100)
+            (it.ingredientDetails.fats.toDouble() * (it.amount.toDoubleOrNull()?:0.0)) / (100)
         }
             .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
                 2,
@@ -188,7 +188,7 @@ fun DietSettingsStatistic(
 
     val polyunsaturatedFats =
         dishViewModel.dishWithIngredientsUiState.dishDetails.ingredientList.stream().map {
-            (it.ingredientDetails.polyunsaturatedFats.toDouble() * it.amount) / (100)
+            (it.ingredientDetails.polyunsaturatedFats.toDouble() * (it.amount.toDoubleOrNull()?:0.0)) / (100)
         }
             .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
                 2,
@@ -197,7 +197,7 @@ fun DietSettingsStatistic(
 
     val soil =
         dishViewModel.dishWithIngredientsUiState.dishDetails.ingredientList.stream().map {
-            (it.ingredientDetails.soil.toDouble() * it.amount) / (100)
+            (it.ingredientDetails.soil.toDouble() * (it.amount.toDoubleOrNull()?:0.0)) / (100)
         }
             .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
                 2,
@@ -206,7 +206,7 @@ fun DietSettingsStatistic(
 
     val fiber =
         dishViewModel.dishWithIngredientsUiState.dishDetails.ingredientList.stream().map {
-            (it.ingredientDetails.fiber.toDouble() * it.amount) / (100)
+            (it.ingredientDetails.fiber.toDouble() * (it.amount.toDoubleOrNull()?:0.0)) / (100)
         }
             .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
                 2,

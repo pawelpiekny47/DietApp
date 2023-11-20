@@ -48,7 +48,7 @@ fun DayItem(
     Card(modifier = Modifier
         .clickable { onItemClick(day.toDayDetails()) }) {
         Text(
-            text = "${day.day.name}  protein:${day.dishWithAmountList.sumOf { it -> it.dishWithIngredients.ingredientList.sumOf { it.ingredient.protein } }} carbs:${day.dishWithAmountList.sumOf { it -> it.dishWithIngredients.ingredientList.sumOf { it.ingredient.carbohydrates } }}"
+            text = "${day.day.name}  protein:${day.dishWithAmountList.sumOf { it -> it.dishWithIngredients.ingredientList.sumOf { it.ingredient.protein } * it.amount }} carbs:${day.dishWithAmountList.sumOf { it -> it.dishWithIngredients.ingredientList.sumOf { it.ingredient.carbohydrates }*it.amount }}"
         )
     }
 }

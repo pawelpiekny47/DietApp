@@ -51,7 +51,7 @@ class DayViewModel(private val dayRepository: DayRepository) : ViewModel() {
                     dishList = dayWithDishesUiState.dayDetails.dishList.stream()
                         .map {
                             if (it.dishDetails.dish.dishId == dishId)
-                                DishWithAmountDetails(it.dishDetails, string.toInt())
+                                DishWithAmountDetails(it.dishDetails, string)
                             else it
                         }
                         .toList()),
@@ -151,7 +151,7 @@ fun DayWithDishesDetailsUiState.toDayDishCrossRefList(): List<DayDishCrossRef> {
             DayDishCrossRef(
                 dayDetails.day.dayId,
                 it.dishDetails.dish.dishId,
-                it.amount
+                it.amount.toInt()
             )
         }
         .toList()
@@ -168,29 +168,29 @@ fun DayWithDishes.toDayDetails(): DayWithDishesDetails {
     return DayWithDishesDetails(
         day,
         dishWithAmountList.map { it.toDishWithAmountDetails() },
-
-        )
+    )
 }
 
 data class DishWithAmountDetails(
     val dishDetails: DishWithIngredientsDetails,
-    var amount: Int = 0
+    var amount: String = "0"
 )
 
 fun DishWithAmount.toDishWithAmountDetails(): DishWithAmountDetails {
     return DishWithAmountDetails(
         dishWithIngredients.toDishWithIngredientDetails(),
-        this.amount
+        this.amount.toString()
     )
 }
 
 fun DishWithIngredientsDetails.toDishWithAmountDetails(): DishWithAmountDetails {
-    return DishWithAmountDetails(this, 0)
+    return DishWithAmountDetails(this, "0")
 }
-fun Dish.toDishDetails(): DishDetails{
+
+fun Dish.toDishDetails(): DishDetails {
     return DishDetails(
-        this.dishId,
-    this.name,
+        this.dishId.toString(),
+        this.name,
         this.description
     )
 }

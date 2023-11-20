@@ -17,10 +17,10 @@ data class DishWithIngredients(
     @Embedded val dish: Dish,
     @Relation(
         parentColumn = "dishId",
-        entityColumn = "ingredientId",
-        associateBy = Junction(IngredientWithAmount::class)
+        entityColumn = "dishId",
+        associateBy = Junction(IngredientWithAmount::class),
     )
-    val ingredientList: List<IngredientWithAmount>
+    val ingredientList: Set<IngredientWithAmount>
 )
 
 @DatabaseView(
