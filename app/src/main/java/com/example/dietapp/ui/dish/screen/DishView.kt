@@ -298,6 +298,10 @@ fun AdditionalInfo(
         text = "salt: ${dishViewModel.returnTotalSoil()} / ${dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.soil}",
         fontSize = 10.sp
     )
+    Text(
+        text = "fiber: ${dishViewModel.returnTotalFiber()} / ${dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.fiber}",
+        fontSize = 10.sp
+    )
 }
 
 @Composable
