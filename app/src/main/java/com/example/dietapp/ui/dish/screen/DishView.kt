@@ -333,7 +333,7 @@ fun CircularBasicStatistics(
             color = Color.Red
         )
         CircularProgressIndicator(
-            modifier = Modifier.rotate(proteinProgress.toFloat() * 360),
+            modifier = Modifier.rotate((carbsProgress + proteinProgress).toFloat() * 360),
             progress = (fatProgress.toFloat()),
             color = Color.Green
         )
@@ -369,22 +369,22 @@ fun CircularFoodTypeStatistics(
             color = Color.Red
         )
         CircularProgressIndicator(
-            modifier = Modifier.rotate(vegetableProgress.toFloat() * 360),
+            modifier = Modifier.rotate((fruitProgress + vegetableProgress).toFloat() * 360),
             progress = (proteinSourceProgress.toFloat()),
             color = Color.Green
         )
         CircularProgressIndicator(
-            modifier = Modifier.rotate(proteinSourceProgress.toFloat() * 360),
+            modifier = Modifier.rotate((fruitProgress + vegetableProgress + proteinSourceProgress).toFloat() * 360),
             progress = (grainProgress.toFloat()),
             color = Color.DarkGray
         )
         CircularProgressIndicator(
-            modifier = Modifier.rotate(grainProgress.toFloat() * 360),
+            modifier = Modifier.rotate((fruitProgress + vegetableProgress + proteinSourceProgress + grainProgress).toFloat() * 360),
             progress = (milkProgress.toFloat()),
             color = Color.Cyan
         )
         CircularProgressIndicator(
-            modifier = Modifier.rotate(milkProgress.toFloat() * 360),
+            modifier = Modifier.rotate((fruitProgress + vegetableProgress + proteinSourceProgress + grainProgress + milkProgress).toFloat() * 360),
             progress = (addedFatProgress.toFloat()),
             color = Color.Blue
         )
