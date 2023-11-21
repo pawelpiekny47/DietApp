@@ -26,7 +26,7 @@ fun AddIngredient(
         FoodCategory.values().forEach { foodCategory ->
             if (ingredientUiState.ingredientList.any { it.foodCategory == foodCategory }) item {
                 Text(
-                    text = "${foodCategory}"
+                    text = "${foodCategory}",
                 )
             }
             items(ingredientUiState.ingredientList.filter { it.foodCategory == foodCategory }) { ingredient ->

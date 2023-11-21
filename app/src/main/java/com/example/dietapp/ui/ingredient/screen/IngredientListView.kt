@@ -86,28 +86,28 @@ fun IngredientItem(ingredient: Ingredient, onItemClick: (IngredientDetails) -> U
             horizontalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "b :${ingredient.protein}",
+                text = "p :${ingredient.protein}",
                 modifier = Modifier
                     .padding(Dp(5F)),
                 fontStyle = FontStyle.Italic,
                 style = MaterialTheme.typography.bodySmall
             )
             Text(
-                text = "w: ${ingredient.carbohydrates}",
+                text = "c: ${ingredient.carbohydrates}",
                 modifier = Modifier
                     .padding(Dp(5F)),
                 fontStyle = FontStyle.Italic,
                 style = MaterialTheme.typography.bodySmall
             )
             Text(
-                text = "t: ${ingredient.fats}",
+                text = "f: ${ingredient.fats}",
                 modifier = Modifier
                     .padding(Dp(5F)),
                 fontStyle = FontStyle.Italic,
                 style = MaterialTheme.typography.bodySmall
             )
             Text(
-                text = "kcal: TODO",
+                text = "kcal: ${ingredient.totalKcal}",
                 modifier = Modifier
                     .padding(Dp(5F)),
                 fontStyle = FontStyle.Italic,
