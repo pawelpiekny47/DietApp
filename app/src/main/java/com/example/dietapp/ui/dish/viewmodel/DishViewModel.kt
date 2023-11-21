@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.dietapp.data.Dish
 import com.example.dietapp.data.DishIngredientCrossRef
 import com.example.dietapp.data.DishWithIngredients
+import com.example.dietapp.data.FoodCategory
 import com.example.dietapp.data.IngredientWithAmount
 import com.example.dietapp.repository.DishRepository
 import com.example.dietapp.ui.ingredient.viewmodel.IngredientDetails
@@ -15,6 +16,8 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import java.math.RoundingMode
+import java.util.stream.Collectors
 import kotlin.streams.toList
 
 class DishViewModel(private val dishRepository: DishRepository) : ViewModel() {
@@ -127,6 +130,92 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel() {
             )
     }
 
+    fun returnTotalKcal(): Double {
+        return dishWithIngredientsUiState.dishDetails.ingredientList.stream().map {
+            (it.ingredientDetails.totalKcal.toDouble() * (it.amount.toDoubleOrNull()
+                ?: 0.0)) / (100)
+        }
+            .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
+                2,
+                RoundingMode.HALF_DOWN
+            ).toDouble()
+    }
+    fun returnTotalProtein(): Double {
+        return dishWithIngredientsUiState.dishDetails.ingredientList.stream().map {
+            (it.ingredientDetails.protein.toDouble() * (it.amount.toDoubleOrNull()
+                ?: 0.0)) / (100)
+        }
+            .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
+                2,
+                RoundingMode.HALF_DOWN
+            ).toDouble()
+    }
+    fun returnTotalCarbs(): Double {
+        return dishWithIngredientsUiState.dishDetails.ingredientList.stream().map {
+            (it.ingredientDetails.carbohydrates.toDouble() * (it.amount.toDoubleOrNull()
+                ?: 0.0)) / (100)
+        }
+            .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
+                2,
+                RoundingMode.HALF_DOWN
+            ).toDouble()
+    }
+    fun returnTotalFat(): Double {
+        return dishWithIngredientsUiState.dishDetails.ingredientList.stream().map {
+            (it.ingredientDetails.fats.toDouble() * (it.amount.toDoubleOrNull()
+                ?: 0.0)) / (100)
+        }
+            .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
+                2,
+                RoundingMode.HALF_DOWN
+            ).toDouble()
+    }
+
+    fun returnTotalSoil(): Double {
+        return dishWithIngredientsUiState.dishDetails.ingredientList.stream().map {
+            (it.ingredientDetails.soil.toDouble() * (it.amount.toDoubleOrNull()
+                ?: 0.0)) / (100)
+        }
+            .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
+                2,
+                RoundingMode.HALF_DOWN
+            ).toDouble()
+    }
+    fun returnTotalFiber(): Double {
+        return dishWithIngredientsUiState.dishDetails.ingredientList.stream().map {
+            (it.ingredientDetails.fiber.toDouble() * (it.amount.toDoubleOrNull()
+                ?: 0.0)) / (100)
+        }
+            .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
+                2,
+                RoundingMode.HALF_DOWN
+            ).toDouble()
+    }
+    fun returnTotalPufa(): Double {
+        return dishWithIngredientsUiState.dishDetails.ingredientList.stream().map {
+            (it.ingredientDetails.polyunsaturatedFats.toDouble() * (it.amount.toDoubleOrNull()
+                ?: 0.0)) / (100)
+        }
+            .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
+                2,
+                RoundingMode.HALF_DOWN
+            ).toDouble()
+    }
+
+    fun returnTotalKcalForFoodCategory(foodType: FoodCategory): Double {
+        return dishWithIngredientsUiState.dishDetails.ingredientList.stream().filter {
+            (it.ingredientDetails.foodCategory == foodType)
+        }.map {
+            (it.ingredientDetails.totalKcal.toDouble() * (it.amount.toDoubleOrNull()
+                ?: 0.0)) / (100)
+        }
+            .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
+                2,
+                RoundingMode.HALF_DOWN
+            ).toDouble()
+    }
+
+
     suspend fun saveDishWithIngredients() {
         dishRepository.saveDish(dishWithIngredientsUiState.dishDetails.dish)
         dishRepository.saveAll(dishWithIngredientsUiState.toDishIngredientCrossRefList())
@@ -167,7 +256,7 @@ fun DishWithIngredients.toDishWithIngredientDetails(): DishWithIngredientsDetail
     return DishWithIngredientsDetails(
         dish,
         ingredientList.map { it.toIngredientWithAmountDetails() },
-        )
+    )
 }
 
 data class IngredientWithAmountDetails(

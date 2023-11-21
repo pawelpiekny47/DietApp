@@ -1,19 +1,25 @@
 package com.example.dietapp.ui.dish.screen
 
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
@@ -29,10 +35,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.dietapp.data.FoodCategory
@@ -147,275 +155,234 @@ fun IngredientList(
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun DietSettingsStatistic(
     dishViewModel: DishViewModel,
     dietSettingsViewModel: DietSettingsViewModel
 ) {
-    val totalKcal =
-        dishViewModel.dishWithIngredientsUiState.dishDetails.ingredientList.stream().map {
-            (it.ingredientDetails.totalKcal.toDouble() * (it.amount.toDoubleOrNull()
-                ?: 0.0)) / (100)
-        }
-            .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
-                2,
-                RoundingMode.HALF_DOWN
-            ).toDouble()
+    val lazyListState = rememberLazyListState()
+    val flingBehavior = rememberSnapFlingBehavior(lazyListState = lazyListState)
 
-    val kcalFromFruits =
-        dishViewModel.dishWithIngredientsUiState.dishDetails.ingredientList.stream().filter {
-            (it.ingredientDetails.foodCategory == FoodCategory.Fruit)
-        }.map {
-            (it.ingredientDetails.totalKcal.toDouble() * (it.amount.toDoubleOrNull()
-                ?: 0.0)) / (100)
-        }
-            .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
-                2,
-                RoundingMode.HALF_DOWN
-            ).toDouble()
-
-    val kcalFromVegetables =
-        dishViewModel.dishWithIngredientsUiState.dishDetails.ingredientList.stream().filter {
-            (it.ingredientDetails.foodCategory == FoodCategory.Vegetable)
-        }.map {
-            (it.ingredientDetails.totalKcal.toDouble() * (it.amount.toDoubleOrNull()
-                ?: 0.0)) / (100)
-        }
-            .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
-                2,
-                RoundingMode.HALF_DOWN
-            ).toDouble()
-
-    val kcalFromProteinSource =
-        dishViewModel.dishWithIngredientsUiState.dishDetails.ingredientList.stream().filter {
-            (it.ingredientDetails.foodCategory == FoodCategory.ProteinSource)
-        }.map {
-            (it.ingredientDetails.totalKcal.toDouble() * (it.amount.toDoubleOrNull()
-                ?: 0.0)) / (100)
-        }
-            .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
-                2,
-                RoundingMode.HALF_DOWN
-            ).toDouble()
-
-    val kcalFromMilkProducts =
-        dishViewModel.dishWithIngredientsUiState.dishDetails.ingredientList.stream().filter {
-            (it.ingredientDetails.foodCategory == FoodCategory.MilkAndReplacement)
-        }.map {
-            (it.ingredientDetails.totalKcal.toDouble() * (it.amount.toDoubleOrNull()
-                ?: 0.0)) / (100)
-        }
-            .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
-                2,
-                RoundingMode.HALF_DOWN
-            ).toDouble()
-
-    val kcalFromGrain =
-        dishViewModel.dishWithIngredientsUiState.dishDetails.ingredientList.stream().filter {
-            (it.ingredientDetails.foodCategory == FoodCategory.Wheet)
-        }.map {
-            (it.ingredientDetails.totalKcal.toDouble() * (it.amount.toDoubleOrNull()
-                ?: 0.0)) / (100)
-        }
-            .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
-                2,
-                RoundingMode.HALF_DOWN
-            ).toDouble()
-    val kcalFromAddedFat =
-        dishViewModel.dishWithIngredientsUiState.dishDetails.ingredientList.stream().filter {
-            (it.ingredientDetails.foodCategory == FoodCategory.AddedFat)
-        }.map {
-            (it.ingredientDetails.totalKcal.toDouble() * (it.amount.toDoubleOrNull()
-                ?: 0.0)) / (100)
-        }
-            .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
-                2,
-                RoundingMode.HALF_DOWN
-            ).toDouble()
-
-    val protein =
-        dishViewModel.dishWithIngredientsUiState.dishDetails.ingredientList.stream().map {
-            (it.ingredientDetails.protein.toDouble() * (it.amount.toDoubleOrNull() ?: 0.0)) / (100)
-        }
-            .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
-                2,
-                RoundingMode.HALF_DOWN
-            ).toDouble()
-
-    val carbohydrates =
-        dishViewModel.dishWithIngredientsUiState.dishDetails.ingredientList.stream().map {
-            (it.ingredientDetails.carbohydrates.toDouble() * (it.amount.toDoubleOrNull()
-                ?: 0.0)) / (100)
-        }
-            .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
-                2,
-                RoundingMode.HALF_DOWN
-            ).toDouble()
-
-    val fats =
-        dishViewModel.dishWithIngredientsUiState.dishDetails.ingredientList.stream().map {
-            (it.ingredientDetails.fats.toDouble() * (it.amount.toDoubleOrNull() ?: 0.0)) / (100)
-        }
-            .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
-                2,
-                RoundingMode.HALF_DOWN
-            ).toDouble()
-
-    val polyunsaturatedFats =
-        dishViewModel.dishWithIngredientsUiState.dishDetails.ingredientList.stream().map {
-            (it.ingredientDetails.polyunsaturatedFats.toDouble() * (it.amount.toDoubleOrNull()
-                ?: 0.0)) / (100)
-        }
-            .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
-                2,
-                RoundingMode.HALF_DOWN
-            ).toDouble()
-
-    val soil =
-        dishViewModel.dishWithIngredientsUiState.dishDetails.ingredientList.stream().map {
-            (it.ingredientDetails.soil.toDouble() * (it.amount.toDoubleOrNull() ?: 0.0)) / (100)
-        }
-            .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
-                2,
-                RoundingMode.HALF_DOWN
-            ).toDouble()
-
-    val fiber =
-        dishViewModel.dishWithIngredientsUiState.dishDetails.ingredientList.stream().map {
-            (it.ingredientDetails.fiber.toDouble() * (it.amount.toDoubleOrNull() ?: 0.0)) / (100)
-        }
-            .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
-                2,
-                RoundingMode.HALF_DOWN
-            ).toDouble()
-
-
-    var expanded by remember { mutableStateOf(false) }
-    Card(modifier = Modifier.animateContentSize(),
-        onClick = { expanded = !expanded }) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-
-
-            DrawStatistics(
-                totalKcal,
-                dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.totalKcal.toDouble()
-                    .toFloat(),
-                "totalKcal"
-            )
-            DrawStatistics(
-                protein,
-                dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.protein.toDouble()
-                    .toFloat(),
-                "protein"
-            )
-            DrawStatistics(
-                carbohydrates,
-                dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.carbohydrates.toDouble()
-                    .toFloat(),
-                "carbs"
-            )
-            DrawStatistics(
-                fats,
-                dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.fats.toDouble()
-                    .toFloat(),
-                "fats"
-            )
-
-            if (expanded) {
-
-                DrawStatistics(
-                    kcalFromFruits,
-                    dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromFruits.toDouble()
-                        .toFloat(),
-                    "kcalFromFruits"
-                )
-                DrawStatistics(
-                    kcalFromVegetables,
-                    dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromVegetables.toDouble()
-                        .toFloat(),
-                    "kcalFromVegetables"
-                )
-                DrawStatistics(
-                    kcalFromProteinSource,
-                    dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromProteinSource.toDouble()
-                        .toFloat(),
-                    "kcalFromProteinSource"
-                )
-                DrawStatistics(
-                    kcalFromMilkProducts,
-                    dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromMilkProducts.toDouble()
-                        .toFloat(),
-                    "kcalFromMilkProducts"
-                )
-                DrawStatistics(
-                    kcalFromGrain,
-                    dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromGrain.toDouble()
-                        .toFloat(),
-                    "kcalFromGrain"
-                )
-                DrawStatistics(
-                    kcalFromAddedFat,
-                    dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromAddedFat.toDouble()
-                        .toFloat(),
-                    "kcalFromAddedFat"
-                )
-
-                DrawStatistics(
-                    polyunsaturatedFats,
-                    dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.polyunsaturatedFats.toDouble()
-                        .toFloat(),
-                    "pufa"
-                )
-                DrawStatistics(
-                    soil,
-                    dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.soil.toDouble()
-                        .toFloat(),
-                    "soil"
-                )
-                DrawStatistics(
-                    fiber,
-                    dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.fiber.toDouble()
-                        .toFloat(),
-                    "fiber"
-                )
+    LazyRow(
+        modifier = Modifier.fillMaxWidth(),
+        state = lazyListState,
+        flingBehavior = flingBehavior
+    ) {
+        item {
+            Column(modifier = Modifier.fillParentMaxWidth()) {
+                BasicStatistics(dishViewModel, dietSettingsViewModel)
             }
-            Icon(
-                imageVector = if (expanded) Icons.Rounded.KeyboardArrowUp else Icons.Rounded.KeyboardArrowDown,
-                "details"
-            )
+        }
+        item {
+            Column(modifier = Modifier.fillParentMaxWidth()) {
+                FoodTypeStatistics(dishViewModel, dietSettingsViewModel)
+            }
+        }
+        item {
+            Column(modifier = Modifier.fillParentMaxWidth()) {
+                AdditionalInfo(dishViewModel, dietSettingsViewModel)
+            }
         }
     }
 }
 
+
 @Composable
-fun DrawStatistics(current: Double, total: Float, name: String) {
+fun BasicStatistics(
+    dishViewModel: DishViewModel,
+    dietSettingsViewModel: DietSettingsViewModel
+) {
+
     Row(
-        modifier = Modifier.padding(0.dp, 3.dp),
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            modifier = Modifier
-                .weight(1F)
-                .padding(10.dp, 0.dp),
-            text = "$name:",
-            maxLines = 1,
-            fontSize = 12.sp,
+        Box(contentAlignment = Alignment.Center) {
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "kcal: ${dishViewModel.returnTotalKcal()} / ${dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.totalKcal}",
+                    fontSize = 10.sp
+                )
+                Text(
+                    text = "protein: ${dishViewModel.returnTotalProtein()} / ${dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.protein}",
+                    fontSize = 10.sp
+                )
+                Text(
+                    text = "carbs: ${dishViewModel.returnTotalCarbs()} / ${dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.carbohydrates}",
+                    fontSize = 10.sp
+                )
+                Text(
+                    text = "fat: ${dishViewModel.returnTotalFat()} / ${dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.fats}",
+                    fontSize = 10.sp
+                )
+            }
+        }
+        CircularBasicStatistics(dishViewModel)
+    }
+
+}
+
+@Composable
+fun FoodTypeStatistics(
+    dishViewModel: DishViewModel,
+    dietSettingsViewModel: DietSettingsViewModel
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(contentAlignment = Alignment.Center) {
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "fruit: ${dishViewModel.returnTotalKcalForFoodCategory(FoodCategory.Fruit)} )/ ${dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromFruits}",
+                    fontSize = 10.sp
+                )
+                Text(
+                    text = "vegetable: ${
+                        dishViewModel.returnTotalKcalForFoodCategory(
+                            FoodCategory.Vegetable
+                        )
+                    } / ${dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromVegetables}",
+                    fontSize = 10.sp
+                )
+                Text(
+                    text = "protein source: ${
+                        dishViewModel.returnTotalKcalForFoodCategory(
+                            FoodCategory.ProteinSource
+                        )
+                    } / ${dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromProteinSource}",
+                    fontSize = 10.sp
+                )
+                Text(
+                    text = "milk: ${dishViewModel.returnTotalKcalForFoodCategory(FoodCategory.MilkAndReplacement)} / ${dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromMilkProducts}",
+                    fontSize = 10.sp
+                )
+                Text(
+                    text = "grains: ${dishViewModel.returnTotalKcalForFoodCategory(FoodCategory.Wheet)} / ${dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromGrain}",
+                    fontSize = 10.sp
+                )
+                Text(
+                    text = "added fats: ${
+                        dishViewModel.returnTotalKcalForFoodCategory(
+                            FoodCategory.AddedFat
+                        )
+                    } / ${dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromAddedFat}",
+                    fontSize = 10.sp
+                )
+            }
+        }
+        CircularFoodTypeStatistics(dishViewModel)
+    }
+
+}
+
+@Composable
+fun AdditionalInfo(
+    dishViewModel: DishViewModel,
+    dietSettingsViewModel: DietSettingsViewModel
+) {
+    Text(
+        text = "pufa: ${dishViewModel.returnTotalPufa()} / ${dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.polyunsaturatedFats}",
+        fontSize = 10.sp
+    )
+    Text(
+        text = "salt: ${dishViewModel.returnTotalSoil()} / ${dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.soil}",
+        fontSize = 10.sp
+    )
+}
+
+@Composable
+fun CircularBasicStatistics(
+    dishViewModel: DishViewModel
+) {
+    val total =
+        dishViewModel.returnTotalProtein() * 4 + dishViewModel.returnTotalFat() * 9 + dishViewModel.returnTotalCarbs() * 4
+    val fatProgress = dishViewModel.returnTotalFat() * 9 / total
+    val carbsProgress = dishViewModel.returnTotalCarbs() * 4 / total
+    val proteinProgress = dishViewModel.returnTotalProtein() * 4 / total
+    Box(contentAlignment = Alignment.Center) {
+        Column(
+            modifier = Modifier.padding(3.dp, 3.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(text = dishViewModel.returnTotalKcal().toString(), fontSize = 10.sp)
+            Text(text = "kcal", fontSize = 8.sp)
+        }
+        CircularProgressIndicator(
+            modifier = Modifier,
+            progress = (proteinProgress.toFloat()),
+            color = Color.Black
         )
-        LinearProgressIndicator(
-            modifier = Modifier
-                .weight(1F)
-                .padding(10.dp, 0.dp),
-            progress = if (current < total) (current / total).toFloat() else 1f
+        CircularProgressIndicator(
+            modifier = Modifier.rotate(proteinProgress.toFloat() * 360),
+            progress = (carbsProgress.toFloat()),
+            color = Color.Red
         )
-        Text(
-            modifier = Modifier
-                .weight(1F)
-                .padding(10.dp, 0.dp),
-            text = "$current / $total",
-            maxLines = 1,
-            fontSize = 12.sp,
-            fontStyle = FontStyle.Italic
+        CircularProgressIndicator(
+            modifier = Modifier.rotate(proteinProgress.toFloat() * 360),
+            progress = (fatProgress.toFloat()),
+            color = Color.Green
+        )
+    }
+}
+
+@Composable
+fun CircularFoodTypeStatistics(
+    dishViewModel: DishViewModel
+) {
+    val total = FoodCategory.values().sumOf { dishViewModel.returnTotalKcalForFoodCategory(it) }
+    val fruitProgress = dishViewModel.returnTotalKcalForFoodCategory(FoodCategory.Fruit) / total
+    val vegetableProgress =
+        dishViewModel.returnTotalKcalForFoodCategory(FoodCategory.Vegetable) / total
+    val proteinSourceProgress =
+        dishViewModel.returnTotalKcalForFoodCategory(FoodCategory.ProteinSource) / total
+    val grainProgress = dishViewModel.returnTotalKcalForFoodCategory(FoodCategory.Wheet) / total
+    val milkProgress =
+        dishViewModel.returnTotalKcalForFoodCategory(FoodCategory.MilkAndReplacement) / total
+    val addedFatProgress =
+        dishViewModel.returnTotalKcalForFoodCategory(FoodCategory.AddedFat) / total
+
+    Box(contentAlignment = Alignment.Center) {
+
+        CircularProgressIndicator(
+            modifier = Modifier,
+            progress = (fruitProgress.toFloat()),
+            color = Color.Black
+        )
+        CircularProgressIndicator(
+            modifier = Modifier.rotate(fruitProgress.toFloat() * 360),
+            progress = (vegetableProgress.toFloat()),
+            color = Color.Red
+        )
+        CircularProgressIndicator(
+            modifier = Modifier.rotate(vegetableProgress.toFloat() * 360),
+            progress = (proteinSourceProgress.toFloat()),
+            color = Color.Green
+        )
+        CircularProgressIndicator(
+            modifier = Modifier.rotate(proteinSourceProgress.toFloat() * 360),
+            progress = (grainProgress.toFloat()),
+            color = Color.DarkGray
+        )
+        CircularProgressIndicator(
+            modifier = Modifier.rotate(grainProgress.toFloat() * 360),
+            progress = (milkProgress.toFloat()),
+            color = Color.Cyan
+        )
+        CircularProgressIndicator(
+            modifier = Modifier.rotate(milkProgress.toFloat() * 360),
+            progress = (addedFatProgress.toFloat()),
+            color = Color.Blue
         )
     }
 }
