@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
@@ -47,88 +49,89 @@ fun DishView(
             enabled = true,
             singleLine = true
         )
-        IngredientList(
-            dishViewModel,
-            dietSettingsViewModel
-        )
-        Box(modifier = Modifier.weight(2f))
-        DietSettingsStatistic(
-            viewModel = dishViewModel,
-            dietSettingsViewModel = dietSettingsViewModel
-        )
-        Box(modifier = Modifier.weight(1f))
-        Button(
-            onClick = saveButtonOnClick,
-            shape = MaterialTheme.shapes.small,
-        ) {
-            Text(text = "Save")
+        IngredientList(Modifier.weight(4F), dishViewModel)
+        Box(modifier = Modifier.weight(1f)) {
+            DietSettingsStatistic(
+                viewModel = dishViewModel,
+                dietSettingsViewModel = dietSettingsViewModel
+            )
         }
+
         Box(modifier = Modifier.weight(1f))
+        {
+            Button(
+                onClick = saveButtonOnClick,
+                shape = MaterialTheme.shapes.small,
+            ) {
+                Text(text = "Save")
+            }
+        }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun IngredientList(
-    dishViewModel: DishViewModel,
-    dietSettingsViewModel: DietSettingsViewModel
+    modifier: Modifier,
+    dishViewModel: DishViewModel
 ) {
-    dishViewModel.dishWithIngredientsUiState.dishDetails.ingredientList.forEach { ingredient ->
-        Row(
-            verticalAlignment = Alignment.Bottom,
-            modifier = Modifier
-        ) {
-            Text(
-                modifier = Modifier.weight(2F),
-                text = ingredient.ingredientDetails.name,
-                fontSize = 15.sp,
-            )
+    LazyColumn(modifier = modifier) {
+        items(dishViewModel.dishWithIngredientsUiState.dishDetails.ingredientList) { ingredient ->
             Row(
+                verticalAlignment = Alignment.Bottom,
                 modifier = Modifier
-                    .weight(1F),
-                verticalAlignment = Alignment.CenterVertically,
             ) {
+                Text(
+                    modifier = Modifier.weight(2F),
+                    text = ingredient.ingredientDetails.name,
+                    fontSize = 15.sp,
+                )
                 Row(
-                    verticalAlignment = Alignment.Bottom,
-                    modifier = Modifier.weight(3F)
+                    modifier = Modifier
+                        .weight(1F),
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    TextField(
-                        textStyle = TextStyle(fontSize = 15.sp),
+                    Row(
+                        verticalAlignment = Alignment.Bottom,
+                        modifier = Modifier.weight(3F)
+                    ) {
+                        TextField(
+                            textStyle = TextStyle(fontSize = 15.sp),
+                            modifier = Modifier
+                                .weight(5F)
+                                .defaultMinSize(minHeight = 10.dp),
+                            value = ingredient.amount,
+                            onValueChange = {
+                                dishViewModel.updateDishWithIngredientUiState(
+                                    ingredient.ingredientDetails.id,
+                                    it
+                                )
+                            },
+                            enabled = true,
+                            singleLine = true,
+                            colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
+                        )
+                        Text(
+                            modifier = Modifier
+                                .defaultMinSize(minWidth = 1.dp)
+                                .weight(1F),
+                            text = " g",
+                            fontSize = 12.sp,
+                        )
+                    }
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = "delete",
                         modifier = Modifier
-                            .weight(5F)
-                            .defaultMinSize(minHeight = 10.dp),
-                        value = ingredient.amount,
-                        onValueChange = {
-                            dishViewModel.updateDishWithIngredientUiState(
-                                ingredient.ingredientDetails.id,
-                                it
-                            )
-                        },
-                        enabled = true,
-                        singleLine = true,
-                        colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
-                    )
-                    Text(
-                        modifier = Modifier
-                            .defaultMinSize(minWidth = 1.dp)
-                            .weight(1F),
-                        text = " g",
-                        fontSize = 12.sp,
+                            .weight(1F)
+                            .clickable {
+                                dishViewModel.deleteIngredientFromDish(
+                                    ingredient
+                                )
+                            }
                     )
                 }
-                Icon(
-                    imageVector = Icons.Default.Close,
-                    contentDescription = "delete",
-                    modifier = Modifier
-                        .weight(1F)
-                        .clickable {
-                            dishViewModel.deleteIngredientFromDish(
-                                ingredient
-                            )
-                        }
-                )
             }
-
         }
     }
 }
