@@ -8,8 +8,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -18,7 +16,6 @@ import androidx.navigation.compose.rememberNavController
 import com.example.dietapp.ui.AppViewModelProvider
 import com.example.dietapp.ui.dietsettings.viewmodel.DietSettingsViewModel
 import com.example.dietapp.ui.dish.screen.AddIngredient
-import com.example.dietapp.ui.dish.screen.DietSettingsStatistic
 import com.example.dietapp.ui.dish.screen.DishListView
 import com.example.dietapp.ui.dish.screen.DishScreenList
 import com.example.dietapp.ui.dish.screen.DishView
