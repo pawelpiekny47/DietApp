@@ -113,6 +113,7 @@ fun BasicStatistics(
             }
         }
         CircularBasicStatistics(viewModel)
+        CircularBasicStatisticsV2(viewModel, dietSettingsViewModel)
     }
 
 }
@@ -189,6 +190,7 @@ fun FoodTypeStatistics(
             }
         }
         CircularFoodTypeStatistics(viewModel)
+        CircularFoodTypeStatisticsV2(viewModel, dietSettingsViewModel)
     }
 
 }
@@ -305,6 +307,106 @@ fun CircularBasicStatistics(
 }
 
 @Composable
+fun CircularBasicStatisticsV2(
+    viewModel: ViewModel,
+    dietSettingsViewModel: DietSettingsViewModel
+) {
+    var kcal = 0.0
+    var proteinProgress = 0.0
+    var carbsProgress = 0.0
+    var fatProgress = 0.0
+
+    val proteinTarget =
+        dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.protein.toDouble() * 4
+    val carbsTarget =
+        dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.carbohydrates.toDouble() * 4
+    val fatTarget =
+        dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.fats.toDouble() * 9
+    var kcalCalculatedTarget = proteinTarget + carbsTarget + fatTarget
+
+    when (viewModel) {
+        is DishViewModel -> {
+            kcal = viewModel.returnTotalKcal()
+            when (kcalCalculatedTarget) {
+                0.0 -> {
+                    proteinProgress = 0.0
+                    carbsProgress = 0.0
+                    fatProgress = 0.0
+
+                }
+
+                else -> {
+                    proteinProgress = viewModel.returnTotalProtein() * 4 / kcalCalculatedTarget
+                    carbsProgress = viewModel.returnTotalCarbs() * 4 / kcalCalculatedTarget
+                    fatProgress = viewModel.returnTotalFat() * 9 / kcalCalculatedTarget
+                }
+            }
+
+        }
+
+        is DayViewModel -> {
+            kcal = viewModel.returnTotalKcal()
+
+            when (kcalCalculatedTarget) {
+                0.0 -> {
+                    proteinProgress = 0.0
+                    carbsProgress = 0.0
+                    fatProgress = 0.0
+                }
+
+                else -> {
+                    proteinProgress = viewModel.returnTotalProtein() * 4 / kcalCalculatedTarget
+                    carbsProgress = viewModel.returnTotalCarbs() * 4 / kcalCalculatedTarget
+                    fatProgress = viewModel.returnTotalFat() * 9 / kcalCalculatedTarget
+                }
+            }
+        }
+    }
+    Box(contentAlignment = Alignment.Center) {
+        Column(
+            modifier = Modifier.padding(3.dp, 3.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(text = "$kcal", fontSize = 10.sp)
+            Text(text = "kcal", fontSize = 8.sp)
+        }
+        CircularProgressIndicator(
+            progress = proteinProgress.toFloat(),
+            color = Color.Black
+        )
+        CircularProgressIndicator(
+            modifier = Modifier.rotate((proteinProgress * 360).toFloat()),
+            progress = ((proteinTarget / kcalCalculatedTarget) - proteinProgress).toFloat(),
+            color = Color.LightGray
+        )
+        CircularProgressIndicator(
+            modifier = Modifier.rotate(((proteinTarget / kcalCalculatedTarget) * 360).toFloat()),
+            progress = carbsProgress.toFloat(),
+            color = Color.Red
+        )
+        CircularProgressIndicator(
+            modifier = Modifier.rotate((((proteinTarget / kcalCalculatedTarget) + carbsProgress) * 360).toFloat()),
+            progress = ((carbsTarget / kcalCalculatedTarget) - carbsProgress).toFloat(),
+            color = Color.LightGray
+        )
+        CircularProgressIndicator(
+            modifier = Modifier.rotate(((proteinTarget + carbsTarget) / kcalCalculatedTarget * 360).toFloat()),
+            progress = fatProgress.toFloat(),
+            color = Color.Green
+        )
+        CircularProgressIndicator(
+            modifier = Modifier.rotate(
+                (((proteinTarget + carbsTarget) / kcalCalculatedTarget + fatProgress) * 360)
+                    .toFloat()
+            ),
+            progress = (fatTarget / kcalCalculatedTarget - fatProgress).toFloat(),
+            color = Color.LightGray
+        )
+    }
+}
+
+@Composable
 fun CircularFoodTypeStatistics(
     viewModel: ViewModel,
 ) {
@@ -407,6 +509,157 @@ fun CircularFoodTypeStatistics(
             modifier = Modifier.rotate((fruitProgress + vegetableProgress + proteinSourceProgress + grainProgress + milkProgress).toFloat() * 360),
             progress = (addedFatProgress.toFloat()),
             color = Color.Blue
+        )
+    }
+}
+
+@Composable
+fun CircularFoodTypeStatisticsV2(
+    viewModel: ViewModel,
+    dietSettingsViewModel: DietSettingsViewModel
+) {
+    var fruitProgress = 0.0
+    var vegetableProgress = 0.0
+    var grainProgress = 0.0
+    var milkProgress = 0.0
+    var proteinSourceProgress = 0.0
+    var addedFatProgress = 0.0
+
+    var fruitTarget =
+        dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromFruits.toDouble()
+    var vegetableTarget =
+        dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromVegetables.toDouble()
+    var grainTarget =
+        dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromGrain.toDouble()
+    var milkTarget =
+        dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromMilkProducts.toDouble()
+    var proteinSourceTarget =
+        dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromProteinSource.toDouble()
+    var addedFatTarget =
+        dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromAddedFat.toDouble()
+    var kcalTarget =
+        dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.totalKcal.toDouble()
+
+
+    when (viewModel) {
+        is DishViewModel -> {
+            when (kcalTarget) {
+                0.0 -> {
+                    fruitProgress = 0.0
+                    vegetableProgress = 0.0
+                    grainProgress = 0.0
+                    milkProgress = 0.0
+                    proteinSourceProgress = 0.0
+                    addedFatProgress = 0.0
+                }
+
+                else -> {
+                    fruitProgress =
+                        viewModel.returnTotalKcalForFoodCategory(FoodCategory.Fruit) / kcalTarget
+                    vegetableProgress =
+                        viewModel.returnTotalKcalForFoodCategory(FoodCategory.Vegetable) / kcalTarget
+                    grainProgress =
+                        viewModel.returnTotalKcalForFoodCategory(FoodCategory.Wheet) / kcalTarget
+                    milkProgress =
+                        viewModel.returnTotalKcalForFoodCategory(FoodCategory.MilkAndReplacement) / kcalTarget
+                    proteinSourceProgress =
+                        viewModel.returnTotalKcalForFoodCategory(FoodCategory.ProteinSource) / kcalTarget
+                    addedFatProgress =
+                        viewModel.returnTotalKcalForFoodCategory(FoodCategory.AddedFat) / kcalTarget
+                }
+            }
+        }
+
+        is DayViewModel -> {
+            when (kcalTarget) {
+                0.0 -> {
+                    fruitProgress = 0.0
+                    vegetableProgress = 0.0
+                    grainProgress = 0.0
+                    milkProgress = 0.0
+                    proteinSourceProgress = 0.0
+                    addedFatProgress = 0.0
+                }
+
+                else -> {
+                    fruitProgress =
+                        viewModel.returnTotalKcalForFoodCategory(FoodCategory.Fruit) / kcalTarget
+                    vegetableProgress =
+                        viewModel.returnTotalKcalForFoodCategory(FoodCategory.Vegetable) / kcalTarget
+                    grainProgress =
+                        viewModel.returnTotalKcalForFoodCategory(FoodCategory.Wheet) / kcalTarget
+                    milkProgress =
+                        viewModel.returnTotalKcalForFoodCategory(FoodCategory.MilkAndReplacement) / kcalTarget
+                    proteinSourceProgress =
+                        viewModel.returnTotalKcalForFoodCategory(FoodCategory.ProteinSource) / kcalTarget
+                    addedFatProgress =
+                        viewModel.returnTotalKcalForFoodCategory(FoodCategory.AddedFat) / kcalTarget
+                }
+            }
+        }
+    }
+
+    Box(contentAlignment = Alignment.Center) {
+
+        CircularProgressIndicator(
+            modifier = Modifier,
+            progress = (fruitProgress.toFloat()),
+            color = Color.Black
+        )
+        CircularProgressIndicator(
+            modifier = Modifier.rotate((fruitProgress * 360).toFloat()),
+            progress = ((fruitTarget / kcalTarget) - fruitProgress).toFloat(),
+            color = Color.LightGray
+        )
+        CircularProgressIndicator(
+            modifier = Modifier.rotate((fruitTarget / kcalTarget).toFloat() * 360),
+            progress = (vegetableProgress.toFloat()),
+            color = Color.Red
+        )
+        CircularProgressIndicator(
+            modifier = Modifier.rotate((((fruitTarget / kcalTarget) + vegetableProgress) * 360).toFloat()),
+            progress = ((vegetableTarget / kcalTarget) - vegetableProgress).toFloat(),
+            color = Color.LightGray
+        )
+        CircularProgressIndicator(
+            modifier = Modifier.rotate((((fruitTarget + vegetableTarget) / kcalTarget)).toFloat() * 360),
+            progress = (proteinSourceProgress.toFloat()),
+            color = Color.Green
+        )
+        CircularProgressIndicator(
+            modifier = Modifier.rotate(((((fruitTarget + vegetableTarget) / kcalTarget) + proteinSourceProgress) * 360).toFloat()),
+            progress = ((proteinSourceTarget / kcalTarget) - proteinSourceProgress).toFloat(),
+            color = Color.LightGray
+        )
+        CircularProgressIndicator(
+            modifier = Modifier.rotate((((fruitTarget + vegetableTarget + proteinSourceTarget) / kcalTarget)).toFloat() * 360),
+            progress = (grainProgress.toFloat()),
+            color = Color.DarkGray
+        )
+        CircularProgressIndicator(
+            modifier = Modifier.rotate(((((fruitTarget + vegetableTarget + proteinSourceTarget) / kcalTarget) + grainProgress) * 360).toFloat()),
+            progress = ((grainTarget / kcalTarget) - grainProgress).toFloat(),
+            color = Color.LightGray
+        )
+        CircularProgressIndicator(
+            modifier = Modifier.rotate((((fruitTarget + vegetableTarget + proteinSourceTarget + grainTarget) / kcalTarget)).toFloat() * 360),
+            progress = (milkProgress.toFloat()),
+            color = Color.Cyan
+        )
+        CircularProgressIndicator(
+            modifier = Modifier.rotate(((((fruitTarget + vegetableTarget + proteinSourceTarget + grainTarget )/ kcalTarget) + milkProgress) * 360).toFloat()),
+            progress = ((milkTarget / kcalTarget) - milkProgress).toFloat(),
+            color = Color.LightGray
+        )
+        CircularProgressIndicator(
+            modifier = Modifier.rotate((((fruitTarget + vegetableTarget + proteinSourceTarget + grainTarget + milkTarget) / kcalTarget)).toFloat() * 360),
+            progress = (addedFatProgress.toFloat()),
+            color = Color.Blue
+        )
+        CircularProgressIndicator(
+            modifier = Modifier.rotate(((((fruitTarget + vegetableTarget + proteinSourceTarget + grainTarget + milkTarget )/ kcalTarget) + addedFatProgress) * 360).toFloat()),
+            progress = ((addedFatTarget / kcalTarget) - addedFatProgress).toFloat(),
+            color = Color.LightGray
         )
     }
 }
