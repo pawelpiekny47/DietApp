@@ -9,6 +9,7 @@ interface DishRepository {
     fun getAll(): Flow<List<DishWithIngredients>>
 
     suspend fun saveDish(dish: Dish)
+    suspend fun deleteDish(dish: Dish)
 
     suspend fun saveAll(dishIngredientCrossRefList: List<DishIngredientCrossRef>)
     suspend fun deleteAll(dishIngredientCrossRefList: List<DishIngredientCrossRef>)

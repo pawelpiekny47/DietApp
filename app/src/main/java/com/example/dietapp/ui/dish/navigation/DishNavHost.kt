@@ -1,11 +1,5 @@
 package com.example.dietapp.ui.dish.navigation
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -71,7 +65,12 @@ fun DishNavHost(
                                 coroutineScope.launch(Dispatchers.IO) { dishViewModel.saveDishWithIngredients() }
                             },
                             dishViewModel = dishViewModel,
-                            dietSettingsViewModel = dietSettingsViewModel
+                            dietSettingsViewModel = dietSettingsViewModel,
+                            deleteButtonVisible = dishViewModel.deleteButtonVisible,
+                            deleteButtonOnClick = {
+                                coroutineScope.launch(Dispatchers.IO) { dishViewModel.deleteDish() }
+                                navController.navigateUp()
+                            }
                         )
         }
         composable(route = DishScreenList.AddIngredientToDish.name) {

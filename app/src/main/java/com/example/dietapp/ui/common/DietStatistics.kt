@@ -237,24 +237,45 @@ fun CircularBasicStatistics(
     var proteinProgress = 0.0
     var carbsProgress = 0.0
     var fatProgress = 0.0
-    var totalProgress = 0.0
+    val totalProgress: Double
     when (viewModel) {
         is DishViewModel -> {
             totalKcal = viewModel.returnTotalKcal()
             totalProgress =
-                viewModel.returnTotalProtein() * 4 + viewModel.returnTotalFat() * 9 + viewModel.returnTotalCarbs() * 4
-            proteinProgress = viewModel.returnTotalProtein() * 4 / totalProgress
-            carbsProgress = viewModel.returnTotalCarbs() * 4 / totalProgress
-            fatProgress = viewModel.returnTotalFat() * 9 / totalProgress
+                (viewModel.returnTotalProtein() * 4 + viewModel.returnTotalFat() * 9 + viewModel.returnTotalCarbs() * 4)
+            when (totalProgress) {
+                0.0 -> {
+                    proteinProgress = 0.0
+                    carbsProgress = 0.0
+                    fatProgress = 0.0
+                }
+
+                else -> {
+                    proteinProgress = viewModel.returnTotalProtein() * 4 / totalProgress
+                    carbsProgress = viewModel.returnTotalCarbs() * 4 / totalProgress
+                    fatProgress = viewModel.returnTotalFat() * 9 / totalProgress
+                }
+            }
+
         }
 
         is DayViewModel -> {
             totalKcal = viewModel.returnTotalKcal()
             totalProgress =
                 viewModel.returnTotalProtein() * 4 + viewModel.returnTotalFat() * 9 + viewModel.returnTotalCarbs() * 4
-            proteinProgress = viewModel.returnTotalProtein() * 4 / totalProgress
-            carbsProgress = viewModel.returnTotalCarbs() * 4 / totalProgress
-            fatProgress = viewModel.returnTotalFat() * 9 / totalProgress
+            when (totalProgress) {
+                0.0 -> {
+                    proteinProgress = 0.0
+                    carbsProgress = 0.0
+                    fatProgress = 0.0
+                }
+
+                else -> {
+                    proteinProgress = viewModel.returnTotalProtein() * 4 / totalProgress
+                    carbsProgress = viewModel.returnTotalCarbs() * 4 / totalProgress
+                    fatProgress = viewModel.returnTotalFat() * 9 / totalProgress
+                }
+            }
         }
     }
     Box(contentAlignment = Alignment.Center) {
@@ -298,30 +319,60 @@ fun CircularFoodTypeStatistics(
     when (viewModel) {
         is DishViewModel -> {
             total = FoodCategory.values().sumOf { viewModel.returnTotalKcalForFoodCategory(it) }
-            fruitProgress = viewModel.returnTotalKcalForFoodCategory(FoodCategory.Fruit) / total
-            vegetableProgress =
-                viewModel.returnTotalKcalForFoodCategory(FoodCategory.Vegetable) / total
-            grainProgress = viewModel.returnTotalKcalForFoodCategory(FoodCategory.Wheet) / total
-            milkProgress =
-                viewModel.returnTotalKcalForFoodCategory(FoodCategory.MilkAndReplacement) / total
-            proteinSourceProgress =
-                viewModel.returnTotalKcalForFoodCategory(FoodCategory.ProteinSource) / total
-            addedFatProgress =
-                viewModel.returnTotalKcalForFoodCategory(FoodCategory.AddedFat) / total
+            when (total) {
+                0.0 -> {
+                    fruitProgress = 0.0
+                    vegetableProgress = 0.0
+                    grainProgress = 0.0
+                    milkProgress = 0.0
+                    proteinSourceProgress = 0.0
+                    addedFatProgress = 0.0
+                }
+
+                else -> {
+                    fruitProgress =
+                        viewModel.returnTotalKcalForFoodCategory(FoodCategory.Fruit) / total
+                    vegetableProgress =
+                        viewModel.returnTotalKcalForFoodCategory(FoodCategory.Vegetable) / total
+                    grainProgress =
+                        viewModel.returnTotalKcalForFoodCategory(FoodCategory.Wheet) / total
+                    milkProgress =
+                        viewModel.returnTotalKcalForFoodCategory(FoodCategory.MilkAndReplacement) / total
+                    proteinSourceProgress =
+                        viewModel.returnTotalKcalForFoodCategory(FoodCategory.ProteinSource) / total
+                    addedFatProgress =
+                        viewModel.returnTotalKcalForFoodCategory(FoodCategory.AddedFat) / total
+                }
+            }
         }
 
         is DayViewModel -> {
             total = FoodCategory.values().sumOf { viewModel.returnTotalKcalForFoodCategory(it) }
-            fruitProgress = viewModel.returnTotalKcalForFoodCategory(FoodCategory.Fruit) / total
-            vegetableProgress =
-                viewModel.returnTotalKcalForFoodCategory(FoodCategory.Vegetable) / total
-            grainProgress = viewModel.returnTotalKcalForFoodCategory(FoodCategory.Wheet) / total
-            milkProgress =
-                viewModel.returnTotalKcalForFoodCategory(FoodCategory.MilkAndReplacement) / total
-            proteinSourceProgress =
-                viewModel.returnTotalKcalForFoodCategory(FoodCategory.ProteinSource) / total
-            addedFatProgress =
-                viewModel.returnTotalKcalForFoodCategory(FoodCategory.AddedFat) / total
+            when (total) {
+                0.0 -> {
+                    fruitProgress = 0.0
+                    vegetableProgress = 0.0
+                    grainProgress = 0.0
+                    milkProgress = 0.0
+                    proteinSourceProgress = 0.0
+                    addedFatProgress = 0.0
+                }
+
+                else -> {
+                    fruitProgress =
+                        viewModel.returnTotalKcalForFoodCategory(FoodCategory.Fruit) / total
+                    vegetableProgress =
+                        viewModel.returnTotalKcalForFoodCategory(FoodCategory.Vegetable) / total
+                    grainProgress =
+                        viewModel.returnTotalKcalForFoodCategory(FoodCategory.Wheet) / total
+                    milkProgress =
+                        viewModel.returnTotalKcalForFoodCategory(FoodCategory.MilkAndReplacement) / total
+                    proteinSourceProgress =
+                        viewModel.returnTotalKcalForFoodCategory(FoodCategory.ProteinSource) / total
+                    addedFatProgress =
+                        viewModel.returnTotalKcalForFoodCategory(FoodCategory.AddedFat) / total
+                }
+            }
         }
     }
 

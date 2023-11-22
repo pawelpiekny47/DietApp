@@ -19,6 +19,9 @@ interface DishDao {
     @Upsert
     fun saveDish(dish: Dish)
 
+    @Delete
+    fun deleteDish(dish: Dish)
+
     @Upsert
     fun saveAll(dishIngredientCrossRef: List<DishIngredientCrossRef>)
 

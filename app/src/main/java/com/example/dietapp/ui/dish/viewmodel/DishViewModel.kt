@@ -221,6 +221,9 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel() {
         dishRepository.saveAll(dishWithIngredientsUiState.toDishIngredientCrossRefList())
         dishRepository.deleteAll(dishWithIngredientsUiState.dishIngredientCrossRefToDelete)
     }
+    suspend fun deleteDish() {
+        dishRepository.deleteDish(dishWithIngredientsUiState.dishDetails.dish)
+    }
 
     companion object {
         private const val TIMEOUT_MILLIS = 5_000L

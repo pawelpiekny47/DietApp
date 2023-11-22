@@ -18,7 +18,7 @@ class DietSettingsViewModel(private var dietSettingsRepository: DietSettingsRepo
     var dietSettingsUiState by mutableStateOf(DietSettingsUiState())
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.Main) {
             val dataFromDatabase = dietSettingsRepository.getDietSettings()?.first()?.toUiState()
             dietSettingsUiState = dataFromDatabase ?: DietSettingsUiState(DietSettingsDetails())
         }

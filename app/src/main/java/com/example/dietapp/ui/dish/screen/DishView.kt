@@ -35,7 +35,9 @@ import com.example.dietapp.ui.dish.viewmodel.DishViewModel
 fun DishView(
     saveButtonOnClick: () -> Unit,
     dishViewModel: DishViewModel,
-    dietSettingsViewModel: DietSettingsViewModel
+    dietSettingsViewModel: DietSettingsViewModel,
+    deleteButtonVisible: Boolean,
+    deleteButtonOnClick: () -> Unit
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -59,11 +61,22 @@ fun DishView(
 
         Box(modifier = Modifier.weight(1f))
         {
-            Button(
-                onClick = saveButtonOnClick,
-                shape = MaterialTheme.shapes.small,
-            ) {
-                Text(text = "Save")
+            Row {
+
+                Button(
+                    onClick = saveButtonOnClick,
+                    shape = MaterialTheme.shapes.small,
+                ) {
+                    Text(text = "Save")
+                }
+                if (deleteButtonVisible) {
+                    Button(
+                        onClick = deleteButtonOnClick,
+                        shape = MaterialTheme.shapes.small,
+                    ) {
+                        Text(text = "Delete")
+                    }
+                }
             }
         }
     }
