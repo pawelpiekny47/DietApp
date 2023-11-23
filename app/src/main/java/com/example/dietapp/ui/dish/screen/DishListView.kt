@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -45,7 +46,7 @@ fun DishListView(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        items(dishUiState.dishList) { dish ->
+        items(dishUiState.dishList.sortedBy { it.dish.name }) { dish ->
             DishItem(
                 onItemClick = onItemClick,
                 dish = dish,
@@ -66,29 +67,30 @@ fun DishItem(
         .padding(Dp(5F))
         .animateContentSize()
         .clickable { onItemClick(dish.toDishWithIngredientDetails()) }) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-
-            Text(
-                modifier = Modifier.weight(2F),
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.titleMedium,
-                text = dish.dish.name
-            )
-            DishMacrosRow(Modifier.weight(1f),dish)
+        Column {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    modifier = Modifier.weight(8F),
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.titleMedium,
+                    text = dish.dish.name
+                )
+                DishMacrosRow(Modifier.weight(4f), dish)
+                Icon(
+                    imageVector = if (extended) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                    contentDescription = "delete",
+                    modifier = Modifier
+                        .weight(1f)
+                        .scale(0.7F)
+                        .clickable {
+                            extended = !extended
+                        }
+                )
+            }
+            if (extended) {
+                DishIngredientList(dish)
+            }
         }
-
-        if (extended) {
-            DishIngredientList(dish)
-        }
-        Icon(
-            imageVector = if (extended) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-            contentDescription = "delete",
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable {
-                    extended = !extended
-                }
-        )
     }
 }
 
@@ -97,6 +99,7 @@ fun DishMacrosRow(modifier: Modifier, dish: DishWithIngredients) {
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
 
         Row(
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) {
             Text(
@@ -149,12 +152,12 @@ fun DishMacrosRow(modifier: Modifier, dish: DishWithIngredients) {
 
 @Composable
 fun DishIngredientList(dish: DishWithIngredients) {
-    dish.ingredientList.forEach { ingredient ->
+    dish.ingredientList.sortedByDescending { it.amount }.forEach { ingredient ->
+
         Text(
             text = "- ${ingredient.ingredient.name}    ${ingredient.amount}g",
             modifier = Modifier
-                .padding(Dp(2F))
-                .fillMaxWidth(),
+                .padding(Dp(2F)),
             fontStyle = FontStyle.Italic,
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodySmall

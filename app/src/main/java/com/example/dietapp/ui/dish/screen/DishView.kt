@@ -1,11 +1,16 @@
 package com.example.dietapp.ui.dish.screen
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -21,9 +26,12 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.dietapp.ui.common.DietSettingsStatistic
@@ -42,27 +50,33 @@ fun DishView(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .padding(Dp(5F)),
+            .padding(Dp(2F)),
     ) {
-        OutlinedTextField(
-            value = dishViewModel.dishWithIngredientsUiState.dishDetails.dish.name,
-            onValueChange = { dishViewModel.updateDishName(it) },
-            label = { Text("name") },
-            enabled = true,
-            singleLine = true
-        )
-        IngredientList(Modifier.weight(4F), dishViewModel)
+        Box(modifier = Modifier.weight(1f)) {
+            TextField(
+                value = dishViewModel.dishWithIngredientsUiState.dishDetails.dish.name,
+                onValueChange = { dishViewModel.updateDishName(it) },
+                label = { Text("name") },
+                enabled = true,
+                singleLine = true,
+                colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
+
+            )
+        }
         Box(modifier = Modifier.weight(1f)) {
             DietSettingsStatistic(
                 viewModel = dishViewModel,
                 dietSettingsViewModel = dietSettingsViewModel
             )
         }
+        IngredientList(Modifier.weight(4F), dishViewModel)
 
         Box(modifier = Modifier.weight(1f))
         {
-            Row {
-
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
                 Button(
                     onClick = saveButtonOnClick,
                     shape = MaterialTheme.shapes.small,
@@ -92,12 +106,11 @@ fun IngredientList(
         items(dishViewModel.dishWithIngredientsUiState.dishDetails.ingredientList) { ingredient ->
             Row(
                 verticalAlignment = Alignment.Bottom,
-                modifier = Modifier
             ) {
                 Text(
-                    modifier = Modifier.weight(2F),
+                    modifier = Modifier.weight(2F).padding(10.dp, 0.dp),
                     text = ingredient.ingredientDetails.name,
-                    fontSize = 15.sp,
+                    fontSize = 12.sp,
                 )
                 Row(
                     modifier = Modifier
@@ -106,13 +119,14 @@ fun IngredientList(
                 ) {
                     Row(
                         verticalAlignment = Alignment.Bottom,
+                        horizontalArrangement = Arrangement.End,
                         modifier = Modifier.weight(3F)
                     ) {
                         TextField(
-                            textStyle = TextStyle(fontSize = 15.sp),
+                            textStyle = TextStyle(fontSize = 12.sp),
                             modifier = Modifier
-                                .weight(5F)
-                                .defaultMinSize(minHeight = 10.dp),
+                                .defaultMinSize(minHeight = 0.dp)
+                                .weight(4F),
                             value = ingredient.amount,
                             onValueChange = {
                                 dishViewModel.updateDishWithIngredientUiState(
@@ -121,12 +135,12 @@ fun IngredientList(
                                 )
                             },
                             enabled = true,
+                            maxLines = 1,
                             singleLine = true,
                             colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
                         )
                         Text(
                             modifier = Modifier
-                                .defaultMinSize(minWidth = 1.dp)
                                 .weight(1F),
                             text = " g",
                             fontSize = 12.sp,
@@ -137,6 +151,7 @@ fun IngredientList(
                         contentDescription = "delete",
                         modifier = Modifier
                             .weight(1F)
+                            .scale(0.7F)
                             .clickable {
                                 dishViewModel.deleteIngredientFromDish(
                                     ingredient

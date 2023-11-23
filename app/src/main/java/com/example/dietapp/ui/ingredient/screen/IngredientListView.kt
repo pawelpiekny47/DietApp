@@ -28,6 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
+import androidx.compose.ui.unit.dp
 import com.example.dietapp.data.FoodCategory
 import com.example.dietapp.ui.ingredient.viewmodel.IngredientDetails
 import com.example.dietapp.ui.ingredient.viewmodel.IngredientViewModel
@@ -52,12 +53,13 @@ fun IngredientListScreen(
                         .fillMaxWidth()
                         .padding(Dp(20f), Dp(0f)),
                     text = "${foodCategory}",
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = MaterialTheme.typography.titleMedium,
                     textAlign = TextAlign.Left,
                     fontStyle = FontStyle.Italic,
                 )
             }
-            items(ingredientUiState.ingredientList.sortedBy { it.name }.filter { it.foodCategory == foodCategory }) { ingredient ->
+            items(ingredientUiState.ingredientList.sortedBy { it.name }
+                .filter { it.foodCategory == foodCategory }) { ingredient ->
                 IngredientItem(
                     ingredient = ingredient,
                     onItemClick = onListItemClick
@@ -71,16 +73,24 @@ fun IngredientListScreen(
 fun IngredientItem(ingredient: Ingredient, onItemClick: (IngredientDetails) -> Unit) {
     Card(modifier = Modifier
         .fillMaxWidth()
-        .padding(Dp(5F))
+        .padding(7.dp)
         .clickable { onItemClick(ingredient.toIngredientDetails()) }) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(modifier = Modifier.weight(2f),
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp, 10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                modifier = Modifier.weight(2f),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.titleMedium,
                 text = ingredient.name
             )
-            Column(modifier = Modifier.weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(
+                modifier = Modifier.weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
 
                 Row(
                     horizontalArrangement = Arrangement.Center
