@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -65,14 +66,17 @@ fun DishItem(
         .padding(Dp(5F))
         .animateContentSize()
         .clickable { onItemClick(dish.toDishWithIngredientDetails()) }) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
 
-        Text(
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.titleMedium,
-            text = dish.dish.name
-        )
-        DishMacrosRow(dish)
+            Text(
+                modifier = Modifier.weight(2F),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.titleMedium,
+                text = dish.dish.name
+            )
+            DishMacrosRow(Modifier.weight(1f),dish)
+        }
+
         if (extended) {
             DishIngredientList(dish)
         }
@@ -89,51 +93,57 @@ fun DishItem(
 }
 
 @Composable
-fun DishMacrosRow(dish: DishWithIngredients) {
-    Row(
-        Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = "p: ${
-                dish.ingredientList.sumOf { it.ingredient.protein * it.amount / 100 }
-                    .toInt()
-            }",
-            modifier = Modifier
-                .padding(Dp(5F)),
-            fontStyle = FontStyle.Italic,
-            style = MaterialTheme.typography.bodySmall
-        )
-        Text(
-            text = "c: ${
-                dish.ingredientList.sumOf { it.ingredient.carbohydrates * it.amount / 100 }
-                    .toInt()
-            }",
-            modifier = Modifier
-                .padding(Dp(5F)),
-            fontStyle = FontStyle.Italic,
-            style = MaterialTheme.typography.bodySmall
-        )
-        Text(
-            text = "f: ${
-                dish.ingredientList.sumOf { it.ingredient.fats * it.amount / 100 }
-                    .toInt()
-            }",
-            modifier = Modifier
-                .padding(Dp(5F)),
-            fontStyle = FontStyle.Italic,
-            style = MaterialTheme.typography.bodySmall
-        )
-        Text(
-            text = "kcal: ${
-                dish.ingredientList.sumOf { it.ingredient.totalKcal * it.amount / 100 }
-                    .toInt()
-            }",
-            modifier = Modifier
-                .padding(Dp(5F)),
-            fontStyle = FontStyle.Italic,
-            style = MaterialTheme.typography.bodySmall
-        )
+fun DishMacrosRow(modifier: Modifier, dish: DishWithIngredients) {
+    Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+
+        Row(
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = "p: ${
+                    dish.ingredientList.sumOf { it.ingredient.protein * it.amount / 100 }
+                        .toInt()
+                }",
+                modifier = Modifier
+                    .padding(Dp(2F)),
+                fontStyle = FontStyle.Italic,
+                style = MaterialTheme.typography.bodySmall
+            )
+            Text(
+                text = "c: ${
+                    dish.ingredientList.sumOf { it.ingredient.carbohydrates * it.amount / 100 }
+                        .toInt()
+                }",
+                modifier = Modifier
+                    .padding(Dp(2F)),
+                fontStyle = FontStyle.Italic,
+                style = MaterialTheme.typography.bodySmall
+            )
+            Text(
+                text = "f: ${
+                    dish.ingredientList.sumOf { it.ingredient.fats * it.amount / 100 }
+                        .toInt()
+                }",
+                modifier = Modifier
+                    .padding(Dp(2F)),
+                fontStyle = FontStyle.Italic,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+
+        Row {
+
+            Text(
+                text = "kcal: ${
+                    dish.ingredientList.sumOf { it.ingredient.totalKcal * it.amount / 100 }
+                        .toInt()
+                }",
+                modifier = Modifier
+                    .padding(Dp(2F)),
+                fontStyle = FontStyle.Italic,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
     }
 }
 
@@ -143,7 +153,8 @@ fun DishIngredientList(dish: DishWithIngredients) {
         Text(
             text = "- ${ingredient.ingredient.name}    ${ingredient.amount}g",
             modifier = Modifier
-                .padding(Dp(2F)).fillMaxWidth(),
+                .padding(Dp(2F))
+                .fillMaxWidth(),
             fontStyle = FontStyle.Italic,
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodySmall

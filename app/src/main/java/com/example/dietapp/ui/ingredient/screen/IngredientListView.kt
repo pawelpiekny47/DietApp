@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.graphics.Paint.Style
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -56,7 +57,7 @@ fun IngredientListScreen(
                     fontStyle = FontStyle.Italic,
                 )
             }
-            items(ingredientUiState.ingredientList.filter { it.foodCategory == foodCategory }) { ingredient ->
+            items(ingredientUiState.ingredientList.sortedBy { it.name }.filter { it.foodCategory == foodCategory }) { ingredient ->
                 IngredientItem(
                     ingredient = ingredient,
                     onItemClick = onListItemClick
@@ -72,47 +73,53 @@ fun IngredientItem(ingredient: Ingredient, onItemClick: (IngredientDetails) -> U
         .fillMaxWidth()
         .padding(Dp(5F))
         .clickable { onItemClick(ingredient.toIngredientDetails()) }) {
-        Row {
-            Text(
-                modifier = Modifier.fillMaxWidth(),
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(modifier = Modifier.weight(2f),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.titleMedium,
                 text = ingredient.name
             )
+            Column(modifier = Modifier.weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally) {
 
-        }
-        Row(
-            Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = "p :${ingredient.protein}",
-                modifier = Modifier
-                    .padding(Dp(5F)),
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
-            )
-            Text(
-                text = "c: ${ingredient.carbohydrates}",
-                modifier = Modifier
-                    .padding(Dp(5F)),
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
-            )
-            Text(
-                text = "f: ${ingredient.fats}",
-                modifier = Modifier
-                    .padding(Dp(5F)),
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
-            )
-            Text(
-                text = "kcal: ${ingredient.totalKcal}",
-                modifier = Modifier
-                    .padding(Dp(5F)),
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
-            )
+                Row(
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = "p: ${ingredient.protein}",
+                        modifier = Modifier
+                            .padding(Dp(1F)),
+                        fontStyle = FontStyle.Italic,
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                    Text(
+                        text = "c: ${ingredient.carbohydrates}",
+                        modifier = Modifier
+                            .padding(Dp(1F)),
+                        fontStyle = FontStyle.Italic,
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                    Text(
+                        text = "f: ${ingredient.fats}",
+                        modifier = Modifier
+                            .padding(Dp(1F)),
+                        fontStyle = FontStyle.Italic,
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
+
+                Row {
+
+                    Text(
+                        text = "kcal: ${ingredient.totalKcal}",
+                        modifier = Modifier
+                            .padding(Dp(1F)),
+                        fontStyle = FontStyle.Italic,
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
+            }
+
         }
     }
 }
