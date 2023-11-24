@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import androidx.room.Upsert
 import com.example.dietapp.data.Ingredient
 import kotlinx.coroutines.flow.Flow
 
@@ -13,7 +14,7 @@ interface IngredientDao {
     @Query("SELECT * FROM ingredient")
     fun getAll(): Flow<List<Ingredient>>
 
-    @Insert
+    @Upsert
     suspend fun insert(ingredient: Ingredient)
 
     @Update

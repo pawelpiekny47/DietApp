@@ -66,6 +66,7 @@ class IngredientViewModel(private val ingredientRepository: IngredientRepository
             product = myResponse.value!!.product!!
             updateUiState(
                 IngredientDetails(
+                    id = ingredientUiState.ingredientDetails.id,
                     name = product.productName ?: "",
                     totalKcal = product.nutriments?.energyKcal100g.toString(),
                     protein = product.nutriments?.proteins100g.toString(),

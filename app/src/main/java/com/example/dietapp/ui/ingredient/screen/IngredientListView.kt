@@ -33,7 +33,6 @@ import com.example.dietapp.data.FoodCategory
 import com.example.dietapp.ui.ingredient.viewmodel.IngredientDetails
 import com.example.dietapp.ui.ingredient.viewmodel.IngredientViewModel
 import com.example.dietapp.ui.ingredient.viewmodel.toIngredientDetails
-import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
