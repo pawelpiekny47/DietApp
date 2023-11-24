@@ -1,20 +1,16 @@
 package com.example.dietapp.ui.ingredient.screen
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Face
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -36,12 +32,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.example.dietapp.barcode.PreviewViewComposable
+import com.example.dietapp.barcode.BarcodeScanner
 import com.example.dietapp.data.FoodCategory
 import com.example.dietapp.ui.ingredient.viewmodel.IngredientDetails
 import com.example.dietapp.ui.ingredient.viewmodel.IngredientViewModel
-import java.util.Currency
-import java.util.Locale
 
 @Composable
 @androidx.annotation.OptIn(androidx.camera.core.ExperimentalGetImage::class)
@@ -49,25 +43,18 @@ fun IngredientView(
     viewModel: IngredientViewModel,
     saveButton: () -> Unit,
     deleteButtonVisible: Boolean,
-    deleteButtonOnClick: () -> Unit
+    deleteButtonOnClick: () -> Unit,
+    barcodeScannerButtonOnClick: () -> Unit
 ) {
-    var expanded by remember { mutableStateOf(false) }
-
-    Column() {
+    Column {
         Icon(
             imageVector = Icons.Default.Close,
             contentDescription = "delete",
             modifier = Modifier
                 .clickable {
-                    expanded = !expanded
+                    barcodeScannerButtonOnClick()
                 }
         )
-        if (expanded) {
-            Column {
-                PreviewViewComposable(viewModel)
-            }
-        }
-
         IngredientForm(
             ingredientDetailsState = viewModel.ingredientUiState.ingredientDetails,
             onValueChange = viewModel::updateUiState

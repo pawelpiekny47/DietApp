@@ -7,6 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.dietapp.barcode.BarcodeScanner
 import com.example.dietapp.ui.AppViewModelProvider
 import com.example.dietapp.ui.ingredient.screen.IngredientScreenList
 import com.example.dietapp.ui.ingredient.screen.IngredientListScreen
@@ -15,6 +16,7 @@ import com.example.dietapp.ui.ingredient.viewmodel.IngredientViewModel
 import kotlinx.coroutines.launch
 
 @Composable
+@androidx.annotation.OptIn(androidx.camera.core.ExperimentalGetImage::class)
 fun IngredientNavHost(
     setMainScreen: ((isFloatButtonVisible: Boolean, floatButtonAction: () -> Unit, isNavigateBackVisible: Boolean, navigateBackAction: () -> Unit, topBarName: String) -> Unit),
     viewModel: IngredientViewModel = viewModel(factory = AppViewModelProvider.Factory),
@@ -60,14 +62,27 @@ fun IngredientNavHost(
                 viewModel,
                 saveButton = {
                     coroutineScope.launch { viewModel.saveItem() }
-                    navController.navigateUp()
+                    navController.navigate(IngredientScreenList.IngredientListScreen.name)
                 },
                 deleteButtonVisible = viewModel.deleteButtonVisible,
                 deleteButtonOnClick = {
                     coroutineScope.launch { viewModel.deleteItem() }
                     navController.navigateUp()
-                }
+                },
+                barcodeScannerButtonOnClick = { navController.navigate(IngredientScreenList.BarcodeScanner.name) }
             )
+        }
+        composable(route = IngredientScreenList.BarcodeScanner.name) {
+            setMainScreen(
+                false,
+                { },
+                false,
+                { navController.navigateUp() },
+                IngredientScreenList.NewIngredientScreen.title
+            )
+            BarcodeScanner(
+                viewModel = viewModel,
+                returnToIngredientScreen = { navController.navigate(IngredientScreenList.NewIngredientScreen.name) })
         }
     }
 }

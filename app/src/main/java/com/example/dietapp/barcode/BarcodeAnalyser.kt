@@ -1,8 +1,6 @@
 package com.example.dietapp.barcode
 
-import android.content.Context
 import android.util.Log
-import android.widget.Toast
 import androidx.annotation.OptIn
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ExperimentalGetImage
@@ -12,18 +10,13 @@ import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.app.ComponentActivity
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.example.dietapp.ui.ingredient.viewmodel.IngredientViewModel
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
@@ -62,7 +55,7 @@ class BarcodeAnalyser(
 
 @ExperimentalGetImage
 @Composable
-fun PreviewViewComposable(viewModel: IngredientViewModel) {
+fun BarcodeScanner(viewModel: IngredientViewModel, returnToIngredientScreen: () -> Unit) {
     AndroidView(
         { context ->
             val cameraExecutor = Executors.newSingleThreadExecutor()
@@ -86,6 +79,7 @@ fun PreviewViewComposable(viewModel: IngredientViewModel) {
                     .also {
                         it.setAnalyzer(cameraExecutor, BarcodeAnalyser { barcode ->
                             viewModel.updateUiWithBarcode(barcode!!)
+                            returnToIngredientScreen()
                         })
                     }
 
