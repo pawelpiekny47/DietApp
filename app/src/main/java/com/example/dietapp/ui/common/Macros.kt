@@ -90,6 +90,85 @@ fun BasicMacrosStats(
 }
 
 @Composable
+fun BasicMacrosStatsV2(
+    kcalTextValue: String,
+    proteinTextValue: String,
+    carbsTextValue: String,
+    fatsTextValue: String
+) {
+
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(2.dp),
+            horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.Bottom
+        ) {
+            Text(
+                text = "kcal",
+                modifier = Modifier.scale(0.6F),
+                fontStyle = FontStyle.Italic,
+                style = MaterialTheme.typography.bodySmall
+            )
+            Text(
+                text = kcalTextValue,
+                fontStyle = FontStyle.Italic,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.Bottom
+        ) {
+            Text(
+                text = "p",
+                modifier = Modifier.scale(0.6F),
+                fontStyle = FontStyle.Italic,
+                style = MaterialTheme.typography.bodySmall
+            )
+            Text(
+                text = proteinTextValue,
+                modifier = Modifier
+                    .padding(Dp(2F)),
+                fontStyle = FontStyle.Italic,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+        Row() {
+            Text(
+                text = "c",
+                modifier = Modifier.scale(0.6F),
+                fontStyle = FontStyle.Italic,
+                style = MaterialTheme.typography.bodySmall
+            )
+            Text(
+                text = carbsTextValue,
+                modifier = Modifier
+                    .padding(Dp(2F)),
+                fontStyle = FontStyle.Italic,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+        Row() {
+            Text(
+                text = "f",
+                modifier = Modifier.scale(0.6F),
+                fontStyle = FontStyle.Italic,
+                style = MaterialTheme.typography.bodySmall
+            )
+            Text(
+                text = fatsTextValue,
+                modifier = Modifier
+                    .padding(Dp(2F)),
+                fontStyle = FontStyle.Italic,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+    }
+}
+
+
+@Composable
 fun FoodCategoryMacrosStats(
     fruitTextValue: String,
     vegetableTextValue: String,
@@ -103,7 +182,7 @@ fun FoodCategoryMacrosStats(
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
-           verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.Center
+            verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.Center
         ) {
             Text(
                 text = "fruit",

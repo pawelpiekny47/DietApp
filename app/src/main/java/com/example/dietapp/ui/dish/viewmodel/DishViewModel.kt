@@ -44,7 +44,7 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel() {
 
     }
 
-    fun updateDishWithIngredientUiState(ingredientId: Int, string: String) {
+    fun updateDishWithIngredientUiState(ingredientId: Int, amount: String) {
         dishWithIngredientsUiState =
             DishWithIngredientsDetailsUiState(
                 dishDetails = DishWithIngredientsDetails(
@@ -52,7 +52,7 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel() {
                     ingredientList = dishWithIngredientsUiState.dishDetails.ingredientList.stream()
                         .map {
                             if (it.ingredientDetails.id == ingredientId)
-                                IngredientWithAmountDetails(it.ingredientDetails, string)
+                                IngredientWithAmountDetails(it.ingredientDetails, amount)
                             else it
                         }
                         .toList()),
@@ -242,7 +242,7 @@ fun DishWithIngredientsDetailsUiState.toDishIngredientCrossRefList(): List<DishI
             DishIngredientCrossRef(
                 dishDetails.dish.dishId,
                 it.ingredientDetails.id,
-                it.amount.toDouble()
+                if(it.amount == "") 0.0 else it.amount.toDouble()
             )
         }
         .toList()
@@ -264,7 +264,7 @@ fun DishWithIngredients.toDishWithIngredientDetails(): DishWithIngredientsDetail
 
 data class IngredientWithAmountDetails(
     val ingredientDetails: IngredientDetails,
-    var amount: String = "0.0"
+    var amount: String = ""
 )
 
 data class DishDetails(

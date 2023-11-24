@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -129,7 +130,7 @@ fun BasicStatistics(
                 fats =
                     "${((totalFat / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.fats.toDouble()) * 100).toInt()}%"
             }
-            BasicMacrosStats(kcal, proteins, carbs, fats)
+            BasicMacrosStatsV2(kcal, proteins, carbs, fats)
         }
 
         Box(
@@ -138,7 +139,7 @@ fun BasicStatistics(
                 .weight(1F),
             contentAlignment = Alignment.Center
         ) {
-            if (extended2) CircularBasicStatistics(viewModel)
+            if (extended2) LinearBasicStatistics(viewModel, dietSettingsViewModel)
             else CircularBasicStatisticsV2(viewModel, dietSettingsViewModel)
         }
     }
@@ -454,6 +455,98 @@ fun CircularBasicStatisticsV2(
             progress = (fatTarget / kcalCalculatedTarget - fatProgress).toFloat(),
             color = Color.LightGray
         )
+    }
+}
+
+@Composable
+fun LinearBasicStatistics(
+    viewModel: ViewModel,
+    dietSettingsViewModel: DietSettingsViewModel
+) {
+    var kcal = 0.0
+    var proteinProgress = 0.0
+    var carbsProgress = 0.0
+    var fatProgress = 0.0
+
+    val proteinTarget =
+        dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.protein.toDouble() * 4
+    val carbsTarget =
+        dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.carbohydrates.toDouble() * 4
+    val fatTarget =
+        dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.fats.toDouble() * 9
+    var kcalCalculatedTarget = proteinTarget + carbsTarget + fatTarget
+
+    when (viewModel) {
+        is DishViewModel -> {
+            kcal = viewModel.returnTotalKcal()
+            when (kcalCalculatedTarget) {
+                0.0 -> {
+                    proteinProgress = 0.0
+                    carbsProgress = 0.0
+                    fatProgress = 0.0
+                    kcalCalculatedTarget = 1.0
+
+                }
+
+                else -> {
+                    proteinProgress = viewModel.returnTotalProtein() * 4 / kcalCalculatedTarget
+                    carbsProgress = viewModel.returnTotalCarbs() * 4 / kcalCalculatedTarget
+                    fatProgress = viewModel.returnTotalFat() * 9 / kcalCalculatedTarget
+                }
+            }
+
+        }
+
+        is DayViewModel -> {
+            kcal = viewModel.returnTotalKcal()
+
+            when (kcalCalculatedTarget) {
+                0.0 -> {
+                    proteinProgress = 0.0
+                    carbsProgress = 0.0
+                    fatProgress = 0.0
+                    kcalCalculatedTarget = 1.0
+                }
+
+                else -> {
+                    proteinProgress = viewModel.returnTotalProtein() * 4 / kcalCalculatedTarget
+                    carbsProgress = viewModel.returnTotalCarbs() * 4 / kcalCalculatedTarget
+                    fatProgress = viewModel.returnTotalFat() * 9 / kcalCalculatedTarget
+                }
+            }
+        }
+    }
+    Column(verticalArrangement = Arrangement.Center) {
+        Column(
+            modifier = Modifier.padding(3.dp, 3.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            LinearProgressIndicator(
+                progress = proteinProgress.toFloat(),
+                color = Color.Black
+            )
+            LinearProgressIndicator(
+                progress = ((proteinTarget / kcalCalculatedTarget) - proteinProgress).toFloat(),
+                color = Color.LightGray
+            )
+            LinearProgressIndicator(
+                progress = carbsProgress.toFloat(),
+                color = Color.Red
+            )
+            LinearProgressIndicator(
+                progress = ((carbsTarget / kcalCalculatedTarget) - carbsProgress).toFloat(),
+                color = Color.LightGray
+            )
+            LinearProgressIndicator(
+                progress = fatProgress.toFloat(),
+                color = Color.Green
+            )
+            LinearProgressIndicator(
+                progress = (fatTarget / kcalCalculatedTarget - fatProgress).toFloat(),
+                color = Color.LightGray
+            )
+        }
     }
 }
 
