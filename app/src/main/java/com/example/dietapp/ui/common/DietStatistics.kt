@@ -88,6 +88,7 @@ fun BasicStatistics(
         }
     }
     var extended by remember { mutableStateOf(false) }
+    var extended2 by remember { mutableStateOf(false) }
 
 
     Row(
@@ -166,8 +167,13 @@ fun BasicStatistics(
                 }
             }
         }
-        CircularBasicStatistics(viewModel)
-        CircularBasicStatisticsV2(viewModel, dietSettingsViewModel)
+        Box(
+            modifier = Modifier.clickable { extended2 = !extended2 },
+            contentAlignment = Alignment.Center
+        ) {
+            if (extended2) CircularBasicStatistics(viewModel)
+            else CircularBasicStatisticsV2(viewModel, dietSettingsViewModel)
+        }
     }
 }
 
@@ -208,6 +214,7 @@ fun FoodTypeStatistics(
         }
     }
     var extended by remember { mutableStateOf(false) }
+    var extended2 by remember { mutableStateOf(false) }
 
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -311,8 +318,13 @@ fun FoodTypeStatistics(
                 }
             }
         }
-        CircularFoodTypeStatistics(viewModel)
-        CircularFoodTypeStatisticsV2(viewModel, dietSettingsViewModel)
+        Box(
+            modifier = Modifier.clickable { extended2 = !extended2 },
+            contentAlignment = Alignment.Center
+        ) {
+            if (extended2) CircularFoodTypeStatistics(viewModel)
+            else CircularFoodTypeStatisticsV2(viewModel, dietSettingsViewModel)
+        }
     }
 
 }

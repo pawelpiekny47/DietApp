@@ -49,7 +49,8 @@ fun DishNavHost(
                     dishViewModel.deleteButtonVisible = true
                     navController.navigate(DishScreenList.Dish.name)
                 },
-                dishViewModel
+                dishViewModel,
+                dietSettingsViewModel
             )
         }
         composable(route = DishScreenList.Dish.name) {

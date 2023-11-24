@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,6 +31,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import com.example.dietapp.data.DishWithIngredients
+import com.example.dietapp.ui.dietsettings.viewmodel.DietSettingsViewModel
 import com.example.dietapp.ui.dish.viewmodel.DishViewModel
 import com.example.dietapp.ui.dish.viewmodel.DishWithIngredientsDetails
 import com.example.dietapp.ui.dish.viewmodel.toDishWithIngredientDetails
@@ -39,7 +41,8 @@ import com.example.dietapp.ui.dish.viewmodel.toDishWithIngredientDetails
 @Composable
 fun DishListView(
     onItemClick: (DishWithIngredientsDetails) -> Unit,
-    viewModel: DishViewModel
+    viewModel: DishViewModel,
+    dietSettingsViewModel: DietSettingsViewModel
 ) {
     val dishUiState by viewModel.dishListUiState.collectAsState()
     LazyColumn(
@@ -50,6 +53,7 @@ fun DishListView(
             DishItem(
                 onItemClick = onItemClick,
                 dish = dish,
+                dietSettingsViewModel = dietSettingsViewModel
             )
         }
     }
@@ -60,8 +64,10 @@ fun DishListView(
 fun DishItem(
     onItemClick: (DishWithIngredientsDetails) -> Unit,
     dish: DishWithIngredients,
+    dietSettingsViewModel: DietSettingsViewModel
 ) {
     var extended by remember { mutableStateOf(false) }
+    var extended2 by remember { mutableStateOf(false) }
 
     Card(modifier = Modifier
         .padding(Dp(5F))
@@ -75,7 +81,14 @@ fun DishItem(
                     style = MaterialTheme.typography.titleMedium,
                     text = dish.dish.name
                 )
-                DishMacrosRow(Modifier.weight(4f), dish)
+                Box(
+                    Modifier
+                        .weight(4f)
+                        .clickable { extended2 = !extended2 }
+                ) {
+                    if (extended2) DishMacrosRow(dish)
+                    else DishMacrosRowWithPercent(dish, dietSettingsViewModel)
+                }
                 Icon(
                     imageVector = if (extended) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
                     contentDescription = "delete",
@@ -87,17 +100,28 @@ fun DishItem(
                         }
                 )
             }
-            if (extended) {
-                DishIngredientList(dish)
-            }
+            DishIngredientList(dish, extended)
         }
     }
 }
 
 @Composable
-fun DishMacrosRow(modifier: Modifier, dish: DishWithIngredients) {
-    Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+fun DishMacrosRow(dish: DishWithIngredients) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
+        Row {
+
+            Text(
+                text = "kcal: ${
+                    dish.ingredientList.sumOf { it.ingredient.totalKcal * it.amount / 100 }
+                        .toInt()
+                }",
+                modifier = Modifier
+                    .padding(Dp(2F)),
+                fontStyle = FontStyle.Italic,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
@@ -133,34 +157,96 @@ fun DishMacrosRow(modifier: Modifier, dish: DishWithIngredients) {
                 style = MaterialTheme.typography.bodySmall
             )
         }
+    }
+}
+
+@Composable
+fun DishMacrosRowWithPercent(
+    dish: DishWithIngredients,
+    dietSettingsViewModel: DietSettingsViewModel
+) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
         Row {
 
             Text(
                 text = "kcal: ${
-                    dish.ingredientList.sumOf { it.ingredient.totalKcal * it.amount / 100 }
+                    (dish.ingredientList.sumOf { it.ingredient.totalKcal * it.amount / 100 } / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.totalKcal.toDouble() * 100)
                         .toInt()
-                }",
+
+                }%",
                 modifier = Modifier
                     .padding(Dp(2F)),
                 fontStyle = FontStyle.Italic,
                 style = MaterialTheme.typography.bodySmall
             )
         }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = "p: ${
+                    (dish.ingredientList.sumOf { it.ingredient.protein * it.amount / 100 } / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.protein.toDouble() * 100)
+                        .toInt()
+                }%",
+                modifier = Modifier
+                    .padding(Dp(2F)),
+                fontStyle = FontStyle.Italic,
+                style = MaterialTheme.typography.bodySmall
+            )
+            Text(
+                text = "c: ${
+                    (dish.ingredientList.sumOf { it.ingredient.carbohydrates * it.amount / 100 } / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.carbohydrates.toDouble() * 100)
+                        .toInt()
+
+                }%",
+                modifier = Modifier
+                    .padding(Dp(2F)),
+                fontStyle = FontStyle.Italic,
+                style = MaterialTheme.typography.bodySmall
+            )
+            Text(
+                text = "f: ${
+                    (dish.ingredientList.sumOf { it.ingredient.fats * it.amount / 100 } / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.fats.toDouble() * 100)
+                        .toInt()
+                }%",
+                modifier = Modifier
+                    .padding(Dp(2F)),
+                fontStyle = FontStyle.Italic,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+
+
     }
 }
 
 @Composable
-fun DishIngredientList(dish: DishWithIngredients) {
-    dish.ingredientList.sortedByDescending { it.amount }.forEach { ingredient ->
-
-        Text(
-            text = "- ${ingredient.ingredient.name}    ${ingredient.amount}g",
-            modifier = Modifier
-                .padding(Dp(2F)),
-            fontStyle = FontStyle.Italic,
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodySmall
-        )
+fun DishIngredientList(dish: DishWithIngredients, extended: Boolean) {
+    if (extended) {
+        dish.ingredientList.sortedByDescending { it.amount }.forEach { ingredient ->
+            Text(
+                text = "- ${ingredient.ingredient.name}    ${ingredient.amount}g",
+                modifier = Modifier
+                    .padding(Dp(2F)),
+                fontStyle = FontStyle.Italic,
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+    } else {
+        val ingredientAmount = dish.ingredientList.count()
+        dish.ingredientList.sortedByDescending { it.amount }.subList(0, minOf(ingredientAmount, 2))
+            .forEach { ingredient ->
+                Text(
+                    text = "- ${ingredient.ingredient.name}    ${ingredient.amount}g",
+                    modifier = Modifier
+                        .padding(Dp(2F)),
+                    fontStyle = FontStyle.Italic,
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
     }
 }
