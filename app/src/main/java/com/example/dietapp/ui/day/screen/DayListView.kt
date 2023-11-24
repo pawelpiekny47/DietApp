@@ -3,7 +3,6 @@ package com.example.dietapp.ui.day.screen
 import android.annotation.SuppressLint
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,7 +30,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import com.example.dietapp.data.DayWithDishes
-import com.example.dietapp.ui.common.MacrosRow
+import com.example.dietapp.ui.common.BasicMacrosStats
 import com.example.dietapp.ui.day.viewmodel.DayViewModel
 import com.example.dietapp.ui.day.viewmodel.DayWithDishesDetails
 import com.example.dietapp.ui.day.viewmodel.toDayDetails
@@ -138,7 +137,7 @@ fun DayItem(
 
                         }
                     }
-                    MacrosRow(kcalTextValue, proteinTextValue, carbsTextValue, fatsTextValue)
+                    BasicMacrosStats(kcalTextValue, proteinTextValue, carbsTextValue, fatsTextValue)
                 }
                 Icon(
                     imageVector = if (extended) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,

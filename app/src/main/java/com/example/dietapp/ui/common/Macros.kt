@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun MacrosRow(
+fun BasicMacrosStats(
     kcalTextValue: String,
     proteinTextValue: String,
     carbsTextValue: String,
