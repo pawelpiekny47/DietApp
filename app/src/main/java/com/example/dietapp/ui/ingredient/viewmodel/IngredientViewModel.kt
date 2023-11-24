@@ -3,18 +3,27 @@ package com.example.dietapp.ui.ingredient.viewmodel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.dietapp.data.FoodCategory
 import com.example.dietapp.data.Ingredient
 import com.example.dietapp.repository.IngredientRepository
+import com.example.dietapp.rest.ExampleJson2KtKotlin
+import com.example.dietapp.rest.NutritionNetwork
+import com.example.dietapp.rest.Product
 import com.example.dietapp.ui.dish.viewmodel.IngredientWithAmountDetails
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 class IngredientViewModel(private val ingredientRepository: IngredientRepository) : ViewModel() {
+    //Retrofit response / query
+    val myResponse: MutableLiveData<ExampleJson2KtKotlin> = MutableLiveData()
+    var product by mutableStateOf(Product())
+
     var deleteButtonVisible by mutableStateOf(true)
     var ingredientUiState by mutableStateOf(IngredientUiState())
         private set
@@ -47,6 +56,26 @@ class IngredientViewModel(private val ingredientRepository: IngredientRepository
         ingredientRepository.delete(ingredientUiState.ingredientDetails.toIngredient())
     }
 
+    fun updateUiWithBarcode(barcode: String) {
+
+        viewModelScope.launch {
+            myResponse.value = NutritionNetwork.retrofit.getData(barcode)
+            product = myResponse.value!!.product!!
+            updateUiState(
+                IngredientDetails(
+                    name = product.productName ?: "",
+                    totalKcal = product.nutriments?.energyKcal100g.toString(),
+                    protein = product.nutriments?.proteins100g.toString(),
+                    carbohydrates = product.nutriments?.carbohydrates100g.toString(),
+                    fats = product.nutriments?.fat100g.toString(),
+                    polyunsaturatedFats = product.nutriments?.saturatedFat100g.toString(),
+                    soil = product.nutriments?.salt100g.toString(),
+                    fiber = product.nutriments?.fiber100g.toString(),
+                )
+            )
+        }
+    }
+
     companion object {
         private const val TIMEOUT_MILLIS = 5_000L
     }
@@ -73,7 +102,7 @@ fun IngredientDetails.toIngredient(): Ingredient {
     return Ingredient(
         ingredientId = id,
         name,
-        totalKcal.toDoubleOrNull() ?:0.0,
+        totalKcal.toDoubleOrNull() ?: 0.0,
         protein.toDoubleOrNull() ?: 0.0,
         carbohydrates.toDoubleOrNull() ?: 0.0,
         fats.toDoubleOrNull() ?: 0.0,
