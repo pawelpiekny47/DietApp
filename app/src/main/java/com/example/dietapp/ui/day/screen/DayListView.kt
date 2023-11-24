@@ -31,6 +31,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import com.example.dietapp.data.DayWithDishes
+import com.example.dietapp.ui.common.MacrosRow
 import com.example.dietapp.ui.day.viewmodel.DayViewModel
 import com.example.dietapp.ui.day.viewmodel.DayWithDishesDetails
 import com.example.dietapp.ui.day.viewmodel.toDayDetails
@@ -89,9 +90,55 @@ fun DayItem(
                         .weight(5f)
                         .clickable { extended2 = !extended2 }
                 ) {
-                    if (extended2) DayMacrosRow(day)
-                    else DayMacrosRowWithPercent(day, dietSettingsViewModel)
+                    val kcalTextValue: String
+                    val proteinTextValue: String
+                    val carbsTextValue: String
+                    val fatsTextValue: String
+                    when (extended2) {
+                        true -> {
+                            kcalTextValue = "${
+                                day.dishWithAmountList.sumOf { it -> it.dishWithIngredients.ingredientList.sumOf { it.ingredient.totalKcal * it.amount / 100 } * it.amount }
+                                    .toInt()
+                            }g"
+                            proteinTextValue = "${
+                                day.dishWithAmountList.sumOf { it -> it.dishWithIngredients.ingredientList.sumOf { it.ingredient.protein * it.amount / 100 } * it.amount }
+                                    .toInt()
+                            }g"
+                            carbsTextValue = "${
+                                day.dishWithAmountList.sumOf { it -> it.dishWithIngredients.ingredientList.sumOf { it.ingredient.carbohydrates * it.amount / 100 } * it.amount }
+                                    .toInt()
+                            }g"
+                            fatsTextValue = "${
+                                day.dishWithAmountList.sumOf { it -> it.dishWithIngredients.ingredientList.sumOf { it.ingredient.fats * it.amount / 100 } * it.amount }
+                                    .toInt()
+                            }g"
+                        }
 
+                        false -> {
+                            kcalTextValue = "${
+                                (day.dishWithAmountList.sumOf { it -> it.dishWithIngredients.ingredientList.sumOf { it.ingredient.totalKcal * it.amount / 100 } * it.amount }
+                                        / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.totalKcal.toDouble() * 100)
+                                    .toInt()
+                            }%"
+                            proteinTextValue = "${
+                                (day.dishWithAmountList.sumOf { it -> it.dishWithIngredients.ingredientList.sumOf { it.ingredient.protein * it.amount / 100 } * it.amount }
+                                        / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.protein.toDouble() * 100)
+                                    .toInt()
+                            }%"
+                            carbsTextValue = "${
+                                (day.dishWithAmountList.sumOf { it -> it.dishWithIngredients.ingredientList.sumOf { it.ingredient.carbohydrates * it.amount / 100 } * it.amount }
+                                        / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.carbohydrates.toDouble() * 100)
+                                    .toInt()
+                            }%"
+                            fatsTextValue = "${
+                                (day.dishWithAmountList.sumOf { it -> it.dishWithIngredients.ingredientList.sumOf { it.ingredient.fats * it.amount / 100 } * it.amount }
+                                        / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.fats.toDouble() * 100)
+                                    .toInt()
+                            }%"
+
+                        }
+                    }
+                    MacrosRow(kcalTextValue, proteinTextValue, carbsTextValue, fatsTextValue)
                 }
                 Icon(
                     imageVector = if (extended) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
@@ -105,126 +152,6 @@ fun DayItem(
                 )
             }
             DayDishList(day)
-        }
-    }
-}
-
-@Composable
-fun DayMacrosRow(day: DayWithDishes) {
-    Column(
-        Modifier
-            .fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        Row{
-            Text(
-                text = "kcal:${
-                    day.dishWithAmountList.sumOf { it -> it.dishWithIngredients.ingredientList.sumOf { it.ingredient.totalKcal * it.amount / 100 } * it.amount }
-                        .toInt()
-                }",
-                modifier = Modifier
-                    .padding(Dp(5F)),
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
-            )
-        }
-        Row(
-            Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = "p:${
-                    day.dishWithAmountList.sumOf { it -> it.dishWithIngredients.ingredientList.sumOf { it.ingredient.protein * it.amount / 100 } * it.amount }
-                        .toInt()
-                }",
-                modifier = Modifier
-                    .padding(Dp(5F)),
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
-            )
-            Text(
-                text = "c:${
-                    day.dishWithAmountList.sumOf { it -> it.dishWithIngredients.ingredientList.sumOf { it.ingredient.carbohydrates * it.amount / 100 } * it.amount }
-                        .toInt()
-                }",
-                modifier = Modifier
-                    .padding(Dp(5F)),
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
-            )
-            Text(
-                text = "f:${
-                    day.dishWithAmountList.sumOf { it -> it.dishWithIngredients.ingredientList.sumOf { it.ingredient.fats * it.amount / 100 } * it.amount }
-                        .toInt()
-                }",
-                modifier = Modifier
-                    .padding(Dp(5F)),
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
-            )
-        }
-    }
-}
-
-@Composable
-fun DayMacrosRowWithPercent(day: DayWithDishes, dietSettingsViewModel: DietSettingsViewModel) {
-    Column(
-        Modifier
-            .fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        Row{
-            Text(
-                text = "kcal:${
-                    (day.dishWithAmountList.sumOf { it -> it.dishWithIngredients.ingredientList.sumOf { it.ingredient.totalKcal * it.amount / 100 } * it.amount }
-                        / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.totalKcal.toDouble() * 100)
-                        .toInt()
-                }%",
-                modifier = Modifier
-                    .padding(Dp(5F)),
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
-            )
-        }
-        Row(
-            Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = "p:${
-                    (day.dishWithAmountList.sumOf { it -> it.dishWithIngredients.ingredientList.sumOf { it.ingredient.protein * it.amount / 100 } * it.amount }
-                            / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.protein.toDouble() * 100)
-                        .toInt()
-                }%",
-                modifier = Modifier
-                    .padding(Dp(5F)),
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
-            )
-            Text(
-                text = "c:${
-                    ( day.dishWithAmountList.sumOf { it -> it.dishWithIngredients.ingredientList.sumOf { it.ingredient.carbohydrates * it.amount / 100 } * it.amount }
-                            / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.carbohydrates.toDouble() * 100)
-                        .toInt()
-                }%",
-                modifier = Modifier
-                    .padding(Dp(5F)),
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
-            )
-            Text(
-                text = "f:${
-                    ( day.dishWithAmountList.sumOf { it -> it.dishWithIngredients.ingredientList.sumOf { it.ingredient.fats * it.amount / 100 } * it.amount }
-                            / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.fats.toDouble() * 100)
-                        .toInt()
-                }%",
-                modifier = Modifier
-                    .padding(Dp(5F)),
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
-            )
         }
     }
 }
