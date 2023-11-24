@@ -402,6 +402,7 @@ fun CircularBasicStatisticsV2(
                     proteinProgress = 0.0
                     carbsProgress = 0.0
                     fatProgress = 0.0
+                    kcalCalculatedTarget = 1.0
                 }
 
                 else -> {

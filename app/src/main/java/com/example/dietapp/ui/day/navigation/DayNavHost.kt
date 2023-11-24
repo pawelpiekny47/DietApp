@@ -17,6 +17,7 @@ import com.example.dietapp.ui.day.viewmodel.toDishWithAmountDetails
 import com.example.dietapp.ui.dietsettings.viewmodel.DietSettingsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+
 @Composable
 fun DayNavHost(
     setMainScreen: ((isFloatButtonVisible: Boolean, floatButtonAction: () -> Unit, isNavigateBackVisible: Boolean, navigateBackAction: () -> Unit, topBarName: String) -> Unit),
@@ -27,8 +28,8 @@ fun DayNavHost(
     val coroutineScope = rememberCoroutineScope()
 
     NavHost(
-    navController = navController,
-    startDestination = DayScreenList.DayList.name,
+        navController = navController,
+        startDestination = DayScreenList.DayList.name,
     )
     {
         composable(route = DayScreenList.DayList.name) {
@@ -81,7 +82,8 @@ fun DayNavHost(
                 {
                     dayViewModel.addToDishWithAmountList(it.toDishWithAmountDetails())
                     navController.navigateUp()
-                }
+                },
+                dayViewModel = dayViewModel
             )
         }
     }
