@@ -53,6 +53,12 @@ fun DishView(
             .padding(Dp(2F)),
     ) {
         Box(modifier = Modifier.weight(1f)) {
+            DietSettingsStatistic(
+                viewModel = dishViewModel,
+                dietSettingsViewModel = dietSettingsViewModel
+            )
+        }
+        Box(modifier = Modifier.weight(1f)) {
             TextField(
                 value = dishViewModel.dishWithIngredientsUiState.dishDetails.dish.name,
                 onValueChange = { dishViewModel.updateDishName(it) },
@@ -63,14 +69,7 @@ fun DishView(
 
             )
         }
-        Box(modifier = Modifier.weight(1f)) {
-            DietSettingsStatistic(
-                viewModel = dishViewModel,
-                dietSettingsViewModel = dietSettingsViewModel
-            )
-        }
         IngredientList(Modifier.weight(4F), dishViewModel)
-
         Box(modifier = Modifier.weight(1f))
         {
             Row(

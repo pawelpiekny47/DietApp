@@ -88,3 +88,119 @@ fun BasicMacrosStats(
         }
     }
 }
+
+@Composable
+fun FoodCategoryMacrosStats(
+    fruitTextValue: String,
+    vegetableTextValue: String,
+    proteinSourceTextValue: String,
+    milkTextValue: String,
+    grainsTextValue: String,
+    addedFatTextValue: String
+) {
+
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+           verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = "fruit",
+                modifier = Modifier.scale(0.6F),
+                fontStyle = FontStyle.Italic,
+                style = MaterialTheme.typography.bodySmall
+            )
+            Text(
+                text = fruitTextValue,
+                fontStyle = FontStyle.Italic,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = "vegetable",
+                modifier = Modifier.scale(0.6F),
+                fontStyle = FontStyle.Italic,
+                style = MaterialTheme.typography.bodySmall
+            )
+            Text(
+                text = vegetableTextValue,
+                fontStyle = FontStyle.Italic,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = "protein source",
+                modifier = Modifier.scale(0.6F),
+                fontStyle = FontStyle.Italic,
+                style = MaterialTheme.typography.bodySmall
+            )
+            Text(
+                text = proteinSourceTextValue,
+                fontStyle = FontStyle.Italic,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = "milk",
+                modifier = Modifier.scale(0.6F),
+                fontStyle = FontStyle.Italic,
+                style = MaterialTheme.typography.bodySmall
+            )
+            Text(
+                text = milkTextValue,
+                fontStyle = FontStyle.Italic,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = "grains",
+                modifier = Modifier.scale(0.6F),
+                fontStyle = FontStyle.Italic,
+                style = MaterialTheme.typography.bodySmall
+            )
+            Text(
+                text = grainsTextValue,
+                fontStyle = FontStyle.Italic,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = "added fats",
+                modifier = Modifier.scale(0.6F),
+                fontStyle = FontStyle.Italic,
+                style = MaterialTheme.typography.bodySmall
+            )
+            Text(
+                text = addedFatTextValue,
+                fontStyle = FontStyle.Italic,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+    }
+}

@@ -61,18 +61,18 @@ fun DishNavHost(
                 { navController.navigateUp() },
                 DishScreenList.Dish.title
             )
-                        DishView(
-                            saveButtonOnClick = {
-                                coroutineScope.launch(Dispatchers.IO) { dishViewModel.saveDishWithIngredients() }
-                            },
-                            dishViewModel = dishViewModel,
-                            dietSettingsViewModel = dietSettingsViewModel,
-                            deleteButtonVisible = dishViewModel.deleteButtonVisible,
-                            deleteButtonOnClick = {
-                                coroutineScope.launch(Dispatchers.IO) { dishViewModel.deleteDish() }
-                                navController.navigateUp()
-                            }
-                        )
+            DishView(
+                saveButtonOnClick = {
+                    coroutineScope.launch(Dispatchers.IO) { dishViewModel.saveDishWithIngredients() }
+                },
+                dishViewModel = dishViewModel,
+                dietSettingsViewModel = dietSettingsViewModel,
+                deleteButtonVisible = dishViewModel.deleteButtonVisible,
+                deleteButtonOnClick = {
+                    coroutineScope.launch(Dispatchers.IO) { dishViewModel.deleteDish() }
+                    navController.navigateUp()
+                }
+            )
         }
         composable(route = DishScreenList.AddIngredientToDish.name) {
             setMainScreen(
@@ -86,7 +86,8 @@ fun DishNavHost(
                 {
                     dishViewModel.addToIngredientWithAmountList(it.toIngredientWithAmountDetails())
                     navController.navigateUp()
-                }
+                },
+                dishViewModel
             )
         }
     }

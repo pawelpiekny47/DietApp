@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
@@ -92,83 +93,49 @@ fun BasicStatistics(
 
 
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxSize(),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
-            modifier = Modifier.clickable { extended = !extended },
+            modifier = Modifier
+                .clickable { extended = !extended }
+                .weight(1F),
             contentAlignment = Alignment.Center
         ) {
-            Column(
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                if (extended) {
-                    Row(verticalAlignment = Alignment.Bottom) {
-                        Text(
-                            text = "kcal: ${totalKcal.toInt()}",
-                            fontSize = 10.sp
-                        )
-                        Text(
-                            text = " /${dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.totalKcal}",
-                            fontSize = 6.sp
-                        )
-                    }
 
-                    Row(verticalAlignment = Alignment.Bottom) {
-                        Text(
-                            text = "protein: ${totalProteins.toInt()}",
-                            fontSize = 10.sp
-                        )
-                        Text(
-                            text = " /${dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.protein}",
-                            fontSize = 6.sp
-                        )
-                    }
-                    Row(verticalAlignment = Alignment.Bottom) {
-                        Text(
-                            text = "carbs: ${totalCarbs.toInt()}",
-                            fontSize = 10.sp
-                        )
-                        Text(
-                            text = " /${dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.carbohydrates}",
-                            fontSize = 6.sp
-                        )
-                    }
-                    Row(verticalAlignment = Alignment.Bottom) {
-                        Text(
-                            text = "fat: ${totalFat.toInt()}",
-                            fontSize = 10.sp
-                        )
-                        Text(
-                            text = " /${dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.fats}",
-                            fontSize = 6.sp
-                        )
-                    }
-                } else {
-                    Text(
-                        text = "kcal: ${((totalKcal / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.totalKcal.toDouble()) * 100).toInt()}%",
-                        fontSize = 10.sp
-                    )
-                    Text(
-                        text = "protein: ${((totalProteins / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.protein.toDouble()) * 100).toInt()}%",
-                        fontSize = 10.sp
-                    )
-                    Text(
-                        text = "carbs: ${((totalCarbs / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.carbohydrates.toDouble()) * 100).toInt()}%",
-                        fontSize = 10.sp
-                    )
-                    Text(
-                        text = "fat: ${((totalFat / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.fats.toDouble()) * 100).toInt()}%",
-                        fontSize = 10.sp
-                    )
+            val kcal: String
+            val proteins: String
+            val carbs: String
+            val fats: String
 
-                }
+            if (extended) {
+                kcal =
+                    "${totalKcal.toInt()}"
+                proteins =
+                    "${totalProteins.toInt()}"
+                carbs =
+                    "${totalCarbs.toInt()}"
+                fats =
+                    "${totalFat.toInt()}"
+
+            } else {
+                kcal =
+                    "${((totalKcal / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.totalKcal.toDouble()) * 100).toInt()}%"
+                proteins =
+                    "${((totalProteins / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.protein.toDouble()) * 100).toInt()}%"
+                carbs =
+                    "${((totalCarbs / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.carbohydrates.toDouble()) * 100).toInt()}%"
+                fats =
+                    "${((totalFat / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.fats.toDouble()) * 100).toInt()}%"
             }
+            BasicMacrosStats(kcal, proteins, carbs, fats)
         }
+
         Box(
-            modifier = Modifier.clickable { extended2 = !extended2 },
+            modifier = Modifier
+                .clickable { extended2 = !extended2 }
+                .weight(1F),
             contentAlignment = Alignment.Center
         ) {
             if (extended2) CircularBasicStatistics(viewModel)
@@ -217,116 +184,64 @@ fun FoodTypeStatistics(
     var extended2 by remember { mutableStateOf(false) }
 
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxSize(),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
-            modifier = Modifier.clickable { extended = !extended },
+            modifier = Modifier
+                .clickable { extended = !extended }
+                .weight(1F)
+                .fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            Column(
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                if (extended) {
-                    Row(verticalAlignment = Alignment.Bottom) {
-                        Text(
-                            text = "fruit: ${totalKcalFruit.toInt()}",
-                            fontSize = 10.sp
-                        )
-                        Text(
-                            text = " /${dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromFruits}",
-                            fontSize = 6.sp
-                        )
-                    }
-                    Row(verticalAlignment = Alignment.Bottom) {
-                        Text(
-                            text = "vegetable: ${totalKcalVegetable.toInt()}",
-                            fontSize = 10.sp
-                        )
-                        Text(
-                            text = " /${dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromVegetables}",
-                            fontSize = 6.sp
-                        )
-                    }
-                    Row(verticalAlignment = Alignment.Bottom) {
-                        Text(
-                            text = "protein source: ${totalKcalProteinSource.toInt()}",
-                            fontSize = 10.sp
-                        )
-                        Text(
-                            text = " /${dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromProteinSource}",
-                            fontSize = 6.sp
-                        )
-                    }
-                    Row(verticalAlignment = Alignment.Bottom) {
-                        Text(
-                            text = "milk: ${totalKcalMilk.toInt()}",
-                            fontSize = 10.sp
-                        )
-                        Text(
-                            text = " /${dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromMilkProducts}",
-                            fontSize = 6.sp
-                        )
-                    }
-                    Row(verticalAlignment = Alignment.Bottom) {
-                        Text(
-                            text = "grains: ${totalKcalWheet.toInt()}",
-                            fontSize = 10.sp
-                        )
-                        Text(
-                            text = " /${dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromGrain}",
-                            fontSize = 6.sp
-                        )
-                    }
-                    Row(verticalAlignment = Alignment.Bottom) {
-                        Text(
-                            text = "added fats: ${totalKcalAddFat.toInt()}",
-                            fontSize = 10.sp
-                        )
-                        Text(
-                            text = " /${dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromAddedFat}",
-                            fontSize = 6.sp
-                        )
-                    }
-                } else {
-                    Text(
-                        text = "fruit: ${(totalKcalFruit / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromFruits.toDouble() * 100).toInt()}%",
-                        fontSize = 10.sp
-                    )
-                    Text(
-                        text = "vegetable: ${(totalKcalVegetable / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromVegetables.toDouble() * 100).toInt()}%",
-                        fontSize = 10.sp
-                    )
-                    Text(
-                        text = "protein source: ${(totalKcalProteinSource / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromProteinSource.toDouble() * 100).toInt()}%",
-                        fontSize = 10.sp
-                    )
-                    Text(
-                        text = "milk: ${(totalKcalMilk / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromMilkProducts.toDouble() * 100).toInt()}%",
-                        fontSize = 10.sp
-                    )
-                    Text(
-                        text = "grains: ${(totalKcalWheet / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromGrain.toDouble() * 100).toInt()}%",
-                        fontSize = 10.sp
-                    )
-                    Text(
-                        text = "added fats: ${(totalKcalAddFat / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromAddedFat.toDouble() * 100).toInt()}%",
-                        fontSize = 10.sp
-                    )
+
+            val fruit: String
+            val vegetable: String
+            val proteinSource: String
+            val milk: String
+            val grains: String
+            val addedFats: String
+
+            when (extended) {
+                true -> {
+                    fruit = "${totalKcalFruit.toInt()}"
+                    vegetable = "${totalKcalVegetable.toInt()}"
+                    proteinSource = "${totalKcalProteinSource.toInt()}"
+                    milk = "${totalKcalMilk.toInt()}"
+                    grains = "${totalKcalWheet.toInt()}"
+                    addedFats = "${totalKcalAddFat.toInt()}"
+                }
+
+                false -> {
+                    fruit =
+                        "${(totalKcalFruit / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromFruits.toDouble() * 100).toInt()}%"
+                    vegetable =
+                        "${(totalKcalVegetable / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromVegetables.toDouble() * 100).toInt()}%"
+                    proteinSource =
+                        "${(totalKcalProteinSource / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromProteinSource.toDouble() * 100).toInt()}%"
+                    milk =
+                        "${(totalKcalMilk / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromMilkProducts.toDouble() * 100).toInt()}%"
+                    grains =
+                        "${(totalKcalWheet / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromGrain.toDouble() * 100).toInt()}%"
+                    addedFats =
+                        "${(totalKcalAddFat / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromAddedFat.toDouble() * 100).toInt()}%"
                 }
             }
+            FoodCategoryMacrosStats(fruit, vegetable, proteinSource, milk, grains, addedFats)
         }
+
         Box(
-            modifier = Modifier.clickable { extended2 = !extended2 },
+            modifier = Modifier
+                .clickable { extended2 = !extended2 }
+                .weight(1F),
             contentAlignment = Alignment.Center
         ) {
             if (extended2) CircularFoodTypeStatistics(viewModel)
             else CircularFoodTypeStatisticsV2(viewModel, dietSettingsViewModel)
         }
-    }
 
+    }
 }
 
 @Composable
@@ -466,6 +381,7 @@ fun CircularBasicStatisticsV2(
                     proteinProgress = 0.0
                     carbsProgress = 0.0
                     fatProgress = 0.0
+                    kcalCalculatedTarget = 1.0
 
                 }
 
