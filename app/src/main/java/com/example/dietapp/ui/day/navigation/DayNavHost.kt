@@ -49,7 +49,8 @@ fun DayNavHost(
                     dayViewModel.deleteButtonVisible = true
                     navController.navigate(DayScreenList.Day.name)
                 },
-                dayViewModel
+                dayViewModel,
+                dietSettingsViewModel
             )
         }
         composable(route = DayScreenList.Day.name) {
