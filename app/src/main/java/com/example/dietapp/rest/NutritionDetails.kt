@@ -107,6 +107,7 @@ data class Nutriments(
 
 
 data class Product(
+    @SerializedName("image_url") var imageUrl: String? = null,
     @SerializedName("nutriments") var nutriments: Nutriments? = Nutriments(),
-    @SerializedName("product_name") var productName: String? = null,
+    @SerializedName("product_name") var productName: String? = null
 )

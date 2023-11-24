@@ -8,9 +8,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -32,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.example.dietapp.barcode.BarcodeScanner
 import com.example.dietapp.data.FoodCategory
 import com.example.dietapp.ui.ingredient.viewmodel.IngredientDetails
@@ -47,13 +50,10 @@ fun IngredientView(
     barcodeScannerButtonOnClick: () -> Unit
 ) {
     Column {
-        Icon(
-            imageVector = Icons.Default.Close,
-            contentDescription = "delete",
-            modifier = Modifier
-                .clickable {
-                    barcodeScannerButtonOnClick()
-                }
+        AsyncImage(
+            model = viewModel.pictureUrl,
+            contentDescription = null,
+            modifier = Modifier.size(100.dp, 100.dp)
         )
         IngredientForm(
             ingredientDetailsState = viewModel.ingredientUiState.ingredientDetails,
@@ -63,6 +63,17 @@ fun IngredientView(
             ingredientDetailsState = viewModel.ingredientUiState.ingredientDetails,
             onValueChange = viewModel::updateUiState
         )
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+            Icon(
+                imageVector = Icons.Default.ShoppingCart,
+                contentDescription = "delete",
+                modifier = Modifier
+                    .clickable {
+                        barcodeScannerButtonOnClick()
+                    }
+            )
+        }
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()

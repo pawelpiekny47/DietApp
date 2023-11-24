@@ -23,6 +23,7 @@ class IngredientViewModel(private val ingredientRepository: IngredientRepository
     //Retrofit response / query
     val myResponse: MutableLiveData<ExampleJson2KtKotlin> = MutableLiveData()
     var product by mutableStateOf(Product())
+    var pictureUrl by mutableStateOf("https://images.openfoodfacts.org/images/products/073/762/806/4502/front_en.6.400.jpg")
 
     var deleteButtonVisible by mutableStateOf(true)
     var ingredientUiState by mutableStateOf(IngredientUiState())
@@ -39,10 +40,12 @@ class IngredientViewModel(private val ingredientRepository: IngredientRepository
     fun updateUiState(ingredientDetails: IngredientDetails) {
         ingredientUiState =
             IngredientUiState(ingredientDetails = ingredientDetails)
+        pictureUrl = ""
     }
 
     fun resetUiState() {
         ingredientUiState = IngredientUiState()
+        pictureUrl = ""
     }
 
     suspend fun saveItem() {
@@ -73,6 +76,7 @@ class IngredientViewModel(private val ingredientRepository: IngredientRepository
                     fiber = product.nutriments?.fiber100g.toString(),
                 )
             )
+            pictureUrl = myResponse.value!!.product!!.imageUrl ?: ""
         }
     }
 

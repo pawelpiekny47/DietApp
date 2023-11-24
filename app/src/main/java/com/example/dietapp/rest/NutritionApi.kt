@@ -6,6 +6,6 @@ import retrofit2.http.Path
 
 
 interface NutritionApi {
-    @GET("{barcode}?fields=nutriments,product_name")
+    @GET("{barcode}?fields=nutriments,product_name,image_url")
     suspend fun getData(@Path("barcode") barcode: String): ExampleJson2KtKotlin
 }

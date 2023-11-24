@@ -76,7 +76,7 @@ fun IngredientNavHost(
             setMainScreen(
                 false,
                 { },
-                false,
+                true,
                 { navController.navigateUp() },
                 IngredientScreenList.NewIngredientScreen.title
             )

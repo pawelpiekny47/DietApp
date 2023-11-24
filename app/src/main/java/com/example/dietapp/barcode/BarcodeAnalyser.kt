@@ -10,8 +10,12 @@ import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -56,56 +60,63 @@ class BarcodeAnalyser(
 @ExperimentalGetImage
 @Composable
 fun BarcodeScanner(viewModel: IngredientViewModel, returnToIngredientScreen: () -> Unit) {
-    AndroidView(
-        { context ->
-            val cameraExecutor = Executors.newSingleThreadExecutor()
-            val previewView = PreviewView(context).also {
-                it.scaleType = PreviewView.ScaleType.FILL_CENTER
-            }
-            val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
-            cameraProviderFuture.addListener({
-                val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
-
-                val preview = Preview.Builder()
-                    .build()
-                    .also {
-                        it.setSurfaceProvider(previewView.surfaceProvider)
+    Column {
+        Box(modifier = Modifier.fillMaxSize().weight(2F), contentAlignment = Alignment.Center) {
+            AndroidView(
+                { context ->
+                    val cameraExecutor = Executors.newSingleThreadExecutor()
+                    val previewView = PreviewView(context).also {
+                        it.scaleType = PreviewView.ScaleType.FILL_CENTER
                     }
+                    val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
+                    cameraProviderFuture.addListener({
+                        val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
 
-                val imageCapture = ImageCapture.Builder().build()
+                        val preview = Preview.Builder()
+                            .build()
+                            .also {
+                                it.setSurfaceProvider(previewView.surfaceProvider)
+                            }
 
-                val imageAnalyzer = ImageAnalysis.Builder()
-                    .build()
-                    .also {
-                        it.setAnalyzer(cameraExecutor, BarcodeAnalyser { barcode ->
-                            viewModel.updateUiWithBarcode(barcode!!)
-                            returnToIngredientScreen()
-                        })
-                    }
+                        val imageCapture = ImageCapture.Builder().build()
 
-                val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+                        val imageAnalyzer = ImageAnalysis.Builder()
+                            .build()
+                            .also {
+                                it.setAnalyzer(cameraExecutor, BarcodeAnalyser { barcode ->
+                                    viewModel.updateUiWithBarcode(barcode!!)
+                                    returnToIngredientScreen()
+                                })
+                            }
 
-                try {
-                    // Unbind use cases before rebinding
-                    cameraProvider.unbindAll()
+                        val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
-                    // Bind use cases to camera
-                    cameraProvider.bindToLifecycle(
-                        context as ComponentActivity,
-                        cameraSelector,
-                        preview,
-                        imageCapture,
-                        imageAnalyzer
-                    )
+                        try {
+                            // Unbind use cases before rebinding
+                            cameraProvider.unbindAll()
 
-                } catch (exc: Exception) {
-                    Log.e("DEBUG", "Use case binding failed", exc)
-                }
-            }, ContextCompat.getMainExecutor(context))
-            previewView
-        },
-        modifier = Modifier
-            .size(width = 250.dp, height = 250.dp)
-    )
+                            // Bind use cases to camera
+                            cameraProvider.bindToLifecycle(
+                                context as ComponentActivity,
+                                cameraSelector,
+                                preview,
+                                imageCapture,
+                                imageAnalyzer
+                            )
+
+                        } catch (exc: Exception) {
+                            Log.e("DEBUG", "Use case binding failed", exc)
+                        }
+                    }, ContextCompat.getMainExecutor(context))
+                    previewView
+                },
+                modifier = Modifier
+                    .size(width = 250.dp, height = 250.dp)
+            )
+        }
+        Box(modifier = Modifier.weight(1F), contentAlignment = Alignment.Center) {
+        }
+    }
+
 }
 
