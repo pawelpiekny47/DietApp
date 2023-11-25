@@ -67,10 +67,18 @@ fun BasicStatistics(
     statisticType: DietStatistics,
     dietSettingsViewModel: DietSettingsViewModel
 ) {
-    val totalKcal = statisticType.returnTotalKcal()
-    val totalProteins = statisticType.returnTotalProtein()
-    val totalCarbs = statisticType.returnTotalCarbs()
-    val totalFat = statisticType.returnTotalFat()
+    val currentKcal = statisticType.returnCurrentKcal()
+    val currentProteins = statisticType.returnCurrentProtein()
+    val currentCarbs = statisticType.returnCurrentCarbs()
+    val currentFat = statisticType.returnCurrentFat()
+
+    val targetKcal =
+        dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.totalKcal.toDouble()
+    val targetProteins =
+        dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.protein.toDouble()
+    val targetCarbs =
+        dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.carbohydrates.toDouble()
+    val targetFat = dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.fats.toDouble()
 
     var extended by remember { mutableStateOf(false) }
     var extended2 by remember { mutableStateOf(false) }
@@ -95,23 +103,23 @@ fun BasicStatistics(
 
             if (extended) {
                 kcal =
-                    "${totalKcal.toInt()}"
+                    "${currentKcal.toInt()}"
                 proteins =
-                    "${totalProteins.toInt()}"
+                    "${currentProteins.toInt()}"
                 carbs =
-                    "${totalCarbs.toInt()}"
+                    "${currentCarbs.toInt()}"
                 fats =
-                    "${totalFat.toInt()}"
+                    "${currentFat.toInt()}"
 
             } else {
                 kcal =
-                    "${((totalKcal / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.totalKcal.toDouble()) * 100).toInt()}%"
+                    "${((currentKcal / targetKcal) * 100).toInt()}%"
                 proteins =
-                    "${((totalProteins / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.protein.toDouble()) * 100).toInt()}%"
+                    "${((currentProteins / targetProteins) * 100).toInt()}%"
                 carbs =
-                    "${((totalCarbs / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.carbohydrates.toDouble()) * 100).toInt()}%"
+                    "${((currentCarbs / targetCarbs) * 100).toInt()}%"
                 fats =
-                    "${((totalFat / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.fats.toDouble()) * 100).toInt()}%"
+                    "${((currentFat / targetFat) * 100).toInt()}%"
             }
             BasicMacrosStatsV2(kcal, proteins, carbs, fats)
         }
@@ -134,13 +142,20 @@ fun FoodTypeStatistics(
     viewModel: DietStatistics,
     dietSettingsViewModel: DietSettingsViewModel
 ) {
-    val totalKcalFruit = viewModel.returnTotalKcalForFoodCategory(FoodCategory.Fruit)
-    val totalKcalVegetable = viewModel.returnTotalKcalForFoodCategory(FoodCategory.Vegetable)
-    val totalKcalWheet = viewModel.returnTotalKcalForFoodCategory(FoodCategory.Wheet)
-    val totalKcalMilk = viewModel.returnTotalKcalForFoodCategory(FoodCategory.MilkAndReplacement)
-    val totalKcalProteinSource =
-        viewModel.returnTotalKcalForFoodCategory(FoodCategory.ProteinSource)
-    val totalKcalAddFat = viewModel.returnTotalKcalForFoodCategory(FoodCategory.AddedFat)
+    val currentKcalFruit = viewModel.returnCurrentKcalForFoodCategory(FoodCategory.Fruit)
+    val currentKcalVegetable = viewModel.returnCurrentKcalForFoodCategory(FoodCategory.Vegetable)
+    val currentKcalWheet = viewModel.returnCurrentKcalForFoodCategory(FoodCategory.Wheet)
+    val currentKcalMilk = viewModel.returnCurrentKcalForFoodCategory(FoodCategory.MilkAndReplacement)
+    val currentKcalProteinSource =
+        viewModel.returnCurrentKcalForFoodCategory(FoodCategory.ProteinSource)
+    val currentKcalAddFat = viewModel.returnCurrentKcalForFoodCategory(FoodCategory.AddedFat)
+
+    val targetKcalFruit = dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromFruits.toDouble()
+    val targetKcalVegetable = dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromVegetables.toDouble()
+    val targetKcalWheet = dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromGrain.toDouble()
+    val targetKcalMilk = dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromMilkProducts.toDouble()
+    val targetKcalProteinSource =dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromProteinSource.toDouble()
+    val targetKcalAddFat = dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromAddedFat.toDouble()
 
     var extended by remember { mutableStateOf(false) }
     var extended2 by remember { mutableStateOf(false) }
@@ -167,27 +182,27 @@ fun FoodTypeStatistics(
 
             when (extended) {
                 true -> {
-                    fruit = "${totalKcalFruit.toInt()}"
-                    vegetable = "${totalKcalVegetable.toInt()}"
-                    proteinSource = "${totalKcalProteinSource.toInt()}"
-                    milk = "${totalKcalMilk.toInt()}"
-                    grains = "${totalKcalWheet.toInt()}"
-                    addedFats = "${totalKcalAddFat.toInt()}"
+                    fruit = "${currentKcalFruit.toInt()}"
+                    vegetable = "${currentKcalVegetable.toInt()}"
+                    proteinSource = "${currentKcalProteinSource.toInt()}"
+                    milk = "${currentKcalMilk.toInt()}"
+                    grains = "${currentKcalWheet.toInt()}"
+                    addedFats = "${currentKcalAddFat.toInt()}"
                 }
 
                 false -> {
                     fruit =
-                        "${(totalKcalFruit / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromFruits.toDouble() * 100).toInt()}%"
+                        "${(currentKcalFruit / targetKcalFruit * 100).toInt()}%"
                     vegetable =
-                        "${(totalKcalVegetable / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromVegetables.toDouble() * 100).toInt()}%"
+                        "${(currentKcalVegetable / targetKcalVegetable * 100).toInt()}%"
                     proteinSource =
-                        "${(totalKcalProteinSource / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromProteinSource.toDouble() * 100).toInt()}%"
+                        "${(currentKcalProteinSource / targetKcalProteinSource * 100).toInt()}%"
                     milk =
-                        "${(totalKcalMilk / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromMilkProducts.toDouble() * 100).toInt()}%"
+                        "${(currentKcalMilk / targetKcalMilk * 100).toInt()}%"
                     grains =
-                        "${(totalKcalWheet / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromGrain.toDouble() * 100).toInt()}%"
+                        "${(currentKcalWheet / targetKcalWheet * 100).toInt()}%"
                     addedFats =
-                        "${(totalKcalAddFat / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromAddedFat.toDouble() * 100).toInt()}%"
+                        "${(currentKcalAddFat / targetKcalAddFat * 100).toInt()}%"
                 }
             }
             FoodCategoryMacrosStats(fruit, vegetable, proteinSource, milk, grains, addedFats)
@@ -211,20 +226,20 @@ fun AdditionalInfo(
     viewModel: DietStatistics,
     dietSettingsViewModel: DietSettingsViewModel
 ) {
-    val totalPufa = viewModel.returnTotalPufa()
-    val totalSoil = viewModel.returnTotalSoil()
-    val totalFiber = viewModel.returnTotalFiber()
+    val currentPufa = viewModel.returnCurrentPufa()
+    val currentSoil = viewModel.returnCurrentSoil()
+    val currentFiber = viewModel.returnCurrentFiber()
 
     Text(
-        text = "pufa: $totalPufa / ${dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.polyunsaturatedFats}",
+        text = "pufa: $currentPufa / ${dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.polyunsaturatedFats}",
         fontSize = 10.sp
     )
     Text(
-        text = "salt: $totalSoil / ${dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.soil}",
+        text = "salt: $currentSoil / ${dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.soil}",
         fontSize = 10.sp
     )
     Text(
-        text = "fiber: $totalFiber / ${dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.fiber}",
+        text = "fiber: $currentFiber / ${dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.fiber}",
         fontSize = 10.sp
     )
 }
@@ -233,12 +248,12 @@ fun AdditionalInfo(
 fun CircularBasicStatistics(
     viewModel: DietStatistics,
 ) {
-    var totalKcal = viewModel.returnTotalKcal()
+    var totalKcal = viewModel.returnCurrentKcal()
     var proteinProgress = 0.0
     var carbsProgress = 0.0
     var fatProgress = 0.0
     val totalProgress =
-        (viewModel.returnTotalProtein() * 4 + viewModel.returnTotalFat() * 9 + viewModel.returnTotalCarbs() * 4)
+        (viewModel.returnCurrentProtein() * 4 + viewModel.returnCurrentFat() * 9 + viewModel.returnCurrentCarbs() * 4)
 
     when (totalProgress) {
         0.0 -> {
@@ -248,9 +263,9 @@ fun CircularBasicStatistics(
         }
 
         else -> {
-            proteinProgress = viewModel.returnTotalProtein() * 4 / totalProgress
-            carbsProgress = viewModel.returnTotalCarbs() * 4 / totalProgress
-            fatProgress = viewModel.returnTotalFat() * 9 / totalProgress
+            proteinProgress = viewModel.returnCurrentProtein() * 4 / totalProgress
+            carbsProgress = viewModel.returnCurrentCarbs() * 4 / totalProgress
+            fatProgress = viewModel.returnCurrentFat() * 9 / totalProgress
         }
     }
 
@@ -299,7 +314,7 @@ fun CircularBasicStatisticsV2(
         dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.fats.toDouble() * 9
     var kcalCalculatedTarget = proteinTarget + carbsTarget + fatTarget
 
-    kcal = viewModel.returnTotalKcal()
+    kcal = viewModel.returnCurrentKcal()
     when (kcalCalculatedTarget) {
         0.0 -> {
             proteinProgress = 0.0
@@ -310,9 +325,9 @@ fun CircularBasicStatisticsV2(
         }
 
         else -> {
-            proteinProgress = viewModel.returnTotalProtein() * 4 / kcalCalculatedTarget
-            carbsProgress = viewModel.returnTotalCarbs() * 4 / kcalCalculatedTarget
-            fatProgress = viewModel.returnTotalFat() * 9 / kcalCalculatedTarget
+            proteinProgress = viewModel.returnCurrentProtein() * 4 / kcalCalculatedTarget
+            carbsProgress = viewModel.returnCurrentCarbs() * 4 / kcalCalculatedTarget
+            fatProgress = viewModel.returnCurrentFat() * 9 / kcalCalculatedTarget
         }
     }
     Box(contentAlignment = Alignment.Center) {
@@ -377,7 +392,7 @@ fun LinearBasicStatistics(
         dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.fats.toDouble() * 9
     var kcalCalculatedTarget = proteinTarget + carbsTarget + fatTarget
 
-    kcal = viewModel.returnTotalKcal()
+    kcal = viewModel.returnCurrentKcal()
     when (kcalCalculatedTarget) {
         0.0 -> {
             proteinProgress = 0.0
@@ -388,9 +403,9 @@ fun LinearBasicStatistics(
         }
 
         else -> {
-            proteinProgress = viewModel.returnTotalProtein() * 4 / kcalCalculatedTarget
-            carbsProgress = viewModel.returnTotalCarbs() * 4 / kcalCalculatedTarget
-            fatProgress = viewModel.returnTotalFat() * 9 / kcalCalculatedTarget
+            proteinProgress = viewModel.returnCurrentProtein() * 4 / kcalCalculatedTarget
+            carbsProgress = viewModel.returnCurrentCarbs() * 4 / kcalCalculatedTarget
+            fatProgress = viewModel.returnCurrentFat() * 9 / kcalCalculatedTarget
         }
     }
 
@@ -443,7 +458,7 @@ fun CircularFoodTypeStatistics(
     var addedFatProgress = 0.0
     val total: Double
 
-    total = FoodCategory.values().sumOf { viewModel.returnTotalKcalForFoodCategory(it) }
+    total = FoodCategory.values().sumOf { viewModel.returnCurrentKcalForFoodCategory(it) }
     when (total) {
         0.0 -> {
             fruitProgress = 0.0
@@ -456,17 +471,17 @@ fun CircularFoodTypeStatistics(
 
         else -> {
             fruitProgress =
-                viewModel.returnTotalKcalForFoodCategory(FoodCategory.Fruit) / total
+                viewModel.returnCurrentKcalForFoodCategory(FoodCategory.Fruit) / total
             vegetableProgress =
-                viewModel.returnTotalKcalForFoodCategory(FoodCategory.Vegetable) / total
+                viewModel.returnCurrentKcalForFoodCategory(FoodCategory.Vegetable) / total
             grainProgress =
-                viewModel.returnTotalKcalForFoodCategory(FoodCategory.Wheet) / total
+                viewModel.returnCurrentKcalForFoodCategory(FoodCategory.Wheet) / total
             milkProgress =
-                viewModel.returnTotalKcalForFoodCategory(FoodCategory.MilkAndReplacement) / total
+                viewModel.returnCurrentKcalForFoodCategory(FoodCategory.MilkAndReplacement) / total
             proteinSourceProgress =
-                viewModel.returnTotalKcalForFoodCategory(FoodCategory.ProteinSource) / total
+                viewModel.returnCurrentKcalForFoodCategory(FoodCategory.ProteinSource) / total
             addedFatProgress =
-                viewModel.returnTotalKcalForFoodCategory(FoodCategory.AddedFat) / total
+                viewModel.returnCurrentKcalForFoodCategory(FoodCategory.AddedFat) / total
         }
     }
 
@@ -545,17 +560,17 @@ fun CircularFoodTypeStatisticsV2(
 
         else -> {
             fruitProgress =
-                viewModel.returnTotalKcalForFoodCategory(FoodCategory.Fruit) / kcalTarget
+                viewModel.returnCurrentKcalForFoodCategory(FoodCategory.Fruit) / kcalTarget
             vegetableProgress =
-                viewModel.returnTotalKcalForFoodCategory(FoodCategory.Vegetable) / kcalTarget
+                viewModel.returnCurrentKcalForFoodCategory(FoodCategory.Vegetable) / kcalTarget
             grainProgress =
-                viewModel.returnTotalKcalForFoodCategory(FoodCategory.Wheet) / kcalTarget
+                viewModel.returnCurrentKcalForFoodCategory(FoodCategory.Wheet) / kcalTarget
             milkProgress =
-                viewModel.returnTotalKcalForFoodCategory(FoodCategory.MilkAndReplacement) / kcalTarget
+                viewModel.returnCurrentKcalForFoodCategory(FoodCategory.MilkAndReplacement) / kcalTarget
             proteinSourceProgress =
-                viewModel.returnTotalKcalForFoodCategory(FoodCategory.ProteinSource) / kcalTarget
+                viewModel.returnCurrentKcalForFoodCategory(FoodCategory.ProteinSource) / kcalTarget
             addedFatProgress =
-                viewModel.returnTotalKcalForFoodCategory(FoodCategory.AddedFat) / kcalTarget
+                viewModel.returnCurrentKcalForFoodCategory(FoodCategory.AddedFat) / kcalTarget
         }
     }
     Box(contentAlignment = Alignment.Center) {
@@ -624,13 +639,13 @@ fun CircularFoodTypeStatisticsV2(
 }
 
 interface DietStatistics {
-    fun returnTotalKcal(): Double
-    fun returnTotalProtein(): Double
-    fun returnTotalCarbs(): Double
-    fun returnTotalFat(): Double
-    fun returnTotalSoil(): Double
-    fun returnTotalFiber(): Double
-    fun returnTotalPufa(): Double
-    fun returnTotalKcalForFoodCategory(foodType: FoodCategory): Double
+    fun returnCurrentKcal(): Double
+    fun returnCurrentProtein(): Double
+    fun returnCurrentCarbs(): Double
+    fun returnCurrentFat(): Double
+    fun returnCurrentSoil(): Double
+    fun returnCurrentFiber(): Double
+    fun returnCurrentPufa(): Double
+    fun returnCurrentKcalForFoodCategory(foodType: FoodCategory): Double
 
 }

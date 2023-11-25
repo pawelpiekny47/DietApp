@@ -138,7 +138,7 @@ class DayViewModel(private val dayRepository: DayRepository) : ViewModel(), Diet
         dayRepository.deleteAll(dayWithDishesUiState.dayDishCrossRefToDelete)
     }
 
-    override fun returnTotalKcal(): Double {
+    override fun returnCurrentKcal(): Double {
         return dayWithDishesUiState.dayDetails.dishList.stream().map { it ->
             it.dishDetails.ingredientList.stream()
                 .map { ((it.ingredientDetails.totalKcal.toDouble() * it.amount.toDouble()) / (100)) }
@@ -149,7 +149,7 @@ class DayViewModel(private val dayRepository: DayRepository) : ViewModel(), Diet
         ).toDouble()
     }
 
-    override fun returnTotalProtein(): Double {
+    override fun returnCurrentProtein(): Double {
         return dayWithDishesUiState.dayDetails.dishList.stream().map { it ->
             it.dishDetails.ingredientList.stream()
                 .map { ((it.ingredientDetails.protein.toDouble() * it.amount.toDouble()) / (100)) }
@@ -160,7 +160,7 @@ class DayViewModel(private val dayRepository: DayRepository) : ViewModel(), Diet
         ).toDouble()
     }
 
-    override fun returnTotalCarbs(): Double {
+    override fun returnCurrentCarbs(): Double {
         return dayWithDishesUiState.dayDetails.dishList.stream().map { it ->
             it.dishDetails.ingredientList.stream()
                 .map { ((it.ingredientDetails.carbohydrates.toDouble() * it.amount.toDouble()) / (100)) }
@@ -171,7 +171,7 @@ class DayViewModel(private val dayRepository: DayRepository) : ViewModel(), Diet
         ).toDouble()
     }
 
-    override fun returnTotalFat(): Double {
+    override fun returnCurrentFat(): Double {
         return dayWithDishesUiState.dayDetails.dishList.stream().map { it ->
             it.dishDetails.ingredientList.stream()
                 .map { ((it.ingredientDetails.fats.toDouble() * it.amount.toDouble()) / (100)) }
@@ -182,7 +182,7 @@ class DayViewModel(private val dayRepository: DayRepository) : ViewModel(), Diet
         ).toDouble()
     }
 
-    override fun returnTotalSoil(): Double {
+    override fun returnCurrentSoil(): Double {
         return dayWithDishesUiState.dayDetails.dishList.stream().map { it ->
             it.dishDetails.ingredientList.stream()
                 .map { ((it.ingredientDetails.soil.toDouble() * it.amount.toDouble()) / (100)) }
@@ -193,7 +193,7 @@ class DayViewModel(private val dayRepository: DayRepository) : ViewModel(), Diet
         ).toDouble()
     }
 
-    override fun returnTotalFiber(): Double {
+    override fun returnCurrentFiber(): Double {
         return dayWithDishesUiState.dayDetails.dishList.stream().map { it ->
             it.dishDetails.ingredientList.stream()
                 .map { ((it.ingredientDetails.fiber.toDouble() * it.amount.toDouble()) / (100)) }
@@ -204,7 +204,7 @@ class DayViewModel(private val dayRepository: DayRepository) : ViewModel(), Diet
         ).toDouble()
     }
 
-    override fun returnTotalPufa(): Double {
+    override fun returnCurrentPufa(): Double {
         return dayWithDishesUiState.dayDetails.dishList.stream().map { it ->
             it.dishDetails.ingredientList.stream()
                 .map { ((it.ingredientDetails.polyunsaturatedFats.toDouble() * it.amount.toDouble()) / (100)) }
@@ -215,7 +215,7 @@ class DayViewModel(private val dayRepository: DayRepository) : ViewModel(), Diet
         ).toDouble()
     }
 
-    override fun returnTotalKcalForFoodCategory(foodType: FoodCategory): Double {
+    override fun returnCurrentKcalForFoodCategory(foodType: FoodCategory): Double {
         return dayWithDishesUiState.dayDetails.dishList.stream().map { it ->
             it.dishDetails.ingredientList.stream()
                 .filter { it.ingredientDetails.foodCategory == foodType }

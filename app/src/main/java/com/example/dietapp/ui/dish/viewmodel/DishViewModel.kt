@@ -131,7 +131,7 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel(), D
             )
     }
 
-    override fun returnTotalKcal(): Double {
+    override fun returnCurrentKcal(): Double {
         return dishWithIngredientsUiState.dishDetails.ingredientList.stream().map {
             (it.ingredientDetails.totalKcal.toDouble() * (it.amount.toDoubleOrNull()
                 ?: 0.0)) / (100)
@@ -142,7 +142,7 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel(), D
             ).toDouble()
     }
 
-    override fun returnTotalProtein(): Double {
+    override fun returnCurrentProtein(): Double {
         return dishWithIngredientsUiState.dishDetails.ingredientList.stream().map {
             (it.ingredientDetails.protein.toDouble() * (it.amount.toDoubleOrNull()
                 ?: 0.0)) / (100)
@@ -153,7 +153,7 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel(), D
             ).toDouble()
     }
 
-    override fun returnTotalCarbs(): Double {
+    override fun returnCurrentCarbs(): Double {
         return dishWithIngredientsUiState.dishDetails.ingredientList.stream().map {
             (it.ingredientDetails.carbohydrates.toDouble() * (it.amount.toDoubleOrNull()
                 ?: 0.0)) / (100)
@@ -164,7 +164,7 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel(), D
             ).toDouble()
     }
 
-    override fun returnTotalFat(): Double {
+    override fun returnCurrentFat(): Double {
         return dishWithIngredientsUiState.dishDetails.ingredientList.stream().map {
             (it.ingredientDetails.fats.toDouble() * (it.amount.toDoubleOrNull()
                 ?: 0.0)) / (100)
@@ -175,7 +175,7 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel(), D
             ).toDouble()
     }
 
-    override fun returnTotalSoil(): Double {
+    override fun returnCurrentSoil(): Double {
         return dishWithIngredientsUiState.dishDetails.ingredientList.stream().map {
             (it.ingredientDetails.soil.toDouble() * (it.amount.toDoubleOrNull()
                 ?: 0.0)) / (100)
@@ -186,7 +186,7 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel(), D
             ).toDouble()
     }
 
-    override fun returnTotalFiber(): Double {
+    override fun returnCurrentFiber(): Double {
         return dishWithIngredientsUiState.dishDetails.ingredientList.stream().map {
             (it.ingredientDetails.fiber.toDouble() * (it.amount.toDoubleOrNull()
                 ?: 0.0)) / (100)
@@ -197,7 +197,7 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel(), D
             ).toDouble()
     }
 
-    override fun returnTotalPufa(): Double {
+    override fun returnCurrentPufa(): Double {
         return dishWithIngredientsUiState.dishDetails.ingredientList.stream().map {
             (it.ingredientDetails.polyunsaturatedFats.toDouble() * (it.amount.toDoubleOrNull()
                 ?: 0.0)) / (100)
@@ -208,7 +208,7 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel(), D
             ).toDouble()
     }
 
-    override fun returnTotalKcalForFoodCategory(foodType: FoodCategory): Double {
+    override fun returnCurrentKcalForFoodCategory(foodType: FoodCategory): Double {
         return dishWithIngredientsUiState.dishDetails.ingredientList.stream().filter {
             (it.ingredientDetails.foodCategory == foodType)
         }.map {
