@@ -35,7 +35,7 @@ fun DietSettingsStatistic(
     val flingBehavior = rememberSnapFlingBehavior(lazyListState = lazyListState)
 
     LazyRow(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxSize(),
         state = lazyListState,
         flingBehavior = flingBehavior
     ) {
@@ -251,19 +251,28 @@ fun AdditionalInfo(
 fun LinearBasicStatistics(
     list: MutableList<DietStatisticItem>,
 ) {
-    Column(
-        modifier = Modifier
-            .padding(3.dp, 3.dp)
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+    Row(
+        modifier = Modifier.fillMaxSize(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
     ) {
-        list.forEach {
-            LinearProgressIndicator(
-                progress = kotlin.math.min((it.current / it.target), 1.0).toFloat(),
-                color = it.statisticColor
-            )
+        Box(modifier = Modifier.weight(1F))
+        Column(
+            modifier = Modifier
+                .weight(3F)
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceEvenly,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            list.forEach {
+                LinearProgressIndicator(
+                    progress = kotlin.math.min((it.current / it.target), 1.0).toFloat(),
+                    color = it.statisticColor
+                )
+            }
+
         }
+        Box(modifier = Modifier.weight(1F))
     }
 }
 
