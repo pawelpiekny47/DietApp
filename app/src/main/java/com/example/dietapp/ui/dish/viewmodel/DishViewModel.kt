@@ -12,6 +12,7 @@ import com.example.dietapp.data.FoodCategory
 import com.example.dietapp.data.IngredientWithAmount
 import com.example.dietapp.repository.DishRepository
 import com.example.dietapp.ui.ingredient.viewmodel.IngredientDetails
+import com.example.dietapp.ui.common.DietStatistics
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -20,7 +21,7 @@ import java.math.RoundingMode
 import java.util.stream.Collectors
 import kotlin.streams.toList
 
-class DishViewModel(private val dishRepository: DishRepository) : ViewModel() {
+class DishViewModel(private val dishRepository: DishRepository) : ViewModel(), DietStatistics {
     var deleteButtonVisible by mutableStateOf(true)
     var dishWithIngredientsUiState by mutableStateOf(DishWithIngredientsDetailsUiState())
         private set
@@ -130,7 +131,7 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel() {
             )
     }
 
-    fun returnTotalKcal(): Double {
+    override fun returnTotalKcal(): Double {
         return dishWithIngredientsUiState.dishDetails.ingredientList.stream().map {
             (it.ingredientDetails.totalKcal.toDouble() * (it.amount.toDoubleOrNull()
                 ?: 0.0)) / (100)
@@ -140,7 +141,8 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel() {
                 RoundingMode.HALF_DOWN
             ).toDouble()
     }
-    fun returnTotalProtein(): Double {
+
+    override fun returnTotalProtein(): Double {
         return dishWithIngredientsUiState.dishDetails.ingredientList.stream().map {
             (it.ingredientDetails.protein.toDouble() * (it.amount.toDoubleOrNull()
                 ?: 0.0)) / (100)
@@ -150,7 +152,8 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel() {
                 RoundingMode.HALF_DOWN
             ).toDouble()
     }
-    fun returnTotalCarbs(): Double {
+
+    override fun returnTotalCarbs(): Double {
         return dishWithIngredientsUiState.dishDetails.ingredientList.stream().map {
             (it.ingredientDetails.carbohydrates.toDouble() * (it.amount.toDoubleOrNull()
                 ?: 0.0)) / (100)
@@ -160,7 +163,8 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel() {
                 RoundingMode.HALF_DOWN
             ).toDouble()
     }
-    fun returnTotalFat(): Double {
+
+    override fun returnTotalFat(): Double {
         return dishWithIngredientsUiState.dishDetails.ingredientList.stream().map {
             (it.ingredientDetails.fats.toDouble() * (it.amount.toDoubleOrNull()
                 ?: 0.0)) / (100)
@@ -171,7 +175,7 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel() {
             ).toDouble()
     }
 
-    fun returnTotalSoil(): Double {
+    override fun returnTotalSoil(): Double {
         return dishWithIngredientsUiState.dishDetails.ingredientList.stream().map {
             (it.ingredientDetails.soil.toDouble() * (it.amount.toDoubleOrNull()
                 ?: 0.0)) / (100)
@@ -181,7 +185,8 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel() {
                 RoundingMode.HALF_DOWN
             ).toDouble()
     }
-    fun returnTotalFiber(): Double {
+
+    override fun returnTotalFiber(): Double {
         return dishWithIngredientsUiState.dishDetails.ingredientList.stream().map {
             (it.ingredientDetails.fiber.toDouble() * (it.amount.toDoubleOrNull()
                 ?: 0.0)) / (100)
@@ -191,7 +196,8 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel() {
                 RoundingMode.HALF_DOWN
             ).toDouble()
     }
-    fun returnTotalPufa(): Double {
+
+    override fun returnTotalPufa(): Double {
         return dishWithIngredientsUiState.dishDetails.ingredientList.stream().map {
             (it.ingredientDetails.polyunsaturatedFats.toDouble() * (it.amount.toDoubleOrNull()
                 ?: 0.0)) / (100)
@@ -202,7 +208,7 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel() {
             ).toDouble()
     }
 
-    fun returnTotalKcalForFoodCategory(foodType: FoodCategory): Double {
+    override fun returnTotalKcalForFoodCategory(foodType: FoodCategory): Double {
         return dishWithIngredientsUiState.dishDetails.ingredientList.stream().filter {
             (it.ingredientDetails.foodCategory == foodType)
         }.map {
@@ -221,6 +227,7 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel() {
         dishRepository.saveAll(dishWithIngredientsUiState.toDishIngredientCrossRefList())
         dishRepository.deleteAll(dishWithIngredientsUiState.dishIngredientCrossRefToDelete)
     }
+
     suspend fun deleteDish() {
         dishRepository.deleteDish(dishWithIngredientsUiState.dishDetails.dish)
     }
@@ -242,7 +249,7 @@ fun DishWithIngredientsDetailsUiState.toDishIngredientCrossRefList(): List<DishI
             DishIngredientCrossRef(
                 dishDetails.dish.dishId,
                 it.ingredientDetails.id,
-                if(it.amount == "") 0.0 else it.amount.toDouble()
+                if (it.amount == "") 0.0 else it.amount.toDouble()
             )
         }
         .toList()
