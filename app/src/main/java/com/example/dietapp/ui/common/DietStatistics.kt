@@ -270,7 +270,6 @@ fun LinearBasicStatistics(
                     color = it.statisticColor
                 )
             }
-
         }
         Box(modifier = Modifier.weight(1F))
     }

@@ -3,6 +3,7 @@ package com.example.dietapp.ui.common
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -95,12 +96,15 @@ fun BasicMacrosStatsV2(
     percent: Boolean
 ) {
 
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceEvenly
+    ) {
         list.forEach {
             Row(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(2.dp),
+                    .weight(1F),
                 horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.Bottom
             ) {
                 Text(
@@ -126,123 +130,6 @@ fun BasicMacrosStatsV2(
                     style = MaterialTheme.typography.bodySmall
                 )
             }
-        }
-    }
-}
-
-
-@Composable
-fun FoodCategoryMacrosStats(
-    fruitTextValue: String,
-    vegetableTextValue: String,
-    proteinSourceTextValue: String,
-    milkTextValue: String,
-    grainsTextValue: String,
-    addedFatTextValue: String
-) {
-
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = "fruit",
-                modifier = Modifier.scale(0.6F),
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
-            )
-            Text(
-                text = fruitTextValue,
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
-            )
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = "vegetable",
-                modifier = Modifier.scale(0.6F),
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
-            )
-            Text(
-                text = vegetableTextValue,
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
-            )
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = "protein source",
-                modifier = Modifier.scale(0.6F),
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
-            )
-            Text(
-                text = proteinSourceTextValue,
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
-            )
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = "milk",
-                modifier = Modifier.scale(0.6F),
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
-            )
-            Text(
-                text = milkTextValue,
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
-            )
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = "grains",
-                modifier = Modifier.scale(0.6F),
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
-            )
-            Text(
-                text = grainsTextValue,
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
-            )
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = "added fats",
-                modifier = Modifier.scale(0.6F),
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
-            )
-            Text(
-                text = addedFatTextValue,
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
-            )
         }
     }
 }
