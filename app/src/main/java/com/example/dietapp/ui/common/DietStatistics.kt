@@ -67,22 +67,35 @@ fun BasicStatistics(
     statisticType: DietStatistics,
     dietSettingsViewModel: DietSettingsViewModel
 ) {
-    val currentKcal = statisticType.returnCurrentKcal()
-    val currentProteins = statisticType.returnCurrentProtein()
-    val currentCarbs = statisticType.returnCurrentCarbs()
-    val currentFat = statisticType.returnCurrentFat()
+    val listOfStatisticItems = mutableListOf(
+        DietStatisticItem(
+            "kcal",
+            statisticType.returnCurrentKcal(),
+            dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.totalKcal.toDouble(),
+            Color.Red
+        ),
+        DietStatisticItem(
+            "p",
+            statisticType.returnCurrentProtein(),
+            dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.protein.toDouble(),
+            Color.Blue
+        ),
+        DietStatisticItem(
+            "c",
+            statisticType.returnCurrentCarbs(),
+            dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.carbohydrates.toDouble(),
+            Color.Green
+        ),
+        DietStatisticItem(
+            "f",
+            statisticType.returnCurrentFat(),
+            dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.fats.toDouble(),
+            Color.Yellow
+        ),
+    )
 
-    val targetKcal =
-        dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.totalKcal.toDouble()
-    val targetProteins =
-        dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.protein.toDouble()
-    val targetCarbs =
-        dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.carbohydrates.toDouble()
-    val targetFat = dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.fats.toDouble()
-
-    var extended by remember { mutableStateOf(false) }
+    var inPercent by remember { mutableStateOf(false) }
     var extended2 by remember { mutableStateOf(false) }
-
 
     Row(
         modifier = Modifier.fillMaxSize(),
@@ -91,46 +104,19 @@ fun BasicStatistics(
     ) {
         Box(
             modifier = Modifier
-                .clickable { extended = !extended }
+                .clickable { inPercent = !inPercent }
                 .weight(1F),
             contentAlignment = Alignment.Center
         ) {
-
-            val kcal: String
-            val proteins: String
-            val carbs: String
-            val fats: String
-
-            if (extended) {
-                kcal =
-                    "${currentKcal.toInt()}"
-                proteins =
-                    "${currentProteins.toInt()}"
-                carbs =
-                    "${currentCarbs.toInt()}"
-                fats =
-                    "${currentFat.toInt()}"
-
-            } else {
-                kcal =
-                    "${((currentKcal / targetKcal) * 100).toInt()}%"
-                proteins =
-                    "${((currentProteins / targetProteins) * 100).toInt()}%"
-                carbs =
-                    "${((currentCarbs / targetCarbs) * 100).toInt()}%"
-                fats =
-                    "${((currentFat / targetFat) * 100).toInt()}%"
-            }
-            BasicMacrosStatsV2(kcal, proteins, carbs, fats)
+            BasicMacrosStatsV2(listOfStatisticItems, inPercent)
         }
-
         Box(
             modifier = Modifier
                 .clickable { extended2 = !extended2 }
                 .weight(1F),
             contentAlignment = Alignment.Center
         ) {
-            if (extended2) LinearBasicStatistics(statisticType, dietSettingsViewModel)
+            if (extended2) LinearBasicStatistics(listOfStatisticItems)
             else CircularBasicStatisticsV2(statisticType, dietSettingsViewModel)
         }
     }
@@ -145,17 +131,24 @@ fun FoodTypeStatistics(
     val currentKcalFruit = viewModel.returnCurrentKcalForFoodCategory(FoodCategory.Fruit)
     val currentKcalVegetable = viewModel.returnCurrentKcalForFoodCategory(FoodCategory.Vegetable)
     val currentKcalWheet = viewModel.returnCurrentKcalForFoodCategory(FoodCategory.Wheet)
-    val currentKcalMilk = viewModel.returnCurrentKcalForFoodCategory(FoodCategory.MilkAndReplacement)
+    val currentKcalMilk =
+        viewModel.returnCurrentKcalForFoodCategory(FoodCategory.MilkAndReplacement)
     val currentKcalProteinSource =
         viewModel.returnCurrentKcalForFoodCategory(FoodCategory.ProteinSource)
     val currentKcalAddFat = viewModel.returnCurrentKcalForFoodCategory(FoodCategory.AddedFat)
 
-    val targetKcalFruit = dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromFruits.toDouble()
-    val targetKcalVegetable = dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromVegetables.toDouble()
-    val targetKcalWheet = dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromGrain.toDouble()
-    val targetKcalMilk = dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromMilkProducts.toDouble()
-    val targetKcalProteinSource =dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromProteinSource.toDouble()
-    val targetKcalAddFat = dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromAddedFat.toDouble()
+    val targetKcalFruit =
+        dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromFruits.toDouble()
+    val targetKcalVegetable =
+        dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromVegetables.toDouble()
+    val targetKcalWheet =
+        dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromGrain.toDouble()
+    val targetKcalMilk =
+        dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromMilkProducts.toDouble()
+    val targetKcalProteinSource =
+        dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromProteinSource.toDouble()
+    val targetKcalAddFat =
+        dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromAddedFat.toDouble()
 
     var extended by remember { mutableStateOf(false) }
     var extended2 by remember { mutableStateOf(false) }
@@ -376,71 +369,19 @@ fun CircularBasicStatisticsV2(
 
 @Composable
 fun LinearBasicStatistics(
-    viewModel: DietStatistics,
-    dietSettingsViewModel: DietSettingsViewModel
+    list: MutableList<DietStatisticItem>,
 ) {
-    var kcal = 0.0
-    var proteinProgress = 0.0
-    var carbsProgress = 0.0
-    var fatProgress = 0.0
-
-    val proteinTarget =
-        dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.protein.toDouble() * 4
-    val carbsTarget =
-        dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.carbohydrates.toDouble() * 4
-    val fatTarget =
-        dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.fats.toDouble() * 9
-    var kcalCalculatedTarget = proteinTarget + carbsTarget + fatTarget
-
-    kcal = viewModel.returnCurrentKcal()
-    when (kcalCalculatedTarget) {
-        0.0 -> {
-            proteinProgress = 0.0
-            carbsProgress = 0.0
-            fatProgress = 0.0
-            kcalCalculatedTarget = 1.0
-
-        }
-
-        else -> {
-            proteinProgress = viewModel.returnCurrentProtein() * 4 / kcalCalculatedTarget
-            carbsProgress = viewModel.returnCurrentCarbs() * 4 / kcalCalculatedTarget
-            fatProgress = viewModel.returnCurrentFat() * 9 / kcalCalculatedTarget
-        }
-    }
-
-
-
-
-    Column(verticalArrangement = Arrangement.Center) {
-        Column(
-            modifier = Modifier.padding(3.dp, 3.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+    Column(
+        modifier = Modifier
+            .padding(3.dp, 3.dp)
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        list.forEach {
             LinearProgressIndicator(
-                progress = proteinProgress.toFloat(),
-                color = Color.Black
-            )
-            LinearProgressIndicator(
-                progress = ((proteinTarget / kcalCalculatedTarget) - proteinProgress).toFloat(),
-                color = Color.LightGray
-            )
-            LinearProgressIndicator(
-                progress = carbsProgress.toFloat(),
-                color = Color.Red
-            )
-            LinearProgressIndicator(
-                progress = ((carbsTarget / kcalCalculatedTarget) - carbsProgress).toFloat(),
-                color = Color.LightGray
-            )
-            LinearProgressIndicator(
-                progress = fatProgress.toFloat(),
-                color = Color.Green
-            )
-            LinearProgressIndicator(
-                progress = (fatTarget / kcalCalculatedTarget - fatProgress).toFloat(),
-                color = Color.LightGray
+                progress = (it.current / it.target).toFloat(),
+                color = it.statisticColor
             )
         }
     }
@@ -647,5 +588,11 @@ interface DietStatistics {
     fun returnCurrentFiber(): Double
     fun returnCurrentPufa(): Double
     fun returnCurrentKcalForFoodCategory(foodType: FoodCategory): Double
-
 }
+
+class DietStatisticItem(
+    val shortName: String,
+    val current: Double,
+    val target: Double,
+    val statisticColor: Color
+)

@@ -91,78 +91,41 @@ fun BasicMacrosStats(
 
 @Composable
 fun BasicMacrosStatsV2(
-    kcalTextValue: String,
-    proteinTextValue: String,
-    carbsTextValue: String,
-    fatsTextValue: String
+    list: MutableList<DietStatisticItem>,
+    percent: Boolean
 ) {
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(2.dp),
-            horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.Bottom
-        ) {
-            Text(
-                text = "kcal",
-                modifier = Modifier.scale(0.6F),
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
-            )
-            Text(
-                text = kcalTextValue,
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
-            )
-        }
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.Bottom
-        ) {
-            Text(
-                text = "p",
-                modifier = Modifier.scale(0.6F),
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
-            )
-            Text(
-                text = proteinTextValue,
+        list.forEach {
+            Row(
                 modifier = Modifier
-                    .padding(Dp(2F)),
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
-            )
-        }
-        Row() {
-            Text(
-                text = "c",
-                modifier = Modifier.scale(0.6F),
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
-            )
-            Text(
-                text = carbsTextValue,
-                modifier = Modifier
-                    .padding(Dp(2F)),
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
-            )
-        }
-        Row() {
-            Text(
-                text = "f",
-                modifier = Modifier.scale(0.6F),
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
-            )
-            Text(
-                text = fatsTextValue,
-                modifier = Modifier
-                    .padding(Dp(2F)),
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
-            )
+                    .fillMaxWidth()
+                    .padding(2.dp),
+                horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.Bottom
+            ) {
+                Text(
+                    text = it.shortName,
+                    modifier = Modifier.scale(0.6F),
+                    fontStyle = FontStyle.Italic,
+                    color = it.statisticColor,
+                    style = MaterialTheme.typography.bodySmall
+                )
+                Text(
+                    text = if (percent) {
+                        ((it.current / it.target) * 100).toInt().toString()
+                    } else "${it.current.toInt()}",
+                    fontStyle = FontStyle.Italic,
+                    color = it.statisticColor,
+                    style = MaterialTheme.typography.bodySmall
+                )
+                Text(
+                    text = if (percent) "%" else "${it.target.toInt()}",
+                    modifier = Modifier.scale(0.6F),
+                    fontStyle = FontStyle.Italic,
+                    color = it.statisticColor,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
         }
     }
 }
