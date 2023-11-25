@@ -58,11 +58,16 @@ class BarcodeAnalyser(
 
 @ExperimentalGetImage
 @Composable
-fun BarcodeScanner(barcodeScannerEffect: (String?) -> Unit, returnToIngredientScreen: () -> Unit) {
+fun BarcodeScanner(
+    barcodeScannerEffect: (String?) -> Unit,
+    returnToIngredientScreen: () -> Unit
+) {
     Column {
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .weight(2F), contentAlignment = Alignment.Center) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .weight(2F), contentAlignment = Alignment.Center
+        ) {
             AndroidView(
                 { context ->
                     val cameraExecutor = Executors.newSingleThreadExecutor()
@@ -115,8 +120,7 @@ fun BarcodeScanner(barcodeScannerEffect: (String?) -> Unit, returnToIngredientSc
                     .size(width = 250.dp, height = 250.dp)
             )
         }
-        Box(modifier = Modifier.weight(1F), contentAlignment = Alignment.Center) {
-        }
+        Box(modifier = Modifier.weight(1F), contentAlignment = Alignment.Center){}
     }
 
 }

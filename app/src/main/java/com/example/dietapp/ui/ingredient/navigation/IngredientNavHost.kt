@@ -81,7 +81,7 @@ fun IngredientNavHost(
                 IngredientScreenList.NewIngredientScreen.title
             )
             BarcodeScanner(
-                barcodeScannerEffect = {viewModel.updateUiWithBarcode(it)},
+                barcodeScannerEffect = { viewModel.updateUiWithBarcode(it) },
                 returnToIngredientScreen = { navController.navigate(IngredientScreenList.NewIngredientScreen.name) })
         }
     }

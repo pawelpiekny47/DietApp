@@ -18,12 +18,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 
 class IngredientViewModel(private val ingredientRepository: IngredientRepository) : ViewModel() {
     //Retrofit response / query
     val myResponse: MutableLiveData<ExampleJson2KtKotlin> = MutableLiveData()
     var product by mutableStateOf(Product())
-    var pictureUrl by mutableStateOf("https://images.openfoodfacts.org/images/products/073/762/806/4502/front_en.6.400.jpg")
+    var pictureUrl by mutableStateOf("")
 
     var deleteButtonVisible by mutableStateOf(true)
     var ingredientUiState by mutableStateOf(IngredientUiState())
@@ -62,22 +63,32 @@ class IngredientViewModel(private val ingredientRepository: IngredientRepository
     fun updateUiWithBarcode(barcode: String?) {
         if (barcode != null) {
             viewModelScope.launch {
-                myResponse.value = NutritionNetwork.retrofit.getData(barcode)
-                product = myResponse.value!!.product!!
-                updateUiState(
-                    IngredientDetails(
-                        id = ingredientUiState.ingredientDetails.id,
-                        name = product.productName ?: "",
-                        totalKcal = product.nutriments?.energyKcal100g.toString(),
-                        protein = product.nutriments?.proteins100g.toString(),
-                        carbohydrates = product.nutriments?.carbohydrates100g.toString(),
-                        fats = product.nutriments?.fat100g.toString(),
-                        polyunsaturatedFats = product.nutriments?.saturatedFat100g.toString(),
-                        soil = product.nutriments?.salt100g.toString(),
-                        fiber = product.nutriments?.fiber100g.toString(),
+                try {
+                    myResponse.value = NutritionNetwork.retrofit.getData(barcode)
+                    if (myResponse.value!!.status != 0.0) {
+                        product = myResponse.value!!.product!!
+                        updateUiState(
+                            IngredientDetails(
+                                id = ingredientUiState.ingredientDetails.id,
+                                name = product.productName ?: "",
+                                totalKcal = product.nutriments?.energyKcal100g.toString(),
+                                protein = product.nutriments?.proteins100g.toString(),
+                                carbohydrates = product.nutriments?.carbohydrates100g.toString(),
+                                fats = product.nutriments?.fat100g.toString(),
+                                polyunsaturatedFats = product.nutriments?.saturatedFat100g.toString(),
+                                soil = product.nutriments?.salt100g.toString(),
+                                fiber = product.nutriments?.fiber100g.toString(),
+                            )
+                        )
+                        pictureUrl = myResponse.value!!.product!!.imageUrl ?: ""
+                    }
+                } catch (e: HttpException) {
+                    updateUiState(
+                        IngredientDetails(
+                            name = product.productName ?: "not found ;c",
+                        )
                     )
-                )
-                pictureUrl = myResponse.value!!.product!!.imageUrl ?: ""
+                }
             }
         }
     }

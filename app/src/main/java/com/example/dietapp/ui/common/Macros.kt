@@ -21,8 +21,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.dietapp.R
 import com.example.dietapp.ui.dish.viewmodel.IngredientWithAmountDetails
-import java.math.BigDecimal
-import java.math.RoundingMode
 import kotlin.math.roundToInt
 
 @Composable
@@ -33,68 +31,75 @@ fun BasicMacrosStats(
     fatsTextValue: String
 ) {
 
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(2.dp),
-            horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.Bottom
-        ) {
-            Text(
-                text = "kcal",
-                modifier = Modifier.scale(0.6F),
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
+    Row(modifier = Modifier.fillMaxSize().padding(5.dp, 5.dp), horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically) {
+        Row(horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically)
+        {
+            Icon(
+                modifier = Modifier.size(10.dp, 10.dp),
+                painter = painterResource(R.drawable.fire),
+                contentDescription = null
             )
             Text(
-                text = kcalTextValue,
+                text = "$kcalTextValue ",
                 fontStyle = FontStyle.Italic,
                 style = MaterialTheme.typography.bodySmall
             )
         }
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.Bottom
+        Column(
+            horizontalAlignment = Alignment.End,
+            verticalArrangement = Arrangement.Center
         ) {
-            Text(
-                text = "p",
-                modifier = Modifier.scale(0.6F),
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
-            )
-            Text(
-                text = proteinTextValue,
-                modifier = Modifier
-                    .padding(Dp(2F)),
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
-            )
-            Text(
-                text = "c",
-                modifier = Modifier.scale(0.6F),
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
-            )
-            Text(
-                text = carbsTextValue,
-                modifier = Modifier
-                    .padding(Dp(2F)),
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
-            )
-            Text(
-                text = "f",
-                modifier = Modifier.scale(0.6F),
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
-            )
-            Text(
-                text = fatsTextValue,
-                modifier = Modifier
-                    .padding(Dp(2F)),
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
-            )
+            Row(
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    modifier = Modifier.size(10.dp, 10.dp),
+                    painter = painterResource(R.drawable.meat),
+                    contentDescription = null
+                )
+                Text(
+                    text = "$proteinTextValue ",
+                    modifier = Modifier
+                        .padding(Dp(2F)),
+                    fontStyle = FontStyle.Italic,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
+            Row(
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    modifier = Modifier.size(10.dp, 10.dp),
+                    painter = painterResource(R.drawable.wheat),
+                    contentDescription = null
+                )
+                Text(
+                    text = "$carbsTextValue ",
+                    modifier = Modifier
+                        .padding(Dp(2F)),
+                    fontStyle = FontStyle.Italic,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
+            Row(
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    modifier = Modifier.size(10.dp, 10.dp),
+                    painter = painterResource(R.drawable.oilbottle),
+                    contentDescription = null
+                )
+                Text(
+                    text = "$fatsTextValue ",
+                    modifier = Modifier
+                        .padding(Dp(2F)),
+                    fontStyle = FontStyle.Italic,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
         }
     }
 }
@@ -163,12 +168,8 @@ fun MacroDetailsUnderIngredientXAmount(ingredient: IngredientWithAmountDetails) 
                 contentDescription = null
             )
             Text(
-                text = ((ingredient.ingredientDetails.protein.toBigDecimal() * ingredient.amount.toBigDecimal()) / BigDecimal(
-                    100
-                )).setScale(
-                    1,
-                    RoundingMode.HALF_DOWN
-                ).toString(),
+                text = (ingredient.ingredientDetails.protein.toDouble() * ingredient.amount.toDouble() / 100).roundToInt()
+                    .toString(),
                 fontSize = 10.sp,
                 fontStyle = FontStyle.Italic,
             )
@@ -183,12 +184,8 @@ fun MacroDetailsUnderIngredientXAmount(ingredient: IngredientWithAmountDetails) 
                 contentDescription = null
             )
             Text(
-                text = ((ingredient.ingredientDetails.carbohydrates.toBigDecimal() * ingredient.amount.toBigDecimal()) / BigDecimal(
-                    100
-                )).setScale(
-                    1,
-                    RoundingMode.HALF_DOWN
-                ).toString(),
+                text = (ingredient.ingredientDetails.carbohydrates.toDouble() * ingredient.amount.toDouble() / 100).roundToInt()
+                    .toString(),
                 fontSize = 10.sp,
                 fontStyle = FontStyle.Italic,
             )
@@ -203,12 +200,8 @@ fun MacroDetailsUnderIngredientXAmount(ingredient: IngredientWithAmountDetails) 
                 contentDescription = null
             )
             Text(
-                text = ((ingredient.ingredientDetails.fats.toBigDecimal() * ingredient.amount.toBigDecimal()) / BigDecimal(
-                    100
-                )).setScale(
-                    1,
-                    RoundingMode.HALF_DOWN
-                ).toString(),
+                text = (ingredient.ingredientDetails.fats.toDouble() * ingredient.amount.toDouble() / 100).roundToInt()
+                    .toString(),
                 fontSize = 10.sp,
                 fontStyle = FontStyle.Italic,
             )
@@ -223,12 +216,8 @@ fun MacroDetailsUnderIngredientXAmount(ingredient: IngredientWithAmountDetails) 
                 contentDescription = null
             )
             Text(
-                text = ((ingredient.ingredientDetails.totalKcal.toBigDecimal() * ingredient.amount.toBigDecimal()) / BigDecimal(
-                    100
-                )).setScale(
-                    1,
-                    RoundingMode.HALF_DOWN
-                ).toString(),
+                text = (ingredient.ingredientDetails.totalKcal.toDouble() * ingredient.amount.toDouble() / 100).roundToInt()
+                    .toString(),
                 fontSize = 10.sp,
                 fontStyle = FontStyle.Italic,
             )
@@ -253,7 +242,7 @@ fun MacroDetailsUnderIngredient(ingredient: IngredientWithAmountDetails) {
                 contentDescription = null
             )
             Text(
-                text = (ingredient.ingredientDetails.protein.toDouble() * ingredient.amount.toDouble() / 100).roundToInt().toString(),
+                text = ingredient.ingredientDetails.protein.toDouble().roundToInt().toString(),
                 fontSize = 10.sp,
                 fontStyle = FontStyle.Italic,
             )
@@ -268,7 +257,8 @@ fun MacroDetailsUnderIngredient(ingredient: IngredientWithAmountDetails) {
                 contentDescription = null
             )
             Text(
-                text = (ingredient.ingredientDetails.carbohydrates.toDouble() * ingredient.amount.toDouble() / 100).roundToInt().toString(),
+                text = ingredient.ingredientDetails.carbohydrates.toDouble().roundToInt()
+                    .toString(),
                 fontSize = 10.sp,
                 fontStyle = FontStyle.Italic,
             )
@@ -283,7 +273,7 @@ fun MacroDetailsUnderIngredient(ingredient: IngredientWithAmountDetails) {
                 contentDescription = null
             )
             Text(
-                text = (ingredient.ingredientDetails.fats.toDouble() * ingredient.amount.toDouble() / 100).roundToInt().toString(),
+                text = ingredient.ingredientDetails.fats.toDouble().roundToInt().toString(),
                 fontSize = 10.sp,
                 fontStyle = FontStyle.Italic,
             )
@@ -298,7 +288,8 @@ fun MacroDetailsUnderIngredient(ingredient: IngredientWithAmountDetails) {
                 contentDescription = null
             )
             Text(
-                text = (ingredient.ingredientDetails.totalKcal.toDouble() * ingredient.amount.toDouble() / 100).roundToInt().toString(),
+                text = ingredient.ingredientDetails.totalKcal.toDouble().roundToInt()
+                    .toString(),
                 fontSize = 10.sp,
                 fontStyle = FontStyle.Italic,
             )

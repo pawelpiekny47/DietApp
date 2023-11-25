@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
@@ -29,13 +28,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.example.dietapp.barcode.BarcodeScanner
+import com.example.dietapp.R
 import com.example.dietapp.data.FoodCategory
 import com.example.dietapp.ui.ingredient.viewmodel.IngredientDetails
 import com.example.dietapp.ui.ingredient.viewmodel.IngredientViewModel
@@ -116,49 +117,12 @@ fun IngredientForm(
         enabled = true,
         singleLine = true
     )
-    Row(modifier = Modifier.defaultMinSize(minHeight = 48.dp)) {
-
-        TextField(
-            modifier = Modifier
-                .defaultMinSize(minHeight = 48.dp)
-                .weight(1F)
-                .padding(Dp(10F)),
-            value = ingredientDetailsState.protein,
-            onValueChange = { onValueChange(ingredientDetailsState.copy(protein = it)) },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-            label = { Text("proteins") },
-            enabled = true,
-            singleLine = true,
-            colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
+    Row(modifier = Modifier.padding(10.dp, 0.dp), verticalAlignment = Alignment.CenterVertically) {
+        Icon(
+            modifier = Modifier.size(10.dp, 10.dp),
+            painter = painterResource(R.drawable.fire),
+            contentDescription = null
         )
-        TextField(
-            modifier = Modifier
-                .defaultMinSize(minHeight = 48.dp)
-                .weight(1F)
-                .padding(Dp(10F)),
-            value = ingredientDetailsState.carbohydrates,
-            onValueChange = { onValueChange(ingredientDetailsState.copy(carbohydrates = it)) },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-            label = { Text("carbs") },
-            enabled = true,
-            singleLine = true,
-            colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
-        )
-        TextField(
-            modifier = Modifier
-                .defaultMinSize(minHeight = 48.dp)
-                .weight(1F)
-                .padding(Dp(10F)),
-            value = ingredientDetailsState.fats,
-            onValueChange = { onValueChange(ingredientDetailsState.copy(fats = it)) },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-            label = { Text("fats") },
-            enabled = true,
-            singleLine = true,
-            colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
-        )
-    }
-    Row() {
         TextField(
             modifier = Modifier
                 .defaultMinSize(minHeight = 48.dp)
@@ -176,9 +140,71 @@ fun IngredientForm(
             modifier = Modifier
                 .defaultMinSize(minHeight = 48.dp)
                 .weight(2F)
-        ) { }
+        )
     }
-    Row() {
+    Row(modifier = Modifier.padding(10.dp, 0.dp), verticalAlignment = Alignment.CenterVertically) {
+        Icon(
+            modifier = Modifier.size(10.dp, 10.dp),
+            painter = painterResource(R.drawable.meat),
+            contentDescription = null
+        )
+        TextField(
+            modifier = Modifier
+                .defaultMinSize(minHeight = 48.dp)
+                .weight(1F)
+                .padding(Dp(10F)),
+            value = ingredientDetailsState.protein,
+            onValueChange = { onValueChange(ingredientDetailsState.copy(protein = it)) },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+            label = { Text("proteins") },
+            enabled = true,
+            singleLine = true,
+            colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
+        )
+        Icon(
+            modifier = Modifier.size(10.dp, 10.dp),
+            painter = painterResource(R.drawable.wheat),
+            contentDescription = null
+        )
+        TextField(
+            modifier = Modifier
+                .defaultMinSize(minHeight = 48.dp)
+                .weight(1F)
+                .padding(Dp(10F)),
+            value = ingredientDetailsState.carbohydrates,
+            onValueChange = { onValueChange(ingredientDetailsState.copy(carbohydrates = it)) },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+            label = { Text("carbs") },
+            enabled = true,
+            singleLine = true,
+            colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
+        )
+        Icon(
+            modifier = Modifier.size(10.dp, 10.dp),
+            painter = painterResource(R.drawable.oilbottle),
+            contentDescription = null
+        )
+        TextField(
+            modifier = Modifier
+                .defaultMinSize(minHeight = 48.dp)
+                .weight(1F)
+                .padding(Dp(10F)),
+            value = ingredientDetailsState.fats,
+            onValueChange = { onValueChange(ingredientDetailsState.copy(fats = it)) },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+            label = { Text("fats") },
+            enabled = true,
+            singleLine = true,
+            colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
+        )
+    }
+
+    Row(modifier = Modifier.padding(10.dp, 0.dp), verticalAlignment = Alignment.CenterVertically) {
+        Icon(
+            modifier = Modifier.size(10.dp, 10.dp),
+            painter = painterResource(R.drawable.oilfree),
+            contentDescription = null
+        )
         TextField(
             modifier = Modifier
                 .defaultMinSize(minHeight = 48.dp)
@@ -192,6 +218,11 @@ fun IngredientForm(
             singleLine = true,
             colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
         )
+        Icon(
+            modifier = Modifier.size(10.dp, 10.dp),
+            painter = painterResource(R.drawable.salt),
+            contentDescription = null
+        )
         TextField(
             modifier = Modifier
                 .defaultMinSize(minHeight = 48.dp)
@@ -204,6 +235,11 @@ fun IngredientForm(
             enabled = true,
             singleLine = true,
             colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
+        )
+        Icon(
+            modifier = Modifier.size(10.dp, 10.dp),
+            painter = painterResource(R.drawable.fiber),
+            contentDescription = null
         )
         TextField(
             modifier = Modifier

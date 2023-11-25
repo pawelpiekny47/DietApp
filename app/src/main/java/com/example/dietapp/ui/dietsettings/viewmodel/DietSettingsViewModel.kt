@@ -11,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.io.Serializable
+import kotlin.math.roundToInt
 
 class DietSettingsViewModel(private var dietSettingsRepository: DietSettingsRepository) :
     ViewModel() {
@@ -27,6 +28,35 @@ class DietSettingsViewModel(private var dietSettingsRepository: DietSettingsRepo
 
     fun updateDietSettingsUiState(dietSettingsDetails: DietSettingsDetails) {
         dietSettingsUiState = DietSettingsUiState(dietSettingsDetails = dietSettingsDetails)
+    }
+
+    fun generateValuesForGivenKcal() {
+        dietSettingsUiState = DietSettingsUiState(
+            dietSettingsDetails = DietSettingsDetails(
+                totalKcal = dietSettingsUiState.dietSettingsDetails.totalKcal,
+                kcalFromFruits = (dietSettingsUiState.dietSettingsDetails.totalKcal.toDouble() * 0.047).roundToInt()
+                    .toString(),
+                kcalFromVegetables = (dietSettingsUiState.dietSettingsDetails.totalKcal.toDouble() * 0.1).roundToInt()
+                    .toString(),
+                kcalFromProteinSource = (dietSettingsUiState.dietSettingsDetails.totalKcal.toDouble() * 0.13334).roundToInt()
+                    .toString(),
+                kcalFromMilkProducts = (dietSettingsUiState.dietSettingsDetails.totalKcal.toDouble() * 0.2).roundToInt()
+                    .toString(),
+                kcalFromGrain = (dietSettingsUiState.dietSettingsDetails.totalKcal.toDouble() * 0.33334).roundToInt()
+                    .toString(),
+                kcalFromAddedFat = (dietSettingsUiState.dietSettingsDetails.totalKcal.toDouble() * 0.18).roundToInt()
+                    .toString(),
+                protein = (dietSettingsUiState.dietSettingsDetails.totalKcal.toDouble() * 0.26 / 4).roundToInt()
+                    .toString(),
+                carbohydrates = (dietSettingsUiState.dietSettingsDetails.totalKcal.toDouble() * (1 - ((0.26 + 0.3))) / 4).roundToInt()
+                    .toString(),
+                fats = (dietSettingsUiState.dietSettingsDetails.totalKcal.toDouble() * 0.3 / 9).roundToInt()
+                    .toString(),
+                polyunsaturatedFats = "10",
+                soil = "5",
+                fiber = "25"
+            )
+        )
     }
 
     suspend fun saveDietSettingsInDatabase() {

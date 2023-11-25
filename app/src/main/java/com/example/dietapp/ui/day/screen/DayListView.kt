@@ -84,7 +84,8 @@ fun DayItem(
                 Box(
                     Modifier
                         .weight(5f)
-                        .clickable { extended2 = !extended2 }
+                        .clickable { extended2 = !extended2 },
+                    contentAlignment = Alignment.CenterEnd
                 ) {
                     val kcalTextValue: String
                     val proteinTextValue: String
