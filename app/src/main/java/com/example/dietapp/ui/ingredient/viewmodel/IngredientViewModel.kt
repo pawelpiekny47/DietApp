@@ -59,25 +59,26 @@ class IngredientViewModel(private val ingredientRepository: IngredientRepository
         ingredientRepository.delete(ingredientUiState.ingredientDetails.toIngredient())
     }
 
-    fun updateUiWithBarcode(barcode: String) {
-
-        viewModelScope.launch {
-            myResponse.value = NutritionNetwork.retrofit.getData(barcode)
-            product = myResponse.value!!.product!!
-            updateUiState(
-                IngredientDetails(
-                    id = ingredientUiState.ingredientDetails.id,
-                    name = product.productName ?: "",
-                    totalKcal = product.nutriments?.energyKcal100g.toString(),
-                    protein = product.nutriments?.proteins100g.toString(),
-                    carbohydrates = product.nutriments?.carbohydrates100g.toString(),
-                    fats = product.nutriments?.fat100g.toString(),
-                    polyunsaturatedFats = product.nutriments?.saturatedFat100g.toString(),
-                    soil = product.nutriments?.salt100g.toString(),
-                    fiber = product.nutriments?.fiber100g.toString(),
+    fun updateUiWithBarcode(barcode: String?) {
+        if (barcode != null) {
+            viewModelScope.launch {
+                myResponse.value = NutritionNetwork.retrofit.getData(barcode)
+                product = myResponse.value!!.product!!
+                updateUiState(
+                    IngredientDetails(
+                        id = ingredientUiState.ingredientDetails.id,
+                        name = product.productName ?: "",
+                        totalKcal = product.nutriments?.energyKcal100g.toString(),
+                        protein = product.nutriments?.proteins100g.toString(),
+                        carbohydrates = product.nutriments?.carbohydrates100g.toString(),
+                        fats = product.nutriments?.fat100g.toString(),
+                        polyunsaturatedFats = product.nutriments?.saturatedFat100g.toString(),
+                        soil = product.nutriments?.salt100g.toString(),
+                        fiber = product.nutriments?.fiber100g.toString(),
+                    )
                 )
-            )
-            pictureUrl = myResponse.value!!.product!!.imageUrl ?: ""
+                pictureUrl = myResponse.value!!.product!!.imageUrl ?: ""
+            }
         }
     }
 

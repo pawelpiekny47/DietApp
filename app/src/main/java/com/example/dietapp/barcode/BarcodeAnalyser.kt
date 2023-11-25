@@ -21,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.app.ComponentActivity
 import androidx.core.content.ContextCompat
-import com.example.dietapp.ui.ingredient.viewmodel.IngredientViewModel
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
@@ -59,9 +58,11 @@ class BarcodeAnalyser(
 
 @ExperimentalGetImage
 @Composable
-fun BarcodeScanner(viewModel: IngredientViewModel, returnToIngredientScreen: () -> Unit) {
+fun BarcodeScanner(barcodeScannerEffect: (String?) -> Unit, returnToIngredientScreen: () -> Unit) {
     Column {
-        Box(modifier = Modifier.fillMaxSize().weight(2F), contentAlignment = Alignment.Center) {
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .weight(2F), contentAlignment = Alignment.Center) {
             AndroidView(
                 { context ->
                     val cameraExecutor = Executors.newSingleThreadExecutor()
@@ -84,7 +85,7 @@ fun BarcodeScanner(viewModel: IngredientViewModel, returnToIngredientScreen: () 
                             .build()
                             .also {
                                 it.setAnalyzer(cameraExecutor, BarcodeAnalyser { barcode ->
-                                    viewModel.updateUiWithBarcode(barcode!!)
+                                    barcodeScannerEffect(barcode)
                                     returnToIngredientScreen()
                                 })
                             }
