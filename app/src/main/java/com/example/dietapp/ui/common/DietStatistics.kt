@@ -29,7 +29,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.example.dietapp.R
 import com.example.dietapp.data.FoodCategory
 import com.example.dietapp.ui.dietsettings.viewmodel.DietSettingsViewModel
 
@@ -76,25 +79,29 @@ fun BasicStatistics(
             "kcal",
             dietStatistics.returnCurrentKcal(),
             dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.totalKcal.toDouble(),
-            Color.Red
+            Color.Red,
+            painterResource(R.drawable.fire)
         ),
         DietStatisticItem(
             "p",
             dietStatistics.returnCurrentProtein(),
             dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.protein.toDouble(),
-            Color.Blue
+            Color.Blue,
+            painterResource(R.drawable.meat)
         ),
         DietStatisticItem(
             "c",
             dietStatistics.returnCurrentCarbs(),
             dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.carbohydrates.toDouble(),
-            Color.Green
+            Color.Green,
+            painterResource(R.drawable.wheat)
         ),
         DietStatisticItem(
             "f",
             dietStatistics.returnCurrentFat(),
             dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.fats.toDouble(),
-            Color.Yellow
+            Color.Yellow,
+            painterResource(R.drawable.oilbottle)
         ),
     )
 
@@ -137,37 +144,43 @@ fun FoodTypeStatistics(
             "fruit",
             dietStatistics.returnCurrentKcalForFoodCategory(FoodCategory.Fruit),
             dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromFruits.toDouble(),
-            Color.Red
+            Color.Red,
+            painterResource(R.drawable.banana)
         ),
         DietStatisticItem(
             "vegetable",
             dietStatistics.returnCurrentKcalForFoodCategory(FoodCategory.Vegetable),
             dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromVegetables.toDouble(),
-            Color.Green
+            Color.Green,
+            painterResource(R.drawable.lettuce)
         ),
         DietStatisticItem(
             "grain",
             dietStatistics.returnCurrentKcalForFoodCategory(FoodCategory.Wheet),
             dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromGrain.toDouble(),
-            Color.Yellow
+            Color.Yellow,
+            painterResource(R.drawable.wheat)
         ),
         DietStatisticItem(
             "milk",
             dietStatistics.returnCurrentKcalForFoodCategory(FoodCategory.MilkAndReplacement),
             dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromMilkProducts.toDouble(),
-            Color.Blue
+            Color.Blue,
+            painterResource(R.drawable.milk)
         ),
         DietStatisticItem(
             "protein source",
             dietStatistics.returnCurrentKcalForFoodCategory(FoodCategory.ProteinSource),
             dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromProteinSource.toDouble(),
-            Color.Black
+            Color.Black,
+            painterResource(R.drawable.meat)
         ),
         DietStatisticItem(
             "added fat",
             dietStatistics.returnCurrentKcalForFoodCategory(FoodCategory.AddedFat),
             dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromAddedFat.toDouble(),
-            Color.LightGray
+            Color.LightGray,
+            painterResource(R.drawable.oliveoil)
         ),
     )
     var inPercent by remember { mutableStateOf(false) }
@@ -210,19 +223,22 @@ fun AdditionalInfo(
             "pufa",
             dietStatistics.returnCurrentPufa(),
             dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.polyunsaturatedFats.toDouble(),
-            Color.Red
+            Color.Red,
+            painterResource(R.drawable.oilfree)
         ),
         DietStatisticItem(
             "soil",
             dietStatistics.returnCurrentSoil(),
             dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.soil.toDouble(),
-            Color.Green
+            Color.Green,
+            painterResource(R.drawable.salt)
         ),
         DietStatisticItem(
             "fiber",
             dietStatistics.returnCurrentFiber(),
             dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.fiber.toDouble(),
-            Color.Yellow
+            Color.Yellow,
+            painterResource(R.drawable.fiber)
         )
     )
     var inPercent by remember { mutableStateOf(false) }
@@ -329,5 +345,6 @@ class DietStatisticItem(
     val shortName: String,
     val current: Double,
     val target: Double,
-    val statisticColor: Color
+    val statisticColor: Color,
+    val icon: Painter,
 )

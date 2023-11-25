@@ -68,9 +68,6 @@ fun DayItem(
     var extended by remember { mutableStateOf(false) }
     var extended2 by remember { mutableStateOf(false) }
 
-
-
-
     Card(modifier = Modifier
         .fillMaxWidth()
         .animateContentSize()

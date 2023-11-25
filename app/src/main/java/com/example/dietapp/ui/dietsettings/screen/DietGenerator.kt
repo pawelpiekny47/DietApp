@@ -20,6 +20,8 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TextFieldDefaults.OutlinedTextFieldDecorationBox
+import androidx.compose.material3.TextFieldDefaults.outlinedTextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -74,7 +76,7 @@ fun DietGeneratorFields() {
             ){
                 val interactionSource = remember { MutableInteractionSource() }
 
-                TextFieldDefaults.OutlinedTextFieldDecorationBox(
+                OutlinedTextFieldDecorationBox(
                     value = "text",
                     visualTransformation = VisualTransformation.None,
                     innerTextField = it,
@@ -85,7 +87,7 @@ fun DietGeneratorFields() {
                     contentPadding = TextFieldDefaults.textFieldWithoutLabelPadding(
                         start = 8.dp, end = 8.dp, bottom = 2.dp
                     ),
-                    colors = TextFieldDefaults.outlinedTextFieldColors()
+                    colors = outlinedTextFieldColors()
                 )
             }
 
