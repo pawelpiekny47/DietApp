@@ -1,5 +1,6 @@
 package com.example.dietapp.ui.common
 
+import android.graphics.Paint.Align
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
@@ -12,6 +13,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.dietapp.data.FoodCategory
@@ -265,10 +273,41 @@ fun LinearBasicStatistics(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             list.forEach {
-                LinearProgressIndicator(
-                    progress = kotlin.math.min((it.current / it.target), 1.0).toFloat(),
-                    color = it.statisticColor
-                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .weight(1F),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    LinearProgressIndicator(
+                        modifier = Modifier.weight(5F),
+                        progress = kotlin.math.min((it.current / it.target), 1.0).toFloat(),
+                        color = it.statisticColor
+                    )
+                    Box(
+                        modifier = Modifier
+                            .weight(1F)
+                            .fillMaxSize(), contentAlignment = Alignment.Center
+                    ) {
+
+                        Icon(
+                            imageVector = Icons.Outlined.Check,
+                            contentDescription = "info",
+                            tint = when {
+                                (it.current / it.target) < 0.7 -> Color.LightGray
+                                (it.current / it.target) < 0.9 -> Color.Green
+                                (it.current / it.target) < 1.05 -> Color.Yellow
+                                (it.current / it.target) < 1.15 -> Color.Red
+
+                                else -> Color.Red
+                            },
+                            modifier = Modifier
+                                .scale(0.5F),
+                        )
+                    }
+                }
+
             }
         }
         Box(modifier = Modifier.weight(1F))
