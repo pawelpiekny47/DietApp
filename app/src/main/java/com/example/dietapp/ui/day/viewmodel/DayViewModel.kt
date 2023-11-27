@@ -73,6 +73,24 @@ class DayViewModel(
             )
     }
 
+    fun updateDayIdAfterSave(dayId: Int) {
+        dayWithDishesUiState =
+            DayWithDishesDetailsUiState(
+                dayWithDishesDetails = DayWithDishesDetails(
+                    day = Day(
+                        dayId,
+                        dayWithDishesUiState.dayWithDishesDetails.day.name,
+                    ),
+                    dishList = dayWithDishesUiState.dayWithDishesDetails.dishList
+                ),
+                dayDishCrossRefToDelete = mutableListOf<DayDishCrossRef>().also {
+                    it.addAll(
+                        dayWithDishesUiState.dayDishCrossRefToDelete,
+                    )
+                }
+            )
+    }
+
     fun updateDayName(name: String) {
         dayWithDishesUiState =
             DayWithDishesDetailsUiState(
@@ -140,13 +158,15 @@ class DayViewModel(
     }
 
     suspend fun saveDayWithDishes() {
-        dayRepository.saveDay(dayWithDishesUiState.dayWithDishesDetails.day)
+        val dayId = dayRepository.saveDay(dayWithDishesUiState.dayWithDishesDetails.day)
         dayRepository.saveAll(dayWithDishesUiState.toDayDishCrossRefList())
         dayRepository.deleteAll(dayWithDishesUiState.dayDishCrossRefToDelete)
         dayWithDishesUiState.dayDishCrossRefToDelete.forEach {
             dishRepository.deleteDish(it.dishId)
             dishRepository.deleteAllCrossRefForDishId(it.dishId)
         }
+        if (dayId != -1L)
+            updateDayIdAfterSave(dayId.toInt())
     }
 
     override fun returnCurrentKcal(): Double {

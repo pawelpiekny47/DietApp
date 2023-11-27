@@ -18,7 +18,7 @@ interface DayDao {
     fun getAll(): Flow<List<DayWithDishes>>
 
     @Upsert
-    fun saveDay(day: Day)
+    fun upsertDay(day: Day): Long
 
     @Upsert
     fun saveAll(dayDishCrossRefList: List<DayDishCrossRef>)

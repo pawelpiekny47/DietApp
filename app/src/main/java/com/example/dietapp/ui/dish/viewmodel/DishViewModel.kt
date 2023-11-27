@@ -28,7 +28,7 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel(), D
         private set
 
     val dishListUiState: StateFlow<DishListUiState> =
-        dishRepository.getAll()
+        dishRepository.getAllBaseDish()
             .map { DishListUiState(it) }
             .stateIn(
                 scope = viewModelScope,
