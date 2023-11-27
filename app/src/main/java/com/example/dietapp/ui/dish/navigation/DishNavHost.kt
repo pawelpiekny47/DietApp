@@ -87,7 +87,8 @@ fun DishNavHost(
                     dishViewModel.addToIngredientWithAmountList(it.toIngredientWithAmountDetails())
                     navController.navigateUp()
                 },
-                dishViewModel
+                dishViewModel,
+                dietSettingsViewModel = dietSettingsViewModel
             )
         }
     }

@@ -15,6 +15,7 @@ import com.example.dietapp.ui.day.viewmodel.DayViewModel
 import com.example.dietapp.ui.day.screen.AddDish
 import com.example.dietapp.ui.day.viewmodel.toDishWithAmountDetails
 import com.example.dietapp.ui.dietsettings.viewmodel.DietSettingsViewModel
+import com.example.dietapp.ui.dish.viewmodel.DishViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -22,6 +23,7 @@ import kotlinx.coroutines.launch
 fun DayNavHost(
     setMainScreen: ((isFloatButtonVisible: Boolean, floatButtonAction: () -> Unit, isNavigateBackVisible: Boolean, navigateBackAction: () -> Unit, topBarName: String) -> Unit),
     dayViewModel: DayViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    dishViewModel: DishViewModel = viewModel(factory = AppViewModelProvider.Factory),
     dietSettingsViewModel: DietSettingsViewModel = viewModel(factory = AppViewModelProvider.Factory),
     navController: NavHostController = rememberNavController(),
 ) {
@@ -64,7 +66,9 @@ fun DayNavHost(
             )
             DayView(
                 saveButtonOnClick = {
-                    coroutineScope.launch(Dispatchers.IO) { dayViewModel.saveDayWithDishes() }
+                    coroutineScope.launch(Dispatchers.IO) {
+                        dayViewModel.saveDayWithDishes()
+                    }
                 },
                 dayViewModel = dayViewModel,
                 dietSettingsViewModel = dietSettingsViewModel
@@ -80,10 +84,14 @@ fun DayNavHost(
             )
             AddDish(
                 {
-                    dayViewModel.addToDishWithAmountList(it.toDishWithAmountDetails())
+                    coroutineScope.launch(Dispatchers.IO) {
+                        val dishId = dishViewModel.copyDishWithIngredientsAsVariant(it)
+                        dayViewModel.addToDishWithAmountList(dishId)
+                    }
                     navController.navigateUp()
                 },
-                dayViewModel = dayViewModel
+                dayViewModel = dayViewModel,
+                dietSettingsViewModel = dietSettingsViewModel
             )
         }
     }

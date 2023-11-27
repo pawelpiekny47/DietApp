@@ -1,5 +1,6 @@
 package com.example.dietapp.ui.day.viewmodel
 
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -12,19 +13,24 @@ import com.example.dietapp.data.Dish
 import com.example.dietapp.data.DishWithAmount
 import com.example.dietapp.data.FoodCategory
 import com.example.dietapp.repository.DayRepository
+import com.example.dietapp.repository.DishRepository
 import com.example.dietapp.ui.dish.viewmodel.DishDetails
 import com.example.dietapp.ui.dish.viewmodel.DishWithIngredientsDetails
 import com.example.dietapp.ui.dish.viewmodel.toDishWithIngredientDetails
 import com.example.dietapp.ui.common.DietStatistics
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import java.math.RoundingMode
 import java.util.stream.Collectors
 import kotlin.streams.toList
 
-class DayViewModel(private val dayRepository: DayRepository) : ViewModel(), DietStatistics {
+class DayViewModel(
+    private val dayRepository: DayRepository,
+    private val dishRepository: DishRepository
+) : ViewModel(), DietStatistics {
     var deleteButtonVisible by mutableStateOf(true)
     var dayWithDishesUiState by mutableStateOf(DayWithDishesDetailsUiState())
         private set
@@ -43,18 +49,18 @@ class DayViewModel(private val dayRepository: DayRepository) : ViewModel(), Diet
 
     fun updateDayWithDishesUiState(dayDetails: DayWithDishesDetails) {
         dayWithDishesUiState =
-            DayWithDishesDetailsUiState(dayDetails = dayDetails)
+            DayWithDishesDetailsUiState(dayWithDishesDetails = dayDetails)
 
     }
 
-    fun updateDayWithDishUiState(dishId: Int, string: String) {
+    fun updateDayWithDishUiState(dishId: String, string: String) {
         dayWithDishesUiState =
             DayWithDishesDetailsUiState(
-                dayDetails = DayWithDishesDetails(
-                    day = dayWithDishesUiState.dayDetails.day,
-                    dishList = dayWithDishesUiState.dayDetails.dishList.stream()
+                dayWithDishesDetails = DayWithDishesDetails(
+                    day = dayWithDishesUiState.dayWithDishesDetails.day,
+                    dishList = dayWithDishesUiState.dayWithDishesDetails.dishList.stream()
                         .map {
-                            if (it.dishDetails.dish.dishId == dishId)
+                            if (it.dishDetails.dishDetails.dishId == dishId)
                                 DishWithAmountDetails(it.dishDetails, string)
                             else it
                         }
@@ -70,12 +76,12 @@ class DayViewModel(private val dayRepository: DayRepository) : ViewModel(), Diet
     fun updateDayName(name: String) {
         dayWithDishesUiState =
             DayWithDishesDetailsUiState(
-                dayDetails = DayWithDishesDetails(
+                dayWithDishesDetails = DayWithDishesDetails(
                     day = Day(
-                        dayWithDishesUiState.dayDetails.day.dayId,
+                        dayWithDishesUiState.dayWithDishesDetails.day.dayId,
                         name
                     ),
-                    dishList = dayWithDishesUiState.dayDetails.dishList
+                    dishList = dayWithDishesUiState.dayWithDishesDetails.dishList
                 ),
                 dayDishCrossRefToDelete = mutableListOf<DayDishCrossRef>().also {
                     it.addAll(
@@ -85,16 +91,17 @@ class DayViewModel(private val dayRepository: DayRepository) : ViewModel(), Diet
             )
     }
 
-    fun addToDishWithAmountList(dishWithAmountDetails: DishWithAmountDetails) {
+    suspend fun addToDishWithAmountList(dishId: Long) {
+        val newDay = dishRepository.getDishWithAmount(dishId.toInt()).first()
         dayWithDishesUiState =
             DayWithDishesDetailsUiState(
-                dayDetails = DayWithDishesDetails(
-                    day = dayWithDishesUiState.dayDetails.day,
+                dayWithDishesDetails = DayWithDishesDetails(
+                    day = dayWithDishesUiState.dayWithDishesDetails.day,
                     dishList = mutableListOf<DishWithAmountDetails>().also {
                         it.addAll(
-                            dayWithDishesUiState.dayDetails.dishList,
+                            dayWithDishesUiState.dayWithDishesDetails.dishList,
                         )
-                        it.add(dishWithAmountDetails)
+                        it.add(DishWithAmountDetails(newDay.toDishWithIngredientDetails()))
                     }.toList()
                 ),
                 dayDishCrossRefToDelete = mutableListOf<DayDishCrossRef>().also {
@@ -111,9 +118,9 @@ class DayViewModel(private val dayRepository: DayRepository) : ViewModel(), Diet
         dayWithDishesUiState.dayDishCrossRefToDelete
         dayWithDishesUiState =
             DayWithDishesDetailsUiState(
-                dayDetails = DayWithDishesDetails(
-                    day = dayWithDishesUiState.dayDetails.day,
-                    dishList = dayWithDishesUiState.dayDetails.dishList.stream()
+                dayWithDishesDetails = DayWithDishesDetails(
+                    day = dayWithDishesUiState.dayWithDishesDetails.day,
+                    dishList = dayWithDishesUiState.dayWithDishesDetails.dishList.stream()
                         .filter { (it != dishWithAmountDetails) }
                         .toList()),
                 dayDishCrossRefToDelete = mutableListOf<DayDishCrossRef>().also {
@@ -123,8 +130,8 @@ class DayViewModel(private val dayRepository: DayRepository) : ViewModel(), Diet
                 }.also {
                     it.add(
                         DayDishCrossRef(
-                            dayId = dayWithDishesUiState.dayDetails.day.dayId,
-                            dishId = dishWithAmountDetails.dishDetails.dish.dishId,
+                            dayId = dayWithDishesUiState.dayWithDishesDetails.day.dayId,
+                            dishId = dishWithAmountDetails.dishDetails.dishDetails.dishId.toInt(),
                             amount = 0
                         )
                     )
@@ -133,13 +140,17 @@ class DayViewModel(private val dayRepository: DayRepository) : ViewModel(), Diet
     }
 
     suspend fun saveDayWithDishes() {
-        dayRepository.saveDay(dayWithDishesUiState.dayDetails.day)
+        dayRepository.saveDay(dayWithDishesUiState.dayWithDishesDetails.day)
         dayRepository.saveAll(dayWithDishesUiState.toDayDishCrossRefList())
         dayRepository.deleteAll(dayWithDishesUiState.dayDishCrossRefToDelete)
+        dayWithDishesUiState.dayDishCrossRefToDelete.forEach {
+            dishRepository.deleteDish(it.dishId)
+            dishRepository.deleteAllCrossRefForDishId(it.dishId)
+        }
     }
 
     override fun returnCurrentKcal(): Double {
-        return dayWithDishesUiState.dayDetails.dishList.stream().map { it ->
+        return dayWithDishesUiState.dayWithDishesDetails.dishList.stream().map { it ->
             it.dishDetails.ingredientList.stream()
                 .map { ((it.ingredientDetails.totalKcal.toDouble() * it.amount.toDouble()) / (100)) }
                 .collect(Collectors.summingDouble { d -> d }) * (it.amount.toIntOrNull() ?: 0)
@@ -150,7 +161,7 @@ class DayViewModel(private val dayRepository: DayRepository) : ViewModel(), Diet
     }
 
     override fun returnCurrentProtein(): Double {
-        return dayWithDishesUiState.dayDetails.dishList.stream().map { it ->
+        return dayWithDishesUiState.dayWithDishesDetails.dishList.stream().map { it ->
             it.dishDetails.ingredientList.stream()
                 .map { ((it.ingredientDetails.protein.toDouble() * it.amount.toDouble()) / (100)) }
                 .collect(Collectors.summingDouble { d -> d }) * (it.amount.toIntOrNull() ?: 0)
@@ -161,7 +172,7 @@ class DayViewModel(private val dayRepository: DayRepository) : ViewModel(), Diet
     }
 
     override fun returnCurrentCarbs(): Double {
-        return dayWithDishesUiState.dayDetails.dishList.stream().map { it ->
+        return dayWithDishesUiState.dayWithDishesDetails.dishList.stream().map { it ->
             it.dishDetails.ingredientList.stream()
                 .map { ((it.ingredientDetails.carbohydrates.toDouble() * it.amount.toDouble()) / (100)) }
                 .collect(Collectors.summingDouble { d -> d }) * (it.amount.toIntOrNull() ?: 0)
@@ -172,7 +183,7 @@ class DayViewModel(private val dayRepository: DayRepository) : ViewModel(), Diet
     }
 
     override fun returnCurrentFat(): Double {
-        return dayWithDishesUiState.dayDetails.dishList.stream().map { it ->
+        return dayWithDishesUiState.dayWithDishesDetails.dishList.stream().map { it ->
             it.dishDetails.ingredientList.stream()
                 .map { ((it.ingredientDetails.fats.toDouble() * it.amount.toDouble()) / (100)) }
                 .collect(Collectors.summingDouble { d -> d }) * (it.amount.toIntOrNull() ?: 0)
@@ -183,7 +194,7 @@ class DayViewModel(private val dayRepository: DayRepository) : ViewModel(), Diet
     }
 
     override fun returnCurrentSoil(): Double {
-        return dayWithDishesUiState.dayDetails.dishList.stream().map { it ->
+        return dayWithDishesUiState.dayWithDishesDetails.dishList.stream().map { it ->
             it.dishDetails.ingredientList.stream()
                 .map { ((it.ingredientDetails.soil.toDouble() * it.amount.toDouble()) / (100)) }
                 .collect(Collectors.summingDouble { d -> d }) * (it.amount.toIntOrNull() ?: 0)
@@ -194,7 +205,7 @@ class DayViewModel(private val dayRepository: DayRepository) : ViewModel(), Diet
     }
 
     override fun returnCurrentFiber(): Double {
-        return dayWithDishesUiState.dayDetails.dishList.stream().map { it ->
+        return dayWithDishesUiState.dayWithDishesDetails.dishList.stream().map { it ->
             it.dishDetails.ingredientList.stream()
                 .map { ((it.ingredientDetails.fiber.toDouble() * it.amount.toDouble()) / (100)) }
                 .collect(Collectors.summingDouble { d -> d }) * (it.amount.toIntOrNull() ?: 0)
@@ -205,7 +216,7 @@ class DayViewModel(private val dayRepository: DayRepository) : ViewModel(), Diet
     }
 
     override fun returnCurrentPufa(): Double {
-        return dayWithDishesUiState.dayDetails.dishList.stream().map { it ->
+        return dayWithDishesUiState.dayWithDishesDetails.dishList.stream().map { it ->
             it.dishDetails.ingredientList.stream()
                 .map { ((it.ingredientDetails.polyunsaturatedFats.toDouble() * it.amount.toDouble()) / (100)) }
                 .collect(Collectors.summingDouble { d -> d }) * (it.amount.toIntOrNull() ?: 0)
@@ -216,7 +227,7 @@ class DayViewModel(private val dayRepository: DayRepository) : ViewModel(), Diet
     }
 
     override fun returnCurrentKcalForFoodCategory(foodType: FoodCategory): Double {
-        return dayWithDishesUiState.dayDetails.dishList.stream().map { it ->
+        return dayWithDishesUiState.dayWithDishesDetails.dishList.stream().map { it ->
             it.dishDetails.ingredientList.stream()
                 .filter { it.ingredientDetails.foodCategory == foodType }
                 .map { ((it.ingredientDetails.totalKcal.toDouble() * it.amount.toDouble()) / (100)) }
@@ -234,17 +245,17 @@ class DayViewModel(private val dayRepository: DayRepository) : ViewModel(), Diet
 }
 
 data class DayWithDishesDetailsUiState(
-    val dayDetails: DayWithDishesDetails = DayWithDishesDetails(),
+    val dayWithDishesDetails: DayWithDishesDetails = DayWithDishesDetails(),
     val dayDishCrossRefToDelete: List<DayDishCrossRef> = mutableListOf()
 )
 
 fun DayWithDishesDetailsUiState.toDayDishCrossRefList(): List<DayDishCrossRef> {
-    return dayDetails.dishList
+    return dayWithDishesDetails.dishList
         .stream()
         .map {
             DayDishCrossRef(
-                dayDetails.day.dayId,
-                it.dishDetails.dish.dishId,
+                dayWithDishesDetails.day.dayId,
+                it.dishDetails.dishDetails.dishId.toInt(),
                 it.amount.toInt()
             )
         }

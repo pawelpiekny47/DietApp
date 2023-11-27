@@ -7,17 +7,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -25,7 +20,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -40,29 +34,17 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.BaselineShift
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.dietapp.R
 import com.example.dietapp.data.FoodCategory
-import com.example.dietapp.data.Ingredient
 import com.example.dietapp.ui.common.DietSettingsStatistic
 import com.example.dietapp.ui.common.MacroDetailsUnderIngredient
 import com.example.dietapp.ui.common.MacroDetailsUnderIngredientXAmount
 import com.example.dietapp.ui.dietsettings.viewmodel.DietSettingsViewModel
-import com.example.dietapp.ui.dish.viewmodel.DishDetails
 import com.example.dietapp.ui.dish.viewmodel.DishViewModel
-import com.example.dietapp.ui.dish.viewmodel.IngredientWithAmountDetails
-import com.example.dietapp.ui.ingredient.viewmodel.IngredientDetails
-import com.example.dietapp.ui.ingredient.viewmodel.IngredientViewModel
-import java.math.BigDecimal
-import java.math.RoundingMode
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -86,7 +68,7 @@ fun DishView(
         }
         Box(contentAlignment = Alignment.Center) {
             TextField(
-                value = dishViewModel.dishWithIngredientsUiState.dishDetails.dish.name,
+                value = dishViewModel.dishWithIngredientsUiState.dishWithIngredientsDetails.dishDetails.name,
                 onValueChange = { dishViewModel.updateDishName(it) },
                 label = { Text("name") },
                 enabled = true,
@@ -134,7 +116,7 @@ fun IngredientList(
 ) {
     var extended by remember { mutableStateOf(0) }
     LazyColumn(modifier = modifier) {
-        items(dishViewModel.dishWithIngredientsUiState.dishDetails.ingredientList) { ingredient ->
+        items(dishViewModel.dishWithIngredientsUiState.dishWithIngredientsDetails.ingredientList) { ingredient ->
             Row(
                 modifier = Modifier.fillMaxSize(),
                 verticalAlignment = Alignment.Bottom,

@@ -25,7 +25,7 @@ fun AddIngredient(
     onListItemClick: (IngredientDetails) -> Unit,
     dishViewModel: DishViewModel,
     ingredientViewModel: IngredientViewModel = viewModel(factory = AppViewModelProvider.Factory),
-    dietSettingsViewModel: DietSettingsViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    dietSettingsViewModel: DietSettingsViewModel,
 ) {
     val ingredientUiState by ingredientViewModel.ingredientListUiState.collectAsState()
     Column {

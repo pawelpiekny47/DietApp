@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.Flow
 interface DayRepository {
     fun getAll(): Flow<List<DayWithDishes>>
     suspend fun saveDay(day: Day)
-
     suspend fun saveAll(dayDishCrossRefList: List<DayDishCrossRef>)
     suspend fun deleteAll(dayDishCrossRefList: List<DayDishCrossRef>)
 

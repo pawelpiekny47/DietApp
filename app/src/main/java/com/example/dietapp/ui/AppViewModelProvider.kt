@@ -26,7 +26,8 @@ object AppViewModelProvider {
         }
         initializer {
             DayViewModel(
-                dietAppApplication().container.dayRepository
+                dietAppApplication().container.dayRepository,
+                dietAppApplication().container.dishRepository
             )
         }
         initializer {

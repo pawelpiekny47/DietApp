@@ -23,7 +23,7 @@ import com.example.dietapp.ui.dish.viewmodel.DishWithIngredientsDetails
 fun AddDish(
     onListItemClick: (DishWithIngredientsDetails) -> Unit,
     viewModel: DishViewModel = viewModel(factory = AppViewModelProvider.Factory),
-    dietSettingsViewModel: DietSettingsViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    dietSettingsViewModel: DietSettingsViewModel,
     dayViewModel: DayViewModel,
 ) {
     val dishUiState by viewModel.dishListUiState.collectAsState()
@@ -36,7 +36,7 @@ fun AddDish(
             LazyColumn(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                items(dishUiState.dishList) { dish ->
+                items(dishUiState.dishList.filter { it.dish.baseDish == 1 }) { dish ->
                     DishItem(
                         dish = dish,
                         dietSettingsViewModel = dietSettingsViewModel,

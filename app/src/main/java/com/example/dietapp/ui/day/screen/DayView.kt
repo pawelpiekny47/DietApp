@@ -60,7 +60,7 @@ fun DayView(
             )
         }
         OutlinedTextField(
-            value = dayViewModel.dayWithDishesUiState.dayDetails.day.name,
+            value = dayViewModel.dayWithDishesUiState.dayWithDishesDetails.day.name,
             onValueChange = { dayViewModel.updateDayName(it) },
             label = { Text("name") },
             enabled = true,
@@ -87,7 +87,7 @@ fun DishList(
 
 
     LazyColumn(modifier = modifier) {
-        items(viewModel.dayWithDishesUiState.dayDetails.dishList) { dish ->
+        items(viewModel.dayWithDishesUiState.dayWithDishesDetails.dishList) { dish ->
             var extendedIngredients by remember { mutableStateOf(true) }
             var extendedIngredientsDetails by remember { mutableStateOf(false) }
 
@@ -106,7 +106,7 @@ fun DishList(
                                 extendedIngredients = !extendedIngredients
                             },
                         style = MaterialTheme.typography.titleMedium,
-                        text = dish.dishDetails.dish.name
+                        text = dish.dishDetails.dishDetails.name
                     )
                     Row(
                         modifier = Modifier
@@ -120,7 +120,7 @@ fun DishList(
                             value = dish.amount,
                             onValueChange = {
                                 viewModel.updateDayWithDishUiState(
-                                    dish.dishDetails.dish.dishId,
+                                    dish.dishDetails.dishDetails.dishId,
                                     it
                                 )
                             },

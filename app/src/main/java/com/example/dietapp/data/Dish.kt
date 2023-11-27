@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 data class Dish(
     @PrimaryKey(autoGenerate = true)
     val dishId: Int = 0,
-
     val name: String,
     val description: String,
+    val baseDish: Int
 )
