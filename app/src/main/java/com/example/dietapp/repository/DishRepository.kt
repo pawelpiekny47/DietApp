@@ -17,6 +17,7 @@ interface DishRepository {
     suspend fun deleteDish(dish: Dish)
     suspend fun deleteDish(id: Int)
     suspend fun saveAll(dishIngredientCrossRefList: List<DishIngredientCrossRef>)
+    suspend fun saveOneCrossRef(dishIngredientCrossRefList: DishIngredientCrossRef)
     suspend fun deleteAll(dishIngredientCrossRefList: List<DishIngredientCrossRef>)
     suspend fun deleteAllCrossRefForDishId(dishId: Int)
 }

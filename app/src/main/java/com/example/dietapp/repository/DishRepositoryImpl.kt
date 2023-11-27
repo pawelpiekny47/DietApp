@@ -19,6 +19,9 @@ class DishRepositoryImpl(private val dishDao: DishDao) : DishRepository {
     override suspend fun saveAll(dishIngredientCrossRefList: List<DishIngredientCrossRef>) =
         dishDao.saveAll(dishIngredientCrossRefList)
 
+    override suspend fun saveOneCrossRef(dishIngredientCrossRefList: DishIngredientCrossRef) =
+        dishDao.saveOneCrossRef(dishIngredientCrossRefList)
+
     override suspend fun deleteAll(dishIngredientCrossRefList: List<DishIngredientCrossRef>) =
         dishDao.deleteAll(dishIngredientCrossRefList)
 

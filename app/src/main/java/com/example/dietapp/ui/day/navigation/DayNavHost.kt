@@ -71,7 +71,8 @@ fun DayNavHost(
                     }
                 },
                 dayViewModel = dayViewModel,
-                dietSettingsViewModel = dietSettingsViewModel
+                dietSettingsViewModel = dietSettingsViewModel,
+                dishViewModel = dishViewModel
             )
         }
         composable(route = DayScreenList.AddDishToDay.name) {

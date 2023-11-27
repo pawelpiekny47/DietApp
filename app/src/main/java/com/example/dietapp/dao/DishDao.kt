@@ -43,6 +43,9 @@ interface DishDao {
     @Upsert
     fun saveAll(dishIngredientCrossRef: List<DishIngredientCrossRef>)
 
+    @Upsert
+    fun saveOneCrossRef(dishIngredientCrossRef: DishIngredientCrossRef)
+
     @Delete
     fun deleteAll(dishIngredientCrossRef: List<DishIngredientCrossRef>)
 

@@ -1,6 +1,5 @@
 package com.example.dietapp.ui.day.viewmodel
 
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -10,14 +9,17 @@ import com.example.dietapp.data.Day
 import com.example.dietapp.data.DayDishCrossRef
 import com.example.dietapp.data.DayWithDishes
 import com.example.dietapp.data.Dish
+import com.example.dietapp.data.DishIngredientCrossRef
 import com.example.dietapp.data.DishWithAmount
 import com.example.dietapp.data.FoodCategory
+import com.example.dietapp.data.IngredientWithAmount
 import com.example.dietapp.repository.DayRepository
 import com.example.dietapp.repository.DishRepository
 import com.example.dietapp.ui.dish.viewmodel.DishDetails
 import com.example.dietapp.ui.dish.viewmodel.DishWithIngredientsDetails
 import com.example.dietapp.ui.dish.viewmodel.toDishWithIngredientDetails
 import com.example.dietapp.ui.common.DietStatistics
+import com.example.dietapp.ui.dish.viewmodel.IngredientWithAmountDetails
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
@@ -53,7 +55,40 @@ class DayViewModel(
 
     }
 
-    fun updateDayWithDishUiState(dishId: String, string: String) {
+
+    fun updateDayUiState(
+        ingredientWithAmountDetails: IngredientWithAmountDetails,
+        dishId: String,
+        amount: String
+    ) {
+        dayWithDishesUiState = DayWithDishesDetailsUiState(
+            dayWithDishesDetails = DayWithDishesDetails(
+                dayWithDishesUiState.dayWithDishesDetails.day,
+                dayWithDishesUiState.dayWithDishesDetails.dishList.stream().map { dish ->
+                    DishWithAmountDetails(
+                        DishWithIngredientsDetails(
+                            dish.dishDetails.dishDetails,
+                            dish.dishDetails.ingredientList.stream()
+                                .map { current ->
+                                    if (dish.dishDetails.dishDetails.dishId == dishId) {
+                                        if (current.ingredientDetails.id == ingredientWithAmountDetails.ingredientDetails.id)
+                                            IngredientWithAmountDetails(
+                                                current.ingredientDetails,
+                                                amount
+                                            )
+                                        else current
+                                    } else current
+                                }.toList()
+                        ), dish.amount
+                    )
+                }.toList()
+            ),
+            dayWithDishesUiState.dayDishCrossRefToDelete
+        )
+    }
+
+
+    fun updateDayWithDishUiState(dishId: String, amount: String) {
         dayWithDishesUiState =
             DayWithDishesDetailsUiState(
                 dayWithDishesDetails = DayWithDishesDetails(
@@ -61,7 +96,7 @@ class DayViewModel(
                     dishList = dayWithDishesUiState.dayWithDishesDetails.dishList.stream()
                         .map {
                             if (it.dishDetails.dishDetails.dishId == dishId)
-                                DishWithAmountDetails(it.dishDetails, string)
+                                DishWithAmountDetails(it.dishDetails, amount)
                             else it
                         }
                         .toList()),
@@ -165,6 +200,19 @@ class DayViewModel(
             dishRepository.deleteDish(it.dishId)
             dishRepository.deleteAllCrossRefForDishId(it.dishId)
         }
+        dishRepository.saveAll(
+            dayWithDishesUiState.dayWithDishesDetails.dishList.stream()
+                .map { dishWithAmountDetails ->
+                    dishWithAmountDetails.dishDetails.ingredientList.stream()
+                        .map { ingredientWithAmountDetails ->
+                            DishIngredientCrossRef(
+                                dishWithAmountDetails.dishDetails.dishDetails.dishId.toInt(),
+                                ingredientWithAmountDetails.ingredientDetails.id,
+                                ingredientWithAmountDetails.amount.toDouble()
+                            )
+                        }.toList()
+                }.toList().flatten()
+        )
         if (dayId != -1L)
             updateDayIdAfterSave(dayId.toInt())
     }
@@ -296,7 +344,7 @@ fun DayWithDishes.toDayDetails(): DayWithDishesDetails {
     )
 }
 
-data class DishWithAmountDetails(
+class DishWithAmountDetails(
     val dishDetails: DishWithIngredientsDetails,
     var amount: String = "0"
 )

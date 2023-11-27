@@ -230,6 +230,10 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel(), D
     }
 
 
+    suspend fun updateAmountDishIngredientCrosRef(dishId: String, ingredientId: Int, amount: String) {
+        dishRepository.saveOneCrossRef(DishIngredientCrossRef(dishId.toInt(),ingredientId, amount.toDouble() ))
+
+    }
     suspend fun saveDishWithIngredients() {
         dishRepository.upsertDish(dishWithIngredientsUiState.dishWithIngredientsDetails.dishDetails.toDish())
         dishRepository.saveAll(dishWithIngredientsUiState.toDishIngredientCrossRefList())

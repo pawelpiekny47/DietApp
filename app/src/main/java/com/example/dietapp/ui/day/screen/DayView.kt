@@ -27,26 +27,32 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.dietapp.ui.AppViewModelProvider
 import com.example.dietapp.ui.common.DietSettingsStatistic
 import com.example.dietapp.ui.common.MacroDetailsUnderIngredientXAmount
 import com.example.dietapp.ui.day.viewmodel.DayViewModel
 import com.example.dietapp.ui.dietsettings.viewmodel.DietSettingsViewModel
+import com.example.dietapp.ui.dish.viewmodel.DishViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DayView(
     saveButtonOnClick: () -> Unit,
     dayViewModel: DayViewModel,
-    dietSettingsViewModel: DietSettingsViewModel
+    dietSettingsViewModel: DietSettingsViewModel,
+    dishViewModel: DishViewModel
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -82,14 +88,15 @@ fun DayView(
 @Composable
 fun DishList(
     modifier: Modifier,
-    viewModel: DayViewModel
+    dayViewModel: DayViewModel,
 ) {
 
 
     LazyColumn(modifier = modifier) {
-        items(viewModel.dayWithDishesUiState.dayWithDishesDetails.dishList) { dish ->
+        items(dayViewModel.dayWithDishesUiState.dayWithDishesDetails.dishList) { dish ->
             var extendedIngredients by remember { mutableStateOf(true) }
             var extendedIngredientsDetails by remember { mutableStateOf(false) }
+            val coroutineScope = rememberCoroutineScope()
 
             Card(
                 modifier = Modifier
@@ -119,7 +126,7 @@ fun DishList(
                                 .defaultMinSize(minHeight = 20.dp),
                             value = dish.amount,
                             onValueChange = {
-                                viewModel.updateDayWithDishUiState(
+                                dayViewModel.updateDayWithDishUiState(
                                     dish.dishDetails.dishDetails.dishId,
                                     it
                                 )
@@ -136,7 +143,7 @@ fun DishList(
                             modifier = Modifier
                                 .weight(1F)
                                 .clickable {
-                                    viewModel.deleteDishFromDay(dish)
+                                    dayViewModel.deleteDishFromDay(dish)
                                 }
                         )
                     }
@@ -149,16 +156,31 @@ fun DishList(
                             extendedIngredientsDetails = !extendedIngredientsDetails
                         }) {
                         dish.dishDetails.ingredientList.sortedByDescending { it.amount.toDouble() }
-                            .forEach {
+                            .forEach { ingredientWithAmountDetails ->
                                 Column {
-                                    Text(
-                                        text = "- ${it.ingredientDetails.name}  ${it.amount}g",
-                                        fontStyle = FontStyle.Italic,
-                                        textAlign = TextAlign.Center,
-                                        style = MaterialTheme.typography.bodySmall
-                                    )
+                                    Row() {
+                                        Text(
+                                            text = "- ${ingredientWithAmountDetails.ingredientDetails.name}  ${ingredientWithAmountDetails.amount}g",
+                                            fontStyle = FontStyle.Italic,
+                                            textAlign = TextAlign.Center,
+                                            style = MaterialTheme.typography.bodySmall
+                                        )
+                                        TextField(
+                                            modifier = Modifier.scale(0.7F),
+                                            value = ingredientWithAmountDetails.amount,
+                                            onValueChange = {
+                                                dayViewModel.updateDayUiState(ingredientWithAmountDetails, dish.dishDetails.dishDetails.dishId, it)
+                                            },
+                                            enabled = true,
+                                            singleLine = true,
+                                            colors = TextFieldDefaults.textFieldColors(
+                                                containerColor = Color.Transparent
+                                            )
+                                        )
+                                    }
+
                                     if (extendedIngredientsDetails)
-                                        MacroDetailsUnderIngredientXAmount(it)
+                                        MacroDetailsUnderIngredientXAmount(ingredientWithAmountDetails)
                                 }
                             }
                     }
