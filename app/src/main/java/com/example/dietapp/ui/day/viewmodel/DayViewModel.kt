@@ -1,5 +1,6 @@
 package com.example.dietapp.ui.day.viewmodel
 
+import android.annotation.SuppressLint
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -12,7 +13,6 @@ import com.example.dietapp.data.Dish
 import com.example.dietapp.data.DishIngredientCrossRef
 import com.example.dietapp.data.DishWithAmount
 import com.example.dietapp.data.FoodCategory
-import com.example.dietapp.data.IngredientWithAmount
 import com.example.dietapp.repository.DayRepository
 import com.example.dietapp.repository.DishRepository
 import com.example.dietapp.ui.dish.viewmodel.DishDetails
@@ -20,6 +20,7 @@ import com.example.dietapp.ui.dish.viewmodel.DishWithIngredientsDetails
 import com.example.dietapp.ui.dish.viewmodel.toDishWithIngredientDetails
 import com.example.dietapp.ui.common.DietStatistics
 import com.example.dietapp.ui.dish.viewmodel.IngredientWithAmountDetails
+import com.example.dietapp.ui.ingredient.viewmodel.IngredientDetails
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
@@ -29,11 +30,14 @@ import java.math.RoundingMode
 import java.util.stream.Collectors
 import kotlin.streams.toList
 
+@SuppressLint("MutableCollectionMutableState")
 class DayViewModel(
     private val dayRepository: DayRepository,
     private val dishRepository: DishRepository
 ) : ViewModel(), DietStatistics {
     var deleteButtonVisible by mutableStateOf(true)
+    var editedDishId by mutableStateOf(0)
+    var crossRefListToDelete by mutableStateOf((mutableListOf<DishIngredientCrossRef>()))
     var dayWithDishesUiState by mutableStateOf(DayWithDishesDetailsUiState())
         private set
 
@@ -64,24 +68,25 @@ class DayViewModel(
         dayWithDishesUiState = DayWithDishesDetailsUiState(
             dayWithDishesDetails = DayWithDishesDetails(
                 dayWithDishesUiState.dayWithDishesDetails.day,
-                dayWithDishesUiState.dayWithDishesDetails.dishList.stream().map { dish ->
-                    DishWithAmountDetails(
-                        DishWithIngredientsDetails(
-                            dish.dishDetails.dishDetails,
-                            dish.dishDetails.ingredientList.stream()
-                                .map { current ->
-                                    if (dish.dishDetails.dishDetails.dishId == dishId) {
-                                        if (current.ingredientDetails.id == ingredientWithAmountDetails.ingredientDetails.id)
-                                            IngredientWithAmountDetails(
-                                                current.ingredientDetails,
-                                                amount
-                                            )
-                                        else current
-                                    } else current
-                                }.toList()
-                        ), dish.amount
-                    )
-                }.toList()
+                dayWithDishesUiState.dayWithDishesDetails.dishWithAmountDetails.stream()
+                    .map { dish ->
+                        DishWithAmountDetails(
+                            DishWithIngredientsDetails(
+                                dish.dishWithIngredientsDetails.dishDetails,
+                                dish.dishWithIngredientsDetails.ingredientList.stream()
+                                    .map { current ->
+                                        if (dish.dishWithIngredientsDetails.dishDetails.dishId == dishId) {
+                                            if (current.ingredientDetails.id == ingredientWithAmountDetails.ingredientDetails.id) {
+                                                IngredientWithAmountDetails(
+                                                    current.ingredientDetails,
+                                                    amount
+                                                )
+                                            } else current
+                                        } else current
+                                    }.toList()
+                            ), dish.amount
+                        )
+                    }.toList()
             ),
             dayWithDishesUiState.dayDishCrossRefToDelete
         )
@@ -93,10 +98,10 @@ class DayViewModel(
             DayWithDishesDetailsUiState(
                 dayWithDishesDetails = DayWithDishesDetails(
                     day = dayWithDishesUiState.dayWithDishesDetails.day,
-                    dishList = dayWithDishesUiState.dayWithDishesDetails.dishList.stream()
+                    dishWithAmountDetails = dayWithDishesUiState.dayWithDishesDetails.dishWithAmountDetails.stream()
                         .map {
-                            if (it.dishDetails.dishDetails.dishId == dishId)
-                                DishWithAmountDetails(it.dishDetails, amount)
+                            if (it.dishWithIngredientsDetails.dishDetails.dishId == dishId)
+                                DishWithAmountDetails(it.dishWithIngredientsDetails, amount)
                             else it
                         }
                         .toList()),
@@ -116,7 +121,7 @@ class DayViewModel(
                         dayId,
                         dayWithDishesUiState.dayWithDishesDetails.day.name,
                     ),
-                    dishList = dayWithDishesUiState.dayWithDishesDetails.dishList
+                    dishWithAmountDetails = dayWithDishesUiState.dayWithDishesDetails.dishWithAmountDetails
                 ),
                 dayDishCrossRefToDelete = mutableListOf<DayDishCrossRef>().also {
                     it.addAll(
@@ -134,7 +139,7 @@ class DayViewModel(
                         dayWithDishesUiState.dayWithDishesDetails.day.dayId,
                         name
                     ),
-                    dishList = dayWithDishesUiState.dayWithDishesDetails.dishList
+                    dishWithAmountDetails = dayWithDishesUiState.dayWithDishesDetails.dishWithAmountDetails
                 ),
                 dayDishCrossRefToDelete = mutableListOf<DayDishCrossRef>().also {
                     it.addAll(
@@ -150,9 +155,9 @@ class DayViewModel(
             DayWithDishesDetailsUiState(
                 dayWithDishesDetails = DayWithDishesDetails(
                     day = dayWithDishesUiState.dayWithDishesDetails.day,
-                    dishList = mutableListOf<DishWithAmountDetails>().also {
+                    dishWithAmountDetails = mutableListOf<DishWithAmountDetails>().also {
                         it.addAll(
-                            dayWithDishesUiState.dayWithDishesDetails.dishList,
+                            dayWithDishesUiState.dayWithDishesDetails.dishWithAmountDetails,
                         )
                         it.add(DishWithAmountDetails(newDay.toDishWithIngredientDetails()))
                     }.toList()
@@ -173,7 +178,7 @@ class DayViewModel(
             DayWithDishesDetailsUiState(
                 dayWithDishesDetails = DayWithDishesDetails(
                     day = dayWithDishesUiState.dayWithDishesDetails.day,
-                    dishList = dayWithDishesUiState.dayWithDishesDetails.dishList.stream()
+                    dishWithAmountDetails = dayWithDishesUiState.dayWithDishesDetails.dishWithAmountDetails.stream()
                         .filter { (it != dishWithAmountDetails) }
                         .toList()),
                 dayDishCrossRefToDelete = mutableListOf<DayDishCrossRef>().also {
@@ -184,12 +189,64 @@ class DayViewModel(
                     it.add(
                         DayDishCrossRef(
                             dayId = dayWithDishesUiState.dayWithDishesDetails.day.dayId,
-                            dishId = dishWithAmountDetails.dishDetails.dishDetails.dishId.toInt(),
+                            dishId = dishWithAmountDetails.dishWithIngredientsDetails.dishDetails.dishId.toInt(),
                             amount = 0
                         )
                     )
                 }
             )
+    }
+
+    fun addIngredientToDishInDay(ingredientDetails: IngredientDetails) {
+        dayWithDishesUiState = dayWithDishesUiState.copy(
+            dayWithDishesDetails = DayWithDishesDetails(
+                day = dayWithDishesUiState.dayWithDishesDetails.day,
+                dishWithAmountDetails = dayWithDishesUiState.dayWithDishesDetails.dishWithAmountDetails.map { dishWithAmountDetails ->
+                    if (dishWithAmountDetails.dishWithIngredientsDetails.dishDetails.dishId.toInt() == editedDishId) {
+                        DishWithAmountDetails(
+                            dishWithIngredientsDetails = DishWithIngredientsDetails(
+                                dishDetails = dishWithAmountDetails.dishWithIngredientsDetails.dishDetails,
+                                ingredientList = mutableListOf<IngredientWithAmountDetails>().also {
+                                    it.addAll(dishWithAmountDetails.dishWithIngredientsDetails.ingredientList)
+                                    it.add(IngredientWithAmountDetails(ingredientDetails, "0"))
+                                }
+                            ),
+                            "0"
+                        )
+                    } else dishWithAmountDetails
+                }
+
+            ),
+        )
+    }
+
+    fun removeIngredientFromDishInDay(ingredientId: Int, dishId: Int) {
+        dayWithDishesUiState = dayWithDishesUiState.copy(
+            dayWithDishesDetails = DayWithDishesDetails(
+                day = dayWithDishesUiState.dayWithDishesDetails.day,
+                dishWithAmountDetails = dayWithDishesUiState.dayWithDishesDetails.dishWithAmountDetails.map { dishWithAmountDetails ->
+                    if (dishWithAmountDetails.dishWithIngredientsDetails.dishDetails.dishId.toInt() == dishId) {
+                        DishWithAmountDetails(
+                            dishWithIngredientsDetails = DishWithIngredientsDetails(
+                                dishDetails = dishWithAmountDetails.dishWithIngredientsDetails.dishDetails,
+                                ingredientList = mutableListOf<IngredientWithAmountDetails>().let { ingredientWithAmount ->
+                                    ingredientWithAmount.addAll(dishWithAmountDetails.dishWithIngredientsDetails.ingredientList)
+                                    crossRefListToDelete.add(
+                                        DishIngredientCrossRef(
+                                            dishId,
+                                            ingredientId,
+                                            0.0
+                                        )
+                                    )
+                                    ingredientWithAmount.filter { it.ingredientDetails.id != ingredientId }
+                                }
+                            ),
+                            "0"
+                        )
+                    } else dishWithAmountDetails
+                }
+            ),
+        )
     }
 
     suspend fun saveDayWithDishes() {
@@ -200,13 +257,16 @@ class DayViewModel(
             dishRepository.deleteDish(it.dishId)
             dishRepository.deleteAllCrossRefForDishId(it.dishId)
         }
+        dishRepository.deleteAll(crossRefListToDelete)
+        crossRefListToDelete = mutableListOf()
+
         dishRepository.saveAll(
-            dayWithDishesUiState.dayWithDishesDetails.dishList.stream()
+            dayWithDishesUiState.dayWithDishesDetails.dishWithAmountDetails.stream()
                 .map { dishWithAmountDetails ->
-                    dishWithAmountDetails.dishDetails.ingredientList.stream()
+                    dishWithAmountDetails.dishWithIngredientsDetails.ingredientList.stream()
                         .map { ingredientWithAmountDetails ->
                             DishIngredientCrossRef(
-                                dishWithAmountDetails.dishDetails.dishDetails.dishId.toInt(),
+                                dishWithAmountDetails.dishWithIngredientsDetails.dishDetails.dishId.toInt(),
                                 ingredientWithAmountDetails.ingredientDetails.id,
                                 ingredientWithAmountDetails.amount.toDouble()
                             )
@@ -218,8 +278,8 @@ class DayViewModel(
     }
 
     override fun returnCurrentKcal(): Double {
-        return dayWithDishesUiState.dayWithDishesDetails.dishList.stream().map { it ->
-            it.dishDetails.ingredientList.stream()
+        return dayWithDishesUiState.dayWithDishesDetails.dishWithAmountDetails.stream().map { it ->
+            it.dishWithIngredientsDetails.ingredientList.stream()
                 .map { ((it.ingredientDetails.totalKcal.toDouble() * it.amount.toDouble()) / (100)) }
                 .collect(Collectors.summingDouble { d -> d }) * (it.amount.toIntOrNull() ?: 0)
         }.collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
@@ -229,8 +289,8 @@ class DayViewModel(
     }
 
     override fun returnCurrentProtein(): Double {
-        return dayWithDishesUiState.dayWithDishesDetails.dishList.stream().map { it ->
-            it.dishDetails.ingredientList.stream()
+        return dayWithDishesUiState.dayWithDishesDetails.dishWithAmountDetails.stream().map { it ->
+            it.dishWithIngredientsDetails.ingredientList.stream()
                 .map { ((it.ingredientDetails.protein.toDouble() * it.amount.toDouble()) / (100)) }
                 .collect(Collectors.summingDouble { d -> d }) * (it.amount.toIntOrNull() ?: 0)
         }.collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
@@ -240,8 +300,8 @@ class DayViewModel(
     }
 
     override fun returnCurrentCarbs(): Double {
-        return dayWithDishesUiState.dayWithDishesDetails.dishList.stream().map { it ->
-            it.dishDetails.ingredientList.stream()
+        return dayWithDishesUiState.dayWithDishesDetails.dishWithAmountDetails.stream().map { it ->
+            it.dishWithIngredientsDetails.ingredientList.stream()
                 .map { ((it.ingredientDetails.carbohydrates.toDouble() * it.amount.toDouble()) / (100)) }
                 .collect(Collectors.summingDouble { d -> d }) * (it.amount.toIntOrNull() ?: 0)
         }.collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
@@ -251,8 +311,8 @@ class DayViewModel(
     }
 
     override fun returnCurrentFat(): Double {
-        return dayWithDishesUiState.dayWithDishesDetails.dishList.stream().map { it ->
-            it.dishDetails.ingredientList.stream()
+        return dayWithDishesUiState.dayWithDishesDetails.dishWithAmountDetails.stream().map { it ->
+            it.dishWithIngredientsDetails.ingredientList.stream()
                 .map { ((it.ingredientDetails.fats.toDouble() * it.amount.toDouble()) / (100)) }
                 .collect(Collectors.summingDouble { d -> d }) * (it.amount.toIntOrNull() ?: 0)
         }.collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
@@ -262,8 +322,8 @@ class DayViewModel(
     }
 
     override fun returnCurrentSoil(): Double {
-        return dayWithDishesUiState.dayWithDishesDetails.dishList.stream().map { it ->
-            it.dishDetails.ingredientList.stream()
+        return dayWithDishesUiState.dayWithDishesDetails.dishWithAmountDetails.stream().map { it ->
+            it.dishWithIngredientsDetails.ingredientList.stream()
                 .map { ((it.ingredientDetails.soil.toDouble() * it.amount.toDouble()) / (100)) }
                 .collect(Collectors.summingDouble { d -> d }) * (it.amount.toIntOrNull() ?: 0)
         }.collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
@@ -273,8 +333,8 @@ class DayViewModel(
     }
 
     override fun returnCurrentFiber(): Double {
-        return dayWithDishesUiState.dayWithDishesDetails.dishList.stream().map { it ->
-            it.dishDetails.ingredientList.stream()
+        return dayWithDishesUiState.dayWithDishesDetails.dishWithAmountDetails.stream().map { it ->
+            it.dishWithIngredientsDetails.ingredientList.stream()
                 .map { ((it.ingredientDetails.fiber.toDouble() * it.amount.toDouble()) / (100)) }
                 .collect(Collectors.summingDouble { d -> d }) * (it.amount.toIntOrNull() ?: 0)
         }.collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
@@ -284,8 +344,8 @@ class DayViewModel(
     }
 
     override fun returnCurrentPufa(): Double {
-        return dayWithDishesUiState.dayWithDishesDetails.dishList.stream().map { it ->
-            it.dishDetails.ingredientList.stream()
+        return dayWithDishesUiState.dayWithDishesDetails.dishWithAmountDetails.stream().map { it ->
+            it.dishWithIngredientsDetails.ingredientList.stream()
                 .map { ((it.ingredientDetails.polyunsaturatedFats.toDouble() * it.amount.toDouble()) / (100)) }
                 .collect(Collectors.summingDouble { d -> d }) * (it.amount.toIntOrNull() ?: 0)
         }.collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
@@ -295,8 +355,8 @@ class DayViewModel(
     }
 
     override fun returnCurrentKcalForFoodCategory(foodType: FoodCategory): Double {
-        return dayWithDishesUiState.dayWithDishesDetails.dishList.stream().map { it ->
-            it.dishDetails.ingredientList.stream()
+        return dayWithDishesUiState.dayWithDishesDetails.dishWithAmountDetails.stream().map { it ->
+            it.dishWithIngredientsDetails.ingredientList.stream()
                 .filter { it.ingredientDetails.foodCategory == foodType }
                 .map { ((it.ingredientDetails.totalKcal.toDouble() * it.amount.toDouble()) / (100)) }
                 .collect(Collectors.summingDouble { d -> d }) * (it.amount.toIntOrNull() ?: 0)
@@ -318,12 +378,12 @@ data class DayWithDishesDetailsUiState(
 )
 
 fun DayWithDishesDetailsUiState.toDayDishCrossRefList(): List<DayDishCrossRef> {
-    return dayWithDishesDetails.dishList
+    return dayWithDishesDetails.dishWithAmountDetails
         .stream()
         .map {
             DayDishCrossRef(
                 dayWithDishesDetails.day.dayId,
-                it.dishDetails.dishDetails.dishId.toInt(),
+                it.dishWithIngredientsDetails.dishDetails.dishId.toInt(),
                 it.amount.toInt()
             )
         }
@@ -332,7 +392,7 @@ fun DayWithDishesDetailsUiState.toDayDishCrossRefList(): List<DayDishCrossRef> {
 
 data class DayWithDishesDetails(
     val day: Day = Day(name = ""),
-    var dishList: List<DishWithAmountDetails> = mutableListOf()
+    var dishWithAmountDetails: List<DishWithAmountDetails> = mutableListOf()
 )
 
 data class DayListUiState(val dayList: List<DayWithDishes> = listOf())
@@ -345,7 +405,7 @@ fun DayWithDishes.toDayDetails(): DayWithDishesDetails {
 }
 
 class DishWithAmountDetails(
-    val dishDetails: DishWithIngredientsDetails,
+    val dishWithIngredientsDetails: DishWithIngredientsDetails,
     var amount: String = "0"
 )
 
