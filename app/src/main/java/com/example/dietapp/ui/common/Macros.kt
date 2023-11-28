@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.dietapp.R
+import com.example.dietapp.ui.day.viewmodel.toDoubleEvenWhenEmpty
 import com.example.dietapp.ui.dish.viewmodel.IngredientWithAmountDetails
 import kotlin.math.roundToInt
 
@@ -168,7 +169,7 @@ fun MacroDetailsUnderIngredientXAmount(ingredient: IngredientWithAmountDetails) 
                 contentDescription = null
             )
             Text(
-                text = (ingredient.ingredientDetails.protein.toDouble() * ingredient.amount.toDouble() / 100).roundToInt()
+                text = (ingredient.ingredientDetails.protein.toDoubleEvenWhenEmpty() * ingredient.amount.toDoubleEvenWhenEmpty() / 100).roundToInt()
                     .toString(),
                 fontSize = 10.sp,
                 fontStyle = FontStyle.Italic,
@@ -184,7 +185,7 @@ fun MacroDetailsUnderIngredientXAmount(ingredient: IngredientWithAmountDetails) 
                 contentDescription = null
             )
             Text(
-                text = (ingredient.ingredientDetails.carbohydrates.toDouble() * ingredient.amount.toDouble() / 100).roundToInt()
+                text = (ingredient.ingredientDetails.carbohydrates.toDoubleEvenWhenEmpty() * ingredient.amount.toDoubleEvenWhenEmpty() / 100).roundToInt()
                     .toString(),
                 fontSize = 10.sp,
                 fontStyle = FontStyle.Italic,
@@ -200,7 +201,7 @@ fun MacroDetailsUnderIngredientXAmount(ingredient: IngredientWithAmountDetails) 
                 contentDescription = null
             )
             Text(
-                text = (ingredient.ingredientDetails.fats.toDouble() * ingredient.amount.toDouble() / 100).roundToInt()
+                text = (ingredient.ingredientDetails.fats.toDoubleEvenWhenEmpty() * ingredient.amount.toDoubleEvenWhenEmpty() / 100).roundToInt()
                     .toString(),
                 fontSize = 10.sp,
                 fontStyle = FontStyle.Italic,
@@ -216,7 +217,7 @@ fun MacroDetailsUnderIngredientXAmount(ingredient: IngredientWithAmountDetails) 
                 contentDescription = null
             )
             Text(
-                text = (ingredient.ingredientDetails.totalKcal.toDouble() * ingredient.amount.toDouble() / 100).roundToInt()
+                text = (ingredient.ingredientDetails.totalKcal.toDoubleEvenWhenEmpty() * ingredient.amount.toDoubleEvenWhenEmpty() / 100).roundToInt()
                     .toString(),
                 fontSize = 10.sp,
                 fontStyle = FontStyle.Italic,
@@ -242,7 +243,7 @@ fun MacroDetailsUnderIngredient(ingredient: IngredientWithAmountDetails) {
                 contentDescription = null
             )
             Text(
-                text = ingredient.ingredientDetails.protein.toDouble().roundToInt().toString(),
+                text = ingredient.ingredientDetails.protein.toDoubleEvenWhenEmpty().roundToInt().toString(),
                 fontSize = 10.sp,
                 fontStyle = FontStyle.Italic,
             )
@@ -257,7 +258,7 @@ fun MacroDetailsUnderIngredient(ingredient: IngredientWithAmountDetails) {
                 contentDescription = null
             )
             Text(
-                text = ingredient.ingredientDetails.carbohydrates.toDouble().roundToInt()
+                text = ingredient.ingredientDetails.carbohydrates.toDoubleEvenWhenEmpty().roundToInt()
                     .toString(),
                 fontSize = 10.sp,
                 fontStyle = FontStyle.Italic,
@@ -273,7 +274,7 @@ fun MacroDetailsUnderIngredient(ingredient: IngredientWithAmountDetails) {
                 contentDescription = null
             )
             Text(
-                text = ingredient.ingredientDetails.fats.toDouble().roundToInt().toString(),
+                text = ingredient.ingredientDetails.fats.toDoubleEvenWhenEmpty().roundToInt().toString(),
                 fontSize = 10.sp,
                 fontStyle = FontStyle.Italic,
             )
@@ -288,7 +289,7 @@ fun MacroDetailsUnderIngredient(ingredient: IngredientWithAmountDetails) {
                 contentDescription = null
             )
             Text(
-                text = ingredient.ingredientDetails.totalKcal.toDouble().roundToInt()
+                text = ingredient.ingredientDetails.totalKcal.toDoubleEvenWhenEmpty().roundToInt()
                     .toString(),
                 fontSize = 10.sp,
                 fontStyle = FontStyle.Italic,

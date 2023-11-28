@@ -5,14 +5,17 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -68,6 +71,7 @@ fun DishView(
         }
         Box(contentAlignment = Alignment.Center) {
             TextField(
+                modifier = Modifier.width(IntrinsicSize.Min),
                 value = dishViewModel.dishWithIngredientsUiState.dishWithIngredientsDetails.dishDetails.name,
                 onValueChange = { dishViewModel.updateDishName(it) },
                 label = { Text("name") },
@@ -168,12 +172,10 @@ fun IngredientList(
                         modifier = Modifier.weight(3F)
                     ) {
 
-                        TextField(
+                        BasicTextField(
                             textStyle = TextStyle(fontSize = 12.sp),
                             modifier = Modifier
-                                .defaultMinSize(minHeight = 0.dp)
-                                .padding(0.dp, 0.dp)
-                                .weight(4F),
+                                .width(IntrinsicSize.Min),
                             value = ingredient.amount,
                             onValueChange = {
                                 dishViewModel.updateDishWithIngredientUiState(
@@ -184,12 +186,9 @@ fun IngredientList(
                             enabled = true,
                             maxLines = 1,
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                            singleLine = true,
-                            colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
+                            singleLine = true
                         )
                         Text(
-                            modifier = Modifier
-                                .weight(1F),
                             text = " g",
                             fontSize = 12.sp,
                         )
@@ -198,8 +197,7 @@ fun IngredientList(
                         imageVector = Icons.Default.Close,
                         contentDescription = "delete",
                         modifier = Modifier
-                            .weight(1F)
-                            .scale(0.7F)
+                            .scale(0.6F)
                             .clickable {
                                 dishViewModel.deleteIngredientFromDish(
                                     ingredient

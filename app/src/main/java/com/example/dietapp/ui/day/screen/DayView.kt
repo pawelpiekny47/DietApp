@@ -2,6 +2,7 @@ package com.example.dietapp.ui.day.screen
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -98,15 +99,19 @@ fun DishList(
 
             Card(
                 modifier = Modifier
-                    .animateContentSize(),
+                    .animateContentSize()
+                    .fillMaxWidth(),
                 colors = CardDefaults.cardColors(containerColor = Color.Transparent),
             ) {
 
-                Row(verticalAlignment = Alignment.CenterVertically)
+                Row(
+                    modifier = Modifier.fillParentMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                )
                 {
                     Text(
                         modifier = Modifier
-                            .weight(2F)
                             .clickable {
                                 extendedIngredients = !extendedIngredients
                             },
@@ -114,18 +119,15 @@ fun DishList(
                         text = dish.dishWithIngredientsDetails.dishDetails.name
                     )
                     Row(
-                        modifier = Modifier
-                            .weight(1F),
-                        verticalAlignment = Alignment.CenterVertically,
+                        verticalAlignment = Alignment.Bottom,
                     ) {
                         Icon(
                             imageVector = Icons.Default.Close,
                             contentDescription = "delete",
                             modifier = Modifier
-                                .weight(1F)
                                 .clickable {
                                     dayViewModel.deleteDishFromDay(dish)
-                                }
+                                }.scale(0.7F)
                         )
                     }
 

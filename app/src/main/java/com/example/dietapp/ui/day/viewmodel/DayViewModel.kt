@@ -256,7 +256,7 @@ class DayViewModel(
     override fun returnCurrentKcal(): Double {
         return dayWithDishesUiState.dayWithDishesDetails.dishWithAmountDetails.stream().map { it ->
             it.dishWithIngredientsDetails.ingredientList.stream()
-                .map { ((it.ingredientDetails.totalKcal.toDouble() * it.amount.toDouble()) / (100)) }
+                .map { ((it.ingredientDetails.totalKcal.toDoubleEvenWhenEmpty() * it.amount.toDoubleEvenWhenEmpty()) / (100)) }
                 .collect(Collectors.summingDouble { d -> d })
         }.collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
             2,
@@ -267,7 +267,7 @@ class DayViewModel(
     override fun returnCurrentProtein(): Double {
         return dayWithDishesUiState.dayWithDishesDetails.dishWithAmountDetails.stream().map { it ->
             it.dishWithIngredientsDetails.ingredientList.stream()
-                .map { ((it.ingredientDetails.protein.toDouble() * it.amount.toDouble()) / (100)) }
+                .map { ((it.ingredientDetails.protein.toDoubleEvenWhenEmpty() * it.amount.toDoubleEvenWhenEmpty()) / (100)) }
                 .collect(Collectors.summingDouble { d -> d })
         }.collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
             2,
@@ -278,7 +278,7 @@ class DayViewModel(
     override fun returnCurrentCarbs(): Double {
         return dayWithDishesUiState.dayWithDishesDetails.dishWithAmountDetails.stream().map { it ->
             it.dishWithIngredientsDetails.ingredientList.stream()
-                .map { ((it.ingredientDetails.carbohydrates.toDouble() * it.amount.toDouble()) / (100)) }
+                .map { ((it.ingredientDetails.carbohydrates.toDoubleEvenWhenEmpty() * it.amount.toDoubleEvenWhenEmpty()) / (100)) }
                 .collect(Collectors.summingDouble { d -> d })
         }.collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
             2,
@@ -289,7 +289,7 @@ class DayViewModel(
     override fun returnCurrentFat(): Double {
         return dayWithDishesUiState.dayWithDishesDetails.dishWithAmountDetails.stream().map { it ->
             it.dishWithIngredientsDetails.ingredientList.stream()
-                .map { ((it.ingredientDetails.fats.toDouble() * it.amount.toDouble()) / (100)) }
+                .map { ((it.ingredientDetails.fats.toDoubleEvenWhenEmpty() * it.amount.toDoubleEvenWhenEmpty()) / (100)) }
                 .collect(Collectors.summingDouble { d -> d })
         }.collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
             2,
@@ -300,7 +300,7 @@ class DayViewModel(
     override fun returnCurrentSoil(): Double {
         return dayWithDishesUiState.dayWithDishesDetails.dishWithAmountDetails.stream().map { it ->
             it.dishWithIngredientsDetails.ingredientList.stream()
-                .map { ((it.ingredientDetails.soil.toDouble() * it.amount.toDouble()) / (100)) }
+                .map { ((it.ingredientDetails.soil.toDoubleEvenWhenEmpty() * it.amount.toDoubleEvenWhenEmpty()) / (100)) }
                 .collect(Collectors.summingDouble { d -> d })
         }.collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
             2,
@@ -311,7 +311,7 @@ class DayViewModel(
     override fun returnCurrentFiber(): Double {
         return dayWithDishesUiState.dayWithDishesDetails.dishWithAmountDetails.stream().map { it ->
             it.dishWithIngredientsDetails.ingredientList.stream()
-                .map { ((it.ingredientDetails.fiber.toDouble() * it.amount.toDouble()) / (100)) }
+                .map { ((it.ingredientDetails.fiber.toDoubleEvenWhenEmpty() * it.amount.toDoubleEvenWhenEmpty()) / (100)) }
                 .collect(Collectors.summingDouble { d -> d })
         }.collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
             2,
@@ -322,7 +322,7 @@ class DayViewModel(
     override fun returnCurrentPufa(): Double {
         return dayWithDishesUiState.dayWithDishesDetails.dishWithAmountDetails.stream().map { it ->
             it.dishWithIngredientsDetails.ingredientList.stream()
-                .map { ((it.ingredientDetails.polyunsaturatedFats.toDouble() * it.amount.toDouble()) / (100)) }
+                .map { ((it.ingredientDetails.polyunsaturatedFats.toDoubleEvenWhenEmpty() * it.amount.toDoubleEvenWhenEmpty()) / (100)) }
                 .collect(Collectors.summingDouble { d -> d })
         }.collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
             2,
@@ -334,7 +334,7 @@ class DayViewModel(
         return dayWithDishesUiState.dayWithDishesDetails.dishWithAmountDetails.stream().map { it ->
             it.dishWithIngredientsDetails.ingredientList.stream()
                 .filter { it.ingredientDetails.foodCategory == foodType }
-                .map { ((it.ingredientDetails.totalKcal.toDouble() * it.amount.toDouble()) / (100)) }
+                .map { ((it.ingredientDetails.totalKcal.toDoubleEvenWhenEmpty() * it.amount.toDoubleEvenWhenEmpty()) / (100)) }
                 .collect(Collectors.summingDouble { d -> d })
         }.collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
             2,
@@ -395,4 +395,10 @@ fun Dish.toDishDetails(): DishDetails {
         this.name,
         this.description
     )
+}
+
+fun String.toDoubleEvenWhenEmpty(): Double {
+    return if (this == "")
+        0.0
+    else this.toDouble()
 }

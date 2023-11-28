@@ -19,7 +19,7 @@ import com.example.dietapp.data.IngredientWithAmount
 
 @Database(
     entities = [Ingredient::class, Dish::class, DishIngredientCrossRef::class, Day::class, DayDishCrossRef::class, DietSettings::class],
-    views = [IngredientWithAmount::class, DishWithAmount::class], version = 1, exportSchema = false
+    views = [IngredientWithAmount::class, DishWithAmount::class], version = 2, exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun ingredientDao(): IngredientDao
@@ -40,6 +40,7 @@ abstract class AppDatabase : RoomDatabase() {
                     "DietApp_database"
                 )
                     .createFromAsset("DietApp_database.db")
+                    .fallbackToDestructiveMigration()
                     .build()
                     .also { Instance = it }
             }

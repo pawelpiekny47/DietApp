@@ -14,6 +14,7 @@ import com.example.dietapp.repository.DishRepository
 import com.example.dietapp.ui.ingredient.viewmodel.IngredientDetails
 import com.example.dietapp.ui.common.DietStatistics
 import com.example.dietapp.ui.day.viewmodel.toDishDetails
+import com.example.dietapp.ui.day.viewmodel.toDoubleEvenWhenEmpty
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -141,8 +142,7 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel(), D
 
     override fun returnCurrentKcal(): Double {
         return dishWithIngredientsUiState.dishWithIngredientsDetails.ingredientList.stream().map {
-            (it.ingredientDetails.totalKcal.toDouble() * (it.amount.toDoubleOrNull()
-                ?: 0.0)) / (100)
+            (it.ingredientDetails.totalKcal.toDoubleEvenWhenEmpty() * (it.amount.toDoubleEvenWhenEmpty())) / (100)
         }
             .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
                 2,
@@ -152,7 +152,7 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel(), D
 
     override fun returnCurrentProtein(): Double {
         return dishWithIngredientsUiState.dishWithIngredientsDetails.ingredientList.stream().map {
-            (it.ingredientDetails.protein.toDouble() * (it.amount.toDoubleOrNull()
+            (it.ingredientDetails.protein.toDoubleEvenWhenEmpty() * (it.amount.toDoubleEvenWhenEmpty()
                 ?: 0.0)) / (100)
         }
             .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
@@ -163,7 +163,7 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel(), D
 
     override fun returnCurrentCarbs(): Double {
         return dishWithIngredientsUiState.dishWithIngredientsDetails.ingredientList.stream().map {
-            (it.ingredientDetails.carbohydrates.toDouble() * (it.amount.toDoubleOrNull()
+            (it.ingredientDetails.carbohydrates.toDoubleEvenWhenEmpty() * (it.amount.toDoubleEvenWhenEmpty()
                 ?: 0.0)) / (100)
         }
             .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
@@ -174,7 +174,7 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel(), D
 
     override fun returnCurrentFat(): Double {
         return dishWithIngredientsUiState.dishWithIngredientsDetails.ingredientList.stream().map {
-            (it.ingredientDetails.fats.toDouble() * (it.amount.toDoubleOrNull()
+            (it.ingredientDetails.fats.toDoubleEvenWhenEmpty() * (it.amount.toDoubleEvenWhenEmpty()
                 ?: 0.0)) / (100)
         }
             .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
@@ -185,7 +185,7 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel(), D
 
     override fun returnCurrentSoil(): Double {
         return dishWithIngredientsUiState.dishWithIngredientsDetails.ingredientList.stream().map {
-            (it.ingredientDetails.soil.toDouble() * (it.amount.toDoubleOrNull()
+            (it.ingredientDetails.soil.toDoubleEvenWhenEmpty() * (it.amount.toDoubleEvenWhenEmpty()
                 ?: 0.0)) / (100)
         }
             .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
@@ -196,7 +196,7 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel(), D
 
     override fun returnCurrentFiber(): Double {
         return dishWithIngredientsUiState.dishWithIngredientsDetails.ingredientList.stream().map {
-            (it.ingredientDetails.fiber.toDouble() * (it.amount.toDoubleOrNull()
+            (it.ingredientDetails.fiber.toDoubleEvenWhenEmpty() * (it.amount.toDoubleEvenWhenEmpty()
                 ?: 0.0)) / (100)
         }
             .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
@@ -207,7 +207,7 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel(), D
 
     override fun returnCurrentPufa(): Double {
         return dishWithIngredientsUiState.dishWithIngredientsDetails.ingredientList.stream().map {
-            (it.ingredientDetails.polyunsaturatedFats.toDouble() * (it.amount.toDoubleOrNull()
+            (it.ingredientDetails.polyunsaturatedFats.toDoubleEvenWhenEmpty() * (it.amount.toDoubleEvenWhenEmpty()
                 ?: 0.0)) / (100)
         }
             .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
@@ -220,7 +220,7 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel(), D
         return dishWithIngredientsUiState.dishWithIngredientsDetails.ingredientList.stream().filter {
             (it.ingredientDetails.foodCategory == foodType)
         }.map {
-            (it.ingredientDetails.totalKcal.toDouble() * (it.amount.toDoubleOrNull()
+            (it.ingredientDetails.totalKcal.toDoubleEvenWhenEmpty() * (it.amount.toDoubleEvenWhenEmpty()
                 ?: 0.0)) / (100)
         }
             .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
@@ -229,11 +229,6 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel(), D
             ).toDouble()
     }
 
-
-    suspend fun updateAmountDishIngredientCrosRef(dishId: String, ingredientId: Int, amount: String) {
-        dishRepository.saveOneCrossRef(DishIngredientCrossRef(dishId.toInt(),ingredientId, amount.toDouble() ))
-
-    }
     suspend fun saveDishWithIngredients() {
         dishRepository.upsertDish(dishWithIngredientsUiState.dishWithIngredientsDetails.dishDetails.toDish())
         dishRepository.saveAll(dishWithIngredientsUiState.toDishIngredientCrossRefList())
@@ -281,7 +276,7 @@ fun DishWithIngredientsDetailsUiState.toDishIngredientCrossRefList(): List<DishI
             DishIngredientCrossRef(
                 dishWithIngredientsDetails.dishDetails.dishId.toInt(),
                 it.ingredientDetails.id,
-                if (it.amount == "") 0.0 else it.amount.toDouble()
+                if (it.amount == "") 0.0 else it.amount.toDoubleEvenWhenEmpty()
             )
         }
         .toList()
