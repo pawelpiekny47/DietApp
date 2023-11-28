@@ -19,7 +19,6 @@ data class Day(
 data class DayDishCrossRef(
     val dayId: Int,
     val dishId: Int,
-    val amount: Int
 )
 
 data class DayWithDishes(
@@ -33,11 +32,10 @@ data class DayWithDishes(
 )
 
 @DatabaseView(
-    "SELECT dish.dishId, dish.name, dish.description, dish.baseDish, day.amount, day.dayId FROM Dish dish " +
+    "SELECT dish.dishId, dish.name, dish.description, dish.baseDish, day.dayId FROM Dish dish " +
             "INNER JOIN day_dish_cross_ref day ON dish.dishId = day.dishId WHERE baseDish = 0"
 )
 data class DishWithAmount(
     val dayId: Int,
     @Embedded val dishWithIngredients: DishWithIngredients,
-    val amount: Int
 )

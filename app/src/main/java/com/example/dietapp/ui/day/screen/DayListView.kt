@@ -94,41 +94,41 @@ fun DayItem(
                     when (extended2) {
                         true -> {
                             kcalTextValue = "${
-                                day.dishWithAmountList.sumOf { it -> it.dishWithIngredients.ingredientList.sumOf { it.ingredient.totalKcal * it.amount / 100 } * it.amount }
+                                day.dishWithAmountList.sumOf { it -> it.dishWithIngredients.ingredientList.sumOf { it.ingredient.totalKcal * it.amount / 100 }}
                                     .toInt()
                             }g"
                             proteinTextValue = "${
-                                day.dishWithAmountList.sumOf { it -> it.dishWithIngredients.ingredientList.sumOf { it.ingredient.protein * it.amount / 100 } * it.amount }
+                                day.dishWithAmountList.sumOf { it -> it.dishWithIngredients.ingredientList.sumOf { it.ingredient.protein * it.amount / 100 }}
                                     .toInt()
                             }g"
                             carbsTextValue = "${
-                                day.dishWithAmountList.sumOf { it -> it.dishWithIngredients.ingredientList.sumOf { it.ingredient.carbohydrates * it.amount / 100 } * it.amount }
+                                day.dishWithAmountList.sumOf { it -> it.dishWithIngredients.ingredientList.sumOf { it.ingredient.carbohydrates * it.amount / 100 }}
                                     .toInt()
                             }g"
                             fatsTextValue = "${
-                                day.dishWithAmountList.sumOf { it -> it.dishWithIngredients.ingredientList.sumOf { it.ingredient.fats * it.amount / 100 } * it.amount }
+                                day.dishWithAmountList.sumOf { it -> it.dishWithIngredients.ingredientList.sumOf { it.ingredient.fats * it.amount / 100 }}
                                     .toInt()
                             }g"
                         }
 
                         false -> {
                             kcalTextValue = "${
-                                (day.dishWithAmountList.sumOf { it -> it.dishWithIngredients.ingredientList.sumOf { it.ingredient.totalKcal * it.amount / 100 } * it.amount }
+                                (day.dishWithAmountList.sumOf { it -> it.dishWithIngredients.ingredientList.sumOf { it.ingredient.totalKcal * it.amount / 100 }}
                                         / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.totalKcal.toDouble() * 100)
                                     .toInt()
                             }%"
                             proteinTextValue = "${
-                                (day.dishWithAmountList.sumOf { it -> it.dishWithIngredients.ingredientList.sumOf { it.ingredient.protein * it.amount / 100 } * it.amount }
+                                (day.dishWithAmountList.sumOf { it -> it.dishWithIngredients.ingredientList.sumOf { it.ingredient.protein * it.amount / 100 }}
                                         / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.protein.toDouble() * 100)
                                     .toInt()
                             }%"
                             carbsTextValue = "${
-                                (day.dishWithAmountList.sumOf { it -> it.dishWithIngredients.ingredientList.sumOf { it.ingredient.carbohydrates * it.amount / 100 } * it.amount }
+                                (day.dishWithAmountList.sumOf { it -> it.dishWithIngredients.ingredientList.sumOf { it.ingredient.carbohydrates * it.amount / 100 }}
                                         / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.carbohydrates.toDouble() * 100)
                                     .toInt()
                             }%"
                             fatsTextValue = "${
-                                (day.dishWithAmountList.sumOf { it -> it.dishWithIngredients.ingredientList.sumOf { it.ingredient.fats * it.amount / 100 } * it.amount }
+                                (day.dishWithAmountList.sumOf { it -> it.dishWithIngredients.ingredientList.sumOf { it.ingredient.fats * it.amount / 100 }}
                                         / dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.fats.toDouble() * 100)
                                     .toInt()
                             }%"

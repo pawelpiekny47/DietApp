@@ -84,33 +84,12 @@ class DayViewModel(
                                             } else current
                                         } else current
                                     }.toList()
-                            ), dish.amount
+                            )
                         )
                     }.toList()
             ),
             dayWithDishesUiState.dayDishCrossRefToDelete
         )
-    }
-
-
-    fun updateDayWithDishUiState(dishId: String, amount: String) {
-        dayWithDishesUiState =
-            DayWithDishesDetailsUiState(
-                dayWithDishesDetails = DayWithDishesDetails(
-                    day = dayWithDishesUiState.dayWithDishesDetails.day,
-                    dishWithAmountDetails = dayWithDishesUiState.dayWithDishesDetails.dishWithAmountDetails.stream()
-                        .map {
-                            if (it.dishWithIngredientsDetails.dishDetails.dishId == dishId)
-                                DishWithAmountDetails(it.dishWithIngredientsDetails, amount)
-                            else it
-                        }
-                        .toList()),
-                dayDishCrossRefToDelete = mutableListOf<DayDishCrossRef>().also {
-                    it.addAll(
-                        dayWithDishesUiState.dayDishCrossRefToDelete,
-                    )
-                }
-            )
     }
 
     fun updateDayIdAfterSave(dayId: Int) {
@@ -189,8 +168,7 @@ class DayViewModel(
                     it.add(
                         DayDishCrossRef(
                             dayId = dayWithDishesUiState.dayWithDishesDetails.day.dayId,
-                            dishId = dishWithAmountDetails.dishWithIngredientsDetails.dishDetails.dishId.toInt(),
-                            amount = 0
+                            dishId = dishWithAmountDetails.dishWithIngredientsDetails.dishDetails.dishId.toInt()
                         )
                     )
                 }
@@ -210,8 +188,7 @@ class DayViewModel(
                                     it.addAll(dishWithAmountDetails.dishWithIngredientsDetails.ingredientList)
                                     it.add(IngredientWithAmountDetails(ingredientDetails, "0"))
                                 }
-                            ),
-                            "0"
+                            )
                         )
                     } else dishWithAmountDetails
                 }
@@ -240,8 +217,7 @@ class DayViewModel(
                                     )
                                     ingredientWithAmount.filter { it.ingredientDetails.id != ingredientId }
                                 }
-                            ),
-                            "0"
+                            )
                         )
                     } else dishWithAmountDetails
                 }
@@ -281,7 +257,7 @@ class DayViewModel(
         return dayWithDishesUiState.dayWithDishesDetails.dishWithAmountDetails.stream().map { it ->
             it.dishWithIngredientsDetails.ingredientList.stream()
                 .map { ((it.ingredientDetails.totalKcal.toDouble() * it.amount.toDouble()) / (100)) }
-                .collect(Collectors.summingDouble { d -> d }) * (it.amount.toIntOrNull() ?: 0)
+                .collect(Collectors.summingDouble { d -> d })
         }.collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
             2,
             RoundingMode.HALF_DOWN
@@ -292,7 +268,7 @@ class DayViewModel(
         return dayWithDishesUiState.dayWithDishesDetails.dishWithAmountDetails.stream().map { it ->
             it.dishWithIngredientsDetails.ingredientList.stream()
                 .map { ((it.ingredientDetails.protein.toDouble() * it.amount.toDouble()) / (100)) }
-                .collect(Collectors.summingDouble { d -> d }) * (it.amount.toIntOrNull() ?: 0)
+                .collect(Collectors.summingDouble { d -> d })
         }.collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
             2,
             RoundingMode.HALF_DOWN
@@ -303,7 +279,7 @@ class DayViewModel(
         return dayWithDishesUiState.dayWithDishesDetails.dishWithAmountDetails.stream().map { it ->
             it.dishWithIngredientsDetails.ingredientList.stream()
                 .map { ((it.ingredientDetails.carbohydrates.toDouble() * it.amount.toDouble()) / (100)) }
-                .collect(Collectors.summingDouble { d -> d }) * (it.amount.toIntOrNull() ?: 0)
+                .collect(Collectors.summingDouble { d -> d })
         }.collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
             2,
             RoundingMode.HALF_DOWN
@@ -314,7 +290,7 @@ class DayViewModel(
         return dayWithDishesUiState.dayWithDishesDetails.dishWithAmountDetails.stream().map { it ->
             it.dishWithIngredientsDetails.ingredientList.stream()
                 .map { ((it.ingredientDetails.fats.toDouble() * it.amount.toDouble()) / (100)) }
-                .collect(Collectors.summingDouble { d -> d }) * (it.amount.toIntOrNull() ?: 0)
+                .collect(Collectors.summingDouble { d -> d })
         }.collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
             2,
             RoundingMode.HALF_DOWN
@@ -325,7 +301,7 @@ class DayViewModel(
         return dayWithDishesUiState.dayWithDishesDetails.dishWithAmountDetails.stream().map { it ->
             it.dishWithIngredientsDetails.ingredientList.stream()
                 .map { ((it.ingredientDetails.soil.toDouble() * it.amount.toDouble()) / (100)) }
-                .collect(Collectors.summingDouble { d -> d }) * (it.amount.toIntOrNull() ?: 0)
+                .collect(Collectors.summingDouble { d -> d })
         }.collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
             2,
             RoundingMode.HALF_DOWN
@@ -336,7 +312,7 @@ class DayViewModel(
         return dayWithDishesUiState.dayWithDishesDetails.dishWithAmountDetails.stream().map { it ->
             it.dishWithIngredientsDetails.ingredientList.stream()
                 .map { ((it.ingredientDetails.fiber.toDouble() * it.amount.toDouble()) / (100)) }
-                .collect(Collectors.summingDouble { d -> d }) * (it.amount.toIntOrNull() ?: 0)
+                .collect(Collectors.summingDouble { d -> d })
         }.collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
             2,
             RoundingMode.HALF_DOWN
@@ -347,7 +323,7 @@ class DayViewModel(
         return dayWithDishesUiState.dayWithDishesDetails.dishWithAmountDetails.stream().map { it ->
             it.dishWithIngredientsDetails.ingredientList.stream()
                 .map { ((it.ingredientDetails.polyunsaturatedFats.toDouble() * it.amount.toDouble()) / (100)) }
-                .collect(Collectors.summingDouble { d -> d }) * (it.amount.toIntOrNull() ?: 0)
+                .collect(Collectors.summingDouble { d -> d })
         }.collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
             2,
             RoundingMode.HALF_DOWN
@@ -359,7 +335,7 @@ class DayViewModel(
             it.dishWithIngredientsDetails.ingredientList.stream()
                 .filter { it.ingredientDetails.foodCategory == foodType }
                 .map { ((it.ingredientDetails.totalKcal.toDouble() * it.amount.toDouble()) / (100)) }
-                .collect(Collectors.summingDouble { d -> d }) * (it.amount.toIntOrNull() ?: 0)
+                .collect(Collectors.summingDouble { d -> d })
         }.collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
             2,
             RoundingMode.HALF_DOWN
@@ -383,8 +359,7 @@ fun DayWithDishesDetailsUiState.toDayDishCrossRefList(): List<DayDishCrossRef> {
         .map {
             DayDishCrossRef(
                 dayWithDishesDetails.day.dayId,
-                it.dishWithIngredientsDetails.dishDetails.dishId.toInt(),
-                it.amount.toInt()
+                it.dishWithIngredientsDetails.dishDetails.dishId.toInt()
             )
         }
         .toList()
@@ -405,19 +380,13 @@ fun DayWithDishes.toDayDetails(): DayWithDishesDetails {
 }
 
 class DishWithAmountDetails(
-    val dishWithIngredientsDetails: DishWithIngredientsDetails,
-    var amount: String = "0"
+    val dishWithIngredientsDetails: DishWithIngredientsDetails
 )
 
 fun DishWithAmount.toDishWithAmountDetails(): DishWithAmountDetails {
     return DishWithAmountDetails(
-        dishWithIngredients.toDishWithIngredientDetails(),
-        this.amount.toString()
+        dishWithIngredients.toDishWithIngredientDetails()
     )
-}
-
-fun DishWithIngredientsDetails.toDishWithAmountDetails(): DishWithAmountDetails {
-    return DishWithAmountDetails(this, "0")
 }
 
 fun Dish.toDishDetails(): DishDetails {
