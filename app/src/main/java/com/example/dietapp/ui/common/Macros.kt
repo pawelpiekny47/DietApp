@@ -32,8 +32,14 @@ fun BasicMacrosStats(
     fatsTextValue: String
 ) {
 
-    Row(modifier = Modifier.fillMaxSize().padding(5.dp, 5.dp), horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically) {
-        Row(horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically)
+    Column(
+        horizontalAlignment = Alignment.End,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
+        )
         {
             Icon(
                 modifier = Modifier.size(10.dp, 10.dp),
@@ -46,61 +52,56 @@ fun BasicMacrosStats(
                 style = MaterialTheme.typography.bodySmall
             )
         }
-        Column(
-            horizontalAlignment = Alignment.End,
-            verticalArrangement = Arrangement.Center
+        Row(
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
-                horizontalArrangement = Arrangement.End,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    modifier = Modifier.size(10.dp, 10.dp),
-                    painter = painterResource(R.drawable.meat),
-                    contentDescription = null
-                )
-                Text(
-                    text = "$proteinTextValue ",
-                    modifier = Modifier
-                        .padding(Dp(2F)),
-                    fontStyle = FontStyle.Italic,
-                    style = MaterialTheme.typography.bodySmall
-                )
-            }
-            Row(
-                horizontalArrangement = Arrangement.End,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    modifier = Modifier.size(10.dp, 10.dp),
-                    painter = painterResource(R.drawable.wheat),
-                    contentDescription = null
-                )
-                Text(
-                    text = "$carbsTextValue ",
-                    modifier = Modifier
-                        .padding(Dp(2F)),
-                    fontStyle = FontStyle.Italic,
-                    style = MaterialTheme.typography.bodySmall
-                )
-            }
-            Row(
-                horizontalArrangement = Arrangement.End,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    modifier = Modifier.size(10.dp, 10.dp),
-                    painter = painterResource(R.drawable.oilbottle),
-                    contentDescription = null
-                )
-                Text(
-                    text = "$fatsTextValue ",
-                    modifier = Modifier
-                        .padding(Dp(2F)),
-                    fontStyle = FontStyle.Italic,
-                    style = MaterialTheme.typography.bodySmall
-                )
-            }
+            Icon(
+                modifier = Modifier.size(10.dp, 10.dp),
+                painter = painterResource(R.drawable.meat),
+                contentDescription = null
+            )
+            Text(
+                text = "$proteinTextValue ",
+                modifier = Modifier
+                    .padding(Dp(2F)),
+                fontStyle = FontStyle.Italic,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+        Row(
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                modifier = Modifier.size(10.dp, 10.dp),
+                painter = painterResource(R.drawable.wheat),
+                contentDescription = null
+            )
+            Text(
+                text = "$carbsTextValue ",
+                modifier = Modifier
+                    .padding(Dp(2F)),
+                fontStyle = FontStyle.Italic,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+        Row(
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                modifier = Modifier.size(10.dp, 10.dp),
+                painter = painterResource(R.drawable.oilbottle),
+                contentDescription = null
+            )
+            Text(
+                text = "$fatsTextValue ",
+                modifier = Modifier
+                    .padding(Dp(2F)),
+                fontStyle = FontStyle.Italic,
+                style = MaterialTheme.typography.bodySmall
+            )
         }
     }
 }
@@ -243,7 +244,8 @@ fun MacroDetailsUnderIngredient(ingredient: IngredientWithAmountDetails) {
                 contentDescription = null
             )
             Text(
-                text = ingredient.ingredientDetails.protein.toDoubleEvenWhenEmpty().roundToInt().toString(),
+                text = ingredient.ingredientDetails.protein.toDoubleEvenWhenEmpty().roundToInt()
+                    .toString(),
                 fontSize = 10.sp,
                 fontStyle = FontStyle.Italic,
             )
@@ -258,7 +260,8 @@ fun MacroDetailsUnderIngredient(ingredient: IngredientWithAmountDetails) {
                 contentDescription = null
             )
             Text(
-                text = ingredient.ingredientDetails.carbohydrates.toDoubleEvenWhenEmpty().roundToInt()
+                text = ingredient.ingredientDetails.carbohydrates.toDoubleEvenWhenEmpty()
+                    .roundToInt()
                     .toString(),
                 fontSize = 10.sp,
                 fontStyle = FontStyle.Italic,
@@ -274,7 +277,8 @@ fun MacroDetailsUnderIngredient(ingredient: IngredientWithAmountDetails) {
                 contentDescription = null
             )
             Text(
-                text = ingredient.ingredientDetails.fats.toDoubleEvenWhenEmpty().roundToInt().toString(),
+                text = ingredient.ingredientDetails.fats.toDoubleEvenWhenEmpty().roundToInt()
+                    .toString(),
                 fontSize = 10.sp,
                 fontStyle = FontStyle.Italic,
             )

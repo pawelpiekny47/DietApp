@@ -66,7 +66,6 @@ fun DishItem(
     dish: DishWithIngredients,
     dietSettingsViewModel: DietSettingsViewModel
 ) {
-    var extended by remember { mutableStateOf(false) }
     var extended2 by remember { mutableStateOf(false) }
 
     Card(modifier = Modifier
@@ -136,26 +135,14 @@ fun DishItem(
                     }
                     BasicMacrosStats(kcalTextValue, proteinTextValue, carbsTextValue, fatsTextValue)
                 }
-                Icon(
-                    imageVector = if (extended) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-                    contentDescription = "delete",
-                    modifier = Modifier
-                        .weight(1f)
-                        .scale(0.7F)
-                        .clickable {
-                            extended = !extended
-                        }
-                )
             }
-
-            DishIngredientList(dish, extended)
+            DishIngredientList(dish)
         }
     }
 }
 
 @Composable
-fun DishIngredientList(dish: DishWithIngredients, extended: Boolean) {
-    if (extended) {
+fun DishIngredientList(dish: DishWithIngredients) {
         dish.ingredientList.sortedByDescending { it.amount }.forEach { ingredient ->
             Text(
                 text = "- ${ingredient.ingredient.name}    ${ingredient.amount}g",
@@ -166,18 +153,4 @@ fun DishIngredientList(dish: DishWithIngredients, extended: Boolean) {
                 style = MaterialTheme.typography.bodySmall
             )
         }
-    } else {
-        val ingredientAmount = dish.ingredientList.count()
-        dish.ingredientList.sortedByDescending { it.amount }.subList(0, minOf(ingredientAmount, 2))
-            .forEach { ingredient ->
-                Text(
-                    text = "- ${ingredient.ingredient.name}    ${ingredient.amount}g",
-                    modifier = Modifier
-                        .padding(Dp(2F)),
-                    fontStyle = FontStyle.Italic,
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.bodySmall
-                )
-            }
-    }
 }
