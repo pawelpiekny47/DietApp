@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -112,7 +111,6 @@ fun DishView(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun IngredientList(
     modifier: Modifier,
@@ -141,10 +139,6 @@ fun IngredientList(
                             .fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(
-                            text = "${ingredient.ingredientDetails.name}    ",
-                            fontSize = 14.sp,
-                        )
                         Icon(
                             modifier = Modifier.size(10.dp, 10.dp),
                             painter = when (ingredient.ingredientDetails.foodCategory) {
@@ -155,7 +149,19 @@ fun IngredientList(
                                 FoodCategory.Wheet -> painterResource(R.drawable.wheat)
                                 FoodCategory.ProteinSource -> painterResource(R.drawable.meat)
                             },
-                            contentDescription = null
+                            contentDescription = null,
+                            tint = when (ingredient.ingredientDetails.foodCategory) {
+                                FoodCategory.Fruit -> com.example.dietapp.ui.theme.lightFruit
+                                FoodCategory.Vegetable -> com.example.dietapp.ui.theme.lightVegetable
+                                FoodCategory.MilkAndReplacement -> com.example.dietapp.ui.theme.lightMilk
+                                FoodCategory.AddedFat -> com.example.dietapp.ui.theme.lightAddedFat
+                                FoodCategory.Wheet -> com.example.dietapp.ui.theme.lightGrain
+                                FoodCategory.ProteinSource -> com.example.dietapp.ui.theme.lightProteinSource
+                            }
+                        )
+                        Text(
+                            text = "   ${ingredient.ingredientDetails.name}",
+                            fontSize = 14.sp,
                         )
                     }
                     if (extended == 1) MacroDetailsUnderIngredient(ingredient)
@@ -171,9 +177,8 @@ fun IngredientList(
                         horizontalArrangement = Arrangement.End,
                         modifier = Modifier.weight(3F)
                     ) {
-
                         BasicTextField(
-                            textStyle = TextStyle(fontSize = 12.sp),
+                            textStyle = TextStyle(fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurface),
                             modifier = Modifier
                                 .width(IntrinsicSize.Min),
                             value = ingredient.amount,

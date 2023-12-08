@@ -44,12 +44,14 @@ fun BasicMacrosStats(
             Icon(
                 modifier = Modifier.size(10.dp, 10.dp),
                 painter = painterResource(R.drawable.fire),
-                contentDescription = null
+                contentDescription = null,
+                tint = com.example.dietapp.ui.theme.lightKcal
             )
             Text(
                 text = "$kcalTextValue ",
                 fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.bodySmall,
+                color = com.example.dietapp.ui.theme.lightKcal
             )
         }
         Row(
@@ -59,14 +61,16 @@ fun BasicMacrosStats(
             Icon(
                 modifier = Modifier.size(10.dp, 10.dp),
                 painter = painterResource(R.drawable.meat),
-                contentDescription = null
+                contentDescription = null,
+                tint = com.example.dietapp.ui.theme.lightProtein
             )
             Text(
                 text = "$proteinTextValue ",
                 modifier = Modifier
                     .padding(Dp(2F)),
                 fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.bodySmall,
+                color = com.example.dietapp.ui.theme.lightProtein
             )
         }
         Row(
@@ -76,14 +80,16 @@ fun BasicMacrosStats(
             Icon(
                 modifier = Modifier.size(10.dp, 10.dp),
                 painter = painterResource(R.drawable.wheat),
-                contentDescription = null
+                contentDescription = null,
+                tint = com.example.dietapp.ui.theme.lightCarbs
             )
             Text(
                 text = "$carbsTextValue ",
                 modifier = Modifier
                     .padding(Dp(2F)),
                 fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.bodySmall,
+                color = com.example.dietapp.ui.theme.lightCarbs
             )
         }
         Row(
@@ -93,14 +99,16 @@ fun BasicMacrosStats(
             Icon(
                 modifier = Modifier.size(10.dp, 10.dp),
                 painter = painterResource(R.drawable.oilbottle),
-                contentDescription = null
+                contentDescription = null,
+                tint = com.example.dietapp.ui.theme.lightFats
             )
             Text(
                 text = "$fatsTextValue ",
                 modifier = Modifier
                     .padding(Dp(2F)),
                 fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.bodySmall,
+                color = com.example.dietapp.ui.theme.lightFats
             )
         }
     }
@@ -167,13 +175,16 @@ fun MacroDetailsUnderIngredientXAmount(ingredient: IngredientWithAmountDetails) 
             Icon(
                 modifier = Modifier.size(10.dp, 10.dp),
                 painter = painterResource(R.drawable.meat),
-                contentDescription = null
+                contentDescription = null,
+                tint = com.example.dietapp.ui.theme.lightProtein
             )
             Text(
                 text = (ingredient.ingredientDetails.protein.toDoubleEvenWhenEmpty() * ingredient.amount.toDoubleEvenWhenEmpty() / 100).roundToInt()
                     .toString(),
                 fontSize = 10.sp,
                 fontStyle = FontStyle.Italic,
+                color = com.example.dietapp.ui.theme.lightProtein
+
             )
         }
         Row(
@@ -183,13 +194,16 @@ fun MacroDetailsUnderIngredientXAmount(ingredient: IngredientWithAmountDetails) 
             Icon(
                 modifier = Modifier.size(10.dp, 10.dp),
                 painter = painterResource(R.drawable.wheat),
-                contentDescription = null
+                contentDescription = null,
+                tint = com.example.dietapp.ui.theme.lightCarbs
             )
             Text(
                 text = (ingredient.ingredientDetails.carbohydrates.toDoubleEvenWhenEmpty() * ingredient.amount.toDoubleEvenWhenEmpty() / 100).roundToInt()
                     .toString(),
                 fontSize = 10.sp,
                 fontStyle = FontStyle.Italic,
+                color = com.example.dietapp.ui.theme.lightCarbs
+
             )
         }
         Row(
@@ -199,13 +213,16 @@ fun MacroDetailsUnderIngredientXAmount(ingredient: IngredientWithAmountDetails) 
             Icon(
                 modifier = Modifier.size(10.dp, 10.dp),
                 painter = painterResource(R.drawable.oilbottle),
-                contentDescription = null
+                contentDescription = null,
+                tint = com.example.dietapp.ui.theme.lightFats
             )
             Text(
                 text = (ingredient.ingredientDetails.fats.toDoubleEvenWhenEmpty() * ingredient.amount.toDoubleEvenWhenEmpty() / 100).roundToInt()
                     .toString(),
                 fontSize = 10.sp,
                 fontStyle = FontStyle.Italic,
+                color = com.example.dietapp.ui.theme.lightFats
+
             )
         }
         Row(
@@ -215,13 +232,16 @@ fun MacroDetailsUnderIngredientXAmount(ingredient: IngredientWithAmountDetails) 
             Icon(
                 modifier = Modifier.size(10.dp, 10.dp),
                 painter = painterResource(R.drawable.fire),
-                contentDescription = null
+                contentDescription = null,
+                tint = com.example.dietapp.ui.theme.lightKcal
             )
             Text(
                 text = (ingredient.ingredientDetails.totalKcal.toDoubleEvenWhenEmpty() * ingredient.amount.toDoubleEvenWhenEmpty() / 100).roundToInt()
                     .toString(),
                 fontSize = 10.sp,
                 fontStyle = FontStyle.Italic,
+                color = com.example.dietapp.ui.theme.lightKcal
+
             )
         }
     }
@@ -241,13 +261,15 @@ fun MacroDetailsUnderIngredient(ingredient: IngredientWithAmountDetails) {
             Icon(
                 modifier = Modifier.size(10.dp, 10.dp),
                 painter = painterResource(R.drawable.meat),
-                contentDescription = null
+                contentDescription = null,
+                tint = com.example.dietapp.ui.theme.lightProtein
             )
             Text(
                 text = ingredient.ingredientDetails.protein.toDoubleEvenWhenEmpty().roundToInt()
                     .toString(),
                 fontSize = 10.sp,
                 fontStyle = FontStyle.Italic,
+                color = com.example.dietapp.ui.theme.lightProtein
             )
         }
         Row(
@@ -257,7 +279,8 @@ fun MacroDetailsUnderIngredient(ingredient: IngredientWithAmountDetails) {
             Icon(
                 modifier = Modifier.size(10.dp, 10.dp),
                 painter = painterResource(R.drawable.wheat),
-                contentDescription = null
+                contentDescription = null,
+                tint = com.example.dietapp.ui.theme.lightCarbs
             )
             Text(
                 text = ingredient.ingredientDetails.carbohydrates.toDoubleEvenWhenEmpty()
@@ -265,6 +288,8 @@ fun MacroDetailsUnderIngredient(ingredient: IngredientWithAmountDetails) {
                     .toString(),
                 fontSize = 10.sp,
                 fontStyle = FontStyle.Italic,
+                color = com.example.dietapp.ui.theme.lightCarbs
+
             )
         }
         Row(
@@ -274,13 +299,16 @@ fun MacroDetailsUnderIngredient(ingredient: IngredientWithAmountDetails) {
             Icon(
                 modifier = Modifier.size(10.dp, 10.dp),
                 painter = painterResource(R.drawable.oilbottle),
-                contentDescription = null
+                contentDescription = null,
+                tint = com.example.dietapp.ui.theme.lightFats
             )
             Text(
                 text = ingredient.ingredientDetails.fats.toDoubleEvenWhenEmpty().roundToInt()
                     .toString(),
                 fontSize = 10.sp,
                 fontStyle = FontStyle.Italic,
+                color = com.example.dietapp.ui.theme.lightFats
+
             )
         }
         Row(
@@ -290,13 +318,16 @@ fun MacroDetailsUnderIngredient(ingredient: IngredientWithAmountDetails) {
             Icon(
                 modifier = Modifier.size(10.dp, 10.dp),
                 painter = painterResource(R.drawable.fire),
-                contentDescription = null
+                contentDescription = null,
+                tint = com.example.dietapp.ui.theme.lightKcal
             )
             Text(
                 text = ingredient.ingredientDetails.totalKcal.toDoubleEvenWhenEmpty().roundToInt()
                     .toString(),
                 fontSize = 10.sp,
                 fontStyle = FontStyle.Italic,
+                color = com.example.dietapp.ui.theme.lightKcal
+
             )
         }
     }

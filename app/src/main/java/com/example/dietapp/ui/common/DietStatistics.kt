@@ -72,28 +72,28 @@ fun BasicStatistics(
             "kcal",
             dietStatistics.returnCurrentKcal(),
             dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.totalKcal.toDouble(),
-            Color.Red,
+            com.example.dietapp.ui.theme.lightKcal,
             painterResource(R.drawable.fire)
         ),
         DietStatisticItem(
             "p",
             dietStatistics.returnCurrentProtein(),
             dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.protein.toDouble(),
-            Color.Blue,
+            com.example.dietapp.ui.theme.lightProtein,
             painterResource(R.drawable.meat)
         ),
         DietStatisticItem(
             "c",
             dietStatistics.returnCurrentCarbs(),
             dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.carbohydrates.toDouble(),
-            Color.Green,
+            com.example.dietapp.ui.theme.lightCarbs,
             painterResource(R.drawable.wheat)
         ),
         DietStatisticItem(
             "f",
             dietStatistics.returnCurrentFat(),
             dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.fats.toDouble(),
-            Color.Yellow,
+            com.example.dietapp.ui.theme.lightFats,
             painterResource(R.drawable.oilbottle)
         ),
     )
@@ -137,42 +137,42 @@ fun FoodTypeStatistics(
             "fruit",
             dietStatistics.returnCurrentKcalForFoodCategory(FoodCategory.Fruit),
             dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromFruits.toDouble(),
-            Color.Red,
+            com.example.dietapp.ui.theme.lightFruit,
             painterResource(R.drawable.banana)
         ),
         DietStatisticItem(
             "vegetable",
             dietStatistics.returnCurrentKcalForFoodCategory(FoodCategory.Vegetable),
             dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromVegetables.toDouble(),
-            Color.Green,
+            com.example.dietapp.ui.theme.lightVegetable,
             painterResource(R.drawable.lettuce)
         ),
         DietStatisticItem(
             "grain",
             dietStatistics.returnCurrentKcalForFoodCategory(FoodCategory.Wheet),
             dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromGrain.toDouble(),
-            Color.Yellow,
+            com.example.dietapp.ui.theme.lightGrain,
             painterResource(R.drawable.wheat)
         ),
         DietStatisticItem(
             "milk",
             dietStatistics.returnCurrentKcalForFoodCategory(FoodCategory.MilkAndReplacement),
             dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromMilkProducts.toDouble(),
-            Color.Blue,
+            com.example.dietapp.ui.theme.lightMilk,
             painterResource(R.drawable.milk)
         ),
         DietStatisticItem(
             "protein source",
             dietStatistics.returnCurrentKcalForFoodCategory(FoodCategory.ProteinSource),
             dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromProteinSource.toDouble(),
-            Color.Black,
+            com.example.dietapp.ui.theme.lightProteinSource,
             painterResource(R.drawable.meat)
         ),
         DietStatisticItem(
             "added fat",
             dietStatistics.returnCurrentKcalForFoodCategory(FoodCategory.AddedFat),
             dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromAddedFat.toDouble(),
-            Color.LightGray,
+            com.example.dietapp.ui.theme.lightAddedFat,
             painterResource(R.drawable.oliveoil)
         ),
     )
@@ -216,21 +216,21 @@ fun AdditionalInfo(
             "pufa",
             dietStatistics.returnCurrentPufa(),
             dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.polyunsaturatedFats.toDouble(),
-            Color.Red,
+            com.example.dietapp.ui.theme.lightSaturatedFats,
             painterResource(R.drawable.oilfree)
         ),
         DietStatisticItem(
             "soil",
             dietStatistics.returnCurrentSoil(),
             dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.soil.toDouble(),
-            Color.Green,
+            com.example.dietapp.ui.theme.lightSoil,
             painterResource(R.drawable.salt)
         ),
         DietStatisticItem(
             "fiber",
             dietStatistics.returnCurrentFiber(),
             dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.fiber.toDouble(),
-            Color.Yellow,
+            com.example.dietapp.ui.theme.lightFiber,
             painterResource(R.drawable.fiber)
         )
     )

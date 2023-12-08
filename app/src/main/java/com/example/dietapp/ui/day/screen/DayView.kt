@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.BasicTextField
@@ -36,9 +37,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.dietapp.R
+import com.example.dietapp.data.FoodCategory
 import com.example.dietapp.ui.common.DietSettingsStatistic
 import com.example.dietapp.ui.common.MacroDetailsUnderIngredientXAmount
 import com.example.dietapp.ui.day.viewmodel.DayViewModel
@@ -145,15 +152,34 @@ fun DishList(
                                         modifier = Modifier.fillMaxWidth(),
                                         verticalAlignment = Alignment.Bottom
                                     ) {
-
-
+                                        Icon(
+                                            modifier = Modifier.size(10.dp, 10.dp),
+                                            painter = when (ingredientWithAmountDetails.ingredientDetails.foodCategory) {
+                                                FoodCategory.Fruit -> painterResource(R.drawable.banana)
+                                                FoodCategory.Vegetable -> painterResource(R.drawable.lettuce)
+                                                FoodCategory.MilkAndReplacement -> painterResource(R.drawable.milk)
+                                                FoodCategory.AddedFat -> painterResource(R.drawable.oliveoil)
+                                                FoodCategory.Wheet -> painterResource(R.drawable.wheat)
+                                                FoodCategory.ProteinSource -> painterResource(R.drawable.meat)
+                                            },
+                                            contentDescription = null,
+                                            tint = when (ingredientWithAmountDetails.ingredientDetails.foodCategory) {
+                                                FoodCategory.Fruit -> com.example.dietapp.ui.theme.lightFruit
+                                                FoodCategory.Vegetable -> com.example.dietapp.ui.theme.lightVegetable
+                                                FoodCategory.MilkAndReplacement -> com.example.dietapp.ui.theme.lightMilk
+                                                FoodCategory.AddedFat -> com.example.dietapp.ui.theme.lightAddedFat
+                                                FoodCategory.Wheet -> com.example.dietapp.ui.theme.lightGrain
+                                                FoodCategory.ProteinSource -> com.example.dietapp.ui.theme.lightProteinSource
+                                            }
+                                        )
                                         Text(
-                                            text = "- ${ingredientWithAmountDetails.ingredientDetails.name}  ",
+                                            text = "   ${ingredientWithAmountDetails.ingredientDetails.name}  ",
                                             fontStyle = FontStyle.Italic,
                                             textAlign = TextAlign.Center,
                                             style = MaterialTheme.typography.bodySmall
                                         )
                                         BasicTextField(
+                                            textStyle = TextStyle(fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurface),
                                             modifier = Modifier
                                                 .width(IntrinsicSize.Min),
                                             value = ingredientWithAmountDetails.amount,

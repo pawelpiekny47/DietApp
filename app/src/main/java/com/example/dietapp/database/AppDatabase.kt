@@ -40,7 +40,6 @@ abstract class AppDatabase : RoomDatabase() {
                     "DietApp_database"
                 )
                     .createFromAsset("DietApp_database.db")
-                    .fallbackToDestructiveMigration()
                     .build()
                     .also { Instance = it }
             }
