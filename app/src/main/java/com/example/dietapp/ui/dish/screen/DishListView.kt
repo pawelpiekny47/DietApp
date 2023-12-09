@@ -83,21 +83,16 @@ fun DishItem(
             .clickable { onItemClick(dish.toDishWithIngredientDetails()) },
         colors = CardDefaults.cardColors(containerColor = Color.Transparent)
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp), horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.titleMedium,
-                        text = dish.dish.name
-                    )
-                }
-                DishIngredientList(dish)
+
+        Column {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.titleMedium,
+                    text = dish.dish.name
+                )
             }
+            DishIngredientList(dish)
             Box(modifier = Modifier.clickable { extended2 = !extended2 }) {
 
                 val kcalTextValue: String

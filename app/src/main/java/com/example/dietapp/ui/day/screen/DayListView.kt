@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -74,22 +73,15 @@ fun DayItem(
         .padding(Dp(5F))
         .clickable { onItemClick(day.toDayDetails()) }) {
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.titleMedium,
-                        text = day.day.name
-                    )
-                }
-                DayDishList(day)
+        Column {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.titleMedium,
+                    text = day.day.name
+                )
             }
+            DayDishList(day)
             Box(modifier = Modifier.clickable { extended2 = !extended2 }) {
                 val kcalTextValue: String
                 val proteinTextValue: String
@@ -150,9 +142,10 @@ fun DayItem(
                         )
                     }
                 }
-
             }
+
         }
+
     }
 }
 

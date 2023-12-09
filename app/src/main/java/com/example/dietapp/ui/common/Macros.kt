@@ -32,9 +32,9 @@ fun BasicMacrosStats(
     fatsTextValue: String
 ) {
 
-    Column(
-        horizontalAlignment = Alignment.End,
-        verticalArrangement = Arrangement.Center
+    Row(modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.End
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceEvenly,
