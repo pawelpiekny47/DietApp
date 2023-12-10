@@ -42,11 +42,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.dietapp.R
 import com.example.dietapp.data.FoodCategory
-import com.example.dietapp.ui.common.DietSettingsStatistic
 import com.example.dietapp.ui.common.MacroDetailsUnderIngredient
 import com.example.dietapp.ui.common.MacroDetailsUnderIngredientXAmount
 import com.example.dietapp.ui.dietsettings.viewmodel.DietSettingsViewModel
 import com.example.dietapp.ui.dish.viewmodel.DishViewModel
+import com.example.dietapp.ui.mainscreen.viewmodel.MainScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,6 +54,7 @@ fun DishView(
     saveButtonOnClick: () -> Unit,
     dishViewModel: DishViewModel,
     dietSettingsViewModel: DietSettingsViewModel,
+    mainScreenViewModel: MainScreenViewModel,
     deleteButtonVisible: Boolean,
     deleteButtonOnClick: () -> Unit
 ) {
@@ -62,12 +63,6 @@ fun DishView(
         modifier = Modifier
             .padding(Dp(2F)),
     ) {
-        Box(modifier = Modifier.weight(1f)) {
-            DietSettingsStatistic(
-                viewModel = dishViewModel,
-                dietSettingsViewModel = dietSettingsViewModel
-            )
-        }
         Box(contentAlignment = Alignment.Center) {
             TextField(
                 modifier = Modifier.width(IntrinsicSize.Min),
@@ -178,7 +173,10 @@ fun IngredientList(
                         modifier = Modifier.weight(3F)
                     ) {
                         BasicTextField(
-                            textStyle = TextStyle(fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurface),
+                            textStyle = TextStyle(
+                                fontSize = 12.sp,
+                                color = MaterialTheme.colorScheme.onSurface
+                            ),
                             modifier = Modifier
                                 .width(IntrinsicSize.Min),
                             value = ingredient.amount,

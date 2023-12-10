@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 @Composable
 @androidx.annotation.OptIn(androidx.camera.core.ExperimentalGetImage::class)
 fun IngredientNavHost(
-    setMainScreen: ((isFloatButtonVisible: Boolean, floatButtonAction: () -> Unit, isNavigateBackVisible: Boolean, navigateBackAction: () -> Unit, topBarName: String) -> Unit),
+    setMainScreen: ((isSearchButtonVisible: Boolean, isDietStatisticsButtonVisible: Boolean, isFloatButtonVisible: Boolean, floatButtonAction: () -> Unit, isNavigateBackVisible: Boolean, navigateBackAction: () -> Unit, topBarName: String) -> Unit),
     viewModel: IngredientViewModel = viewModel(factory = AppViewModelProvider.Factory),
     navController: NavHostController = rememberNavController(),
 ) {
@@ -30,6 +30,8 @@ fun IngredientNavHost(
     ) {
         composable(route = IngredientScreenList.IngredientListScreen.name) {
             setMainScreen(
+                true,
+                false,
                 true,
                 {
                     viewModel.resetUiState()
@@ -53,6 +55,8 @@ fun IngredientNavHost(
         composable(route = IngredientScreenList.NewIngredientScreen.name) {
             setMainScreen(
                 false,
+                false,
+                false,
                 { },
                 true,
                 { navController.navigateUp() },
@@ -74,6 +78,8 @@ fun IngredientNavHost(
         }
         composable(route = IngredientScreenList.BarcodeScanner.name) {
             setMainScreen(
+                false,
+                false,
                 false,
                 { },
                 true,

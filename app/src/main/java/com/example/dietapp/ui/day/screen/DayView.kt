@@ -46,18 +46,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.dietapp.R
 import com.example.dietapp.data.FoodCategory
-import com.example.dietapp.ui.common.DietSettingsStatistic
 import com.example.dietapp.ui.common.MacroDetailsUnderIngredientXAmount
 import com.example.dietapp.ui.day.viewmodel.DayViewModel
 import com.example.dietapp.ui.day.viewmodel.DishWithAmountDetails
-import com.example.dietapp.ui.dietsettings.viewmodel.DietSettingsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DayView(
     saveButtonOnClick: () -> Unit,
     dayViewModel: DayViewModel,
-    dietSettingsViewModel: DietSettingsViewModel,
     onAddIconClick: (dishWithAmountDetails: DishWithAmountDetails) -> Unit
 ) {
     Column(
@@ -65,12 +62,6 @@ fun DayView(
         modifier = Modifier
             .padding(Dp(10F)),
     ) {
-        Box(modifier = Modifier.weight(1f)) {
-            DietSettingsStatistic(
-                viewModel = dayViewModel,
-                dietSettingsViewModel = dietSettingsViewModel
-            )
-        }
         OutlinedTextField(
             value = dayViewModel.dayWithDishesUiState.dayWithDishesDetails.day.name,
             onValueChange = { dayViewModel.updateDayName(it) },

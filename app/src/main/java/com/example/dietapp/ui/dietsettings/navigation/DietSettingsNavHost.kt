@@ -14,7 +14,7 @@ import com.example.dietapp.ui.dietsettings.viewmodel.DietSettingsViewModel
 
 @Composable
 fun DietSettingsNavHost(
-    setMainScreen: ((isFloatButtonVisible: Boolean, floatButtonAction: () -> Unit, isNavigateBackVisible: Boolean, navigateBackAction: () -> Unit, topBarName: String) -> Unit),
+    setMainScreen: ((isSearchButtonVisible: Boolean, isDietStatisticsButtonVisible: Boolean, isFloatButtonVisible: Boolean, floatButtonAction: () -> Unit, isNavigateBackVisible: Boolean, navigateBackAction: () -> Unit, topBarName: String) -> Unit),
     viewModel: DietSettingsViewModel = viewModel(factory = AppViewModelProvider.Factory),
     navController: NavHostController = rememberNavController(),
 ) {
@@ -24,6 +24,8 @@ fun DietSettingsNavHost(
     ) {
         composable(route = DietSettingsScreenList.CustomDietSettings.name) {
             setMainScreen(
+                false,
+                false,
                 true,
                 {},
                 false,

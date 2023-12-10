@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
@@ -91,6 +93,8 @@ fun MainView(
         Scaffold(
             topBar = {
                 DietAppTopBar(
+                    dietStatButtonAction = {viewModel.isDietStatVisible = !viewModel.isDietStatVisible},
+                    searchButtonAction = {viewModel.isSearchVisible = !viewModel.isSearchVisible},
                     menuButtonAction = { scope.launch { drawerState.open() } },
                     viewModel = viewModel
                 )
@@ -107,6 +111,8 @@ fun MainView(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DietAppTopBar(
+    dietStatButtonAction: () -> Unit,
+    searchButtonAction: () -> Unit,
     menuButtonAction: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: MainScreenViewModel
@@ -128,6 +134,20 @@ fun DietAppTopBar(
             }
         },
         actions = {
+            if(viewModel.isDietStatButtonVisible)
+            IconButton(onClick = dietStatButtonAction) {
+                Icon(
+                    imageVector = Icons.Filled.Info,
+                    contentDescription = "Diet statistics"
+                )
+            }
+            if(viewModel.isSearchButtonVisible)
+            IconButton(onClick = searchButtonAction) {
+                Icon(
+                    imageVector = Icons.Filled.Search,
+                    contentDescription = "Search"
+                )
+            }
             IconButton(onClick = menuButtonAction) {
                 Icon(
                     imageVector = Icons.Filled.List,
@@ -159,6 +179,6 @@ fun FloatButton(
 @Preview
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainViewPreview(){
+fun MainViewPreview() {
     MainView()
 }

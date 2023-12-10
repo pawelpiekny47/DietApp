@@ -16,13 +16,14 @@ import com.example.dietapp.ui.day.screen.AddDish
 import com.example.dietapp.ui.day.screen.AddIngredientForDayView
 import com.example.dietapp.ui.dietsettings.viewmodel.DietSettingsViewModel
 import com.example.dietapp.ui.dish.viewmodel.DishViewModel
+import com.example.dietapp.ui.mainscreen.viewmodel.MainScreenViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
 fun DayNavHost(
-    setMainScreen: ((isFloatButtonVisible: Boolean, floatButtonAction: () -> Unit, isNavigateBackVisible: Boolean, navigateBackAction: () -> Unit, topBarName: String) -> Unit),
-    dayViewModel: DayViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    setMainScreen: ((isSearchButtonVisible: Boolean, isDietStatisticsButtonVisible: Boolean, isFloatButtonVisible: Boolean, floatButtonAction: () -> Unit, isNavigateBackVisible: Boolean, navigateBackAction: () -> Unit, topBarName: String) -> Unit),
+    dayViewModel: DayViewModel,
     dishViewModel: DishViewModel = viewModel(factory = AppViewModelProvider.Factory),
     dietSettingsViewModel: DietSettingsViewModel = viewModel(factory = AppViewModelProvider.Factory),
     navController: NavHostController = rememberNavController(),
@@ -36,6 +37,8 @@ fun DayNavHost(
     {
         composable(route = DayScreenList.DayList.name) {
             setMainScreen(
+                true,
+                false,
                 true,
                 {
                     dayViewModel.resetUiState()
@@ -58,6 +61,8 @@ fun DayNavHost(
         }
         composable(route = DayScreenList.Day.name) {
             setMainScreen(
+                false,
+                true,
                 true,
                 { navController.navigate(DayScreenList.AddDishToDay.name) },
                 true,
@@ -74,7 +79,6 @@ fun DayNavHost(
                     }
                 },
                 dayViewModel = dayViewModel,
-                dietSettingsViewModel = dietSettingsViewModel,
                 onAddIconClick = {
                     dayViewModel.editedDishId =
                         it.dishWithIngredientsDetails.dishDetails.dishId.toInt()
@@ -84,6 +88,8 @@ fun DayNavHost(
         }
         composable(route = DayScreenList.AddDishToDay.name) {
             setMainScreen(
+                true,
+                true,
                 false,
                 {},
                 true,
@@ -98,12 +104,13 @@ fun DayNavHost(
                     }
                     navController.navigateUp()
                 },
-                dayViewModel = dayViewModel,
-                dietSettingsViewModel = dietSettingsViewModel
+                dietSettingsViewModel = dietSettingsViewModel,
             )
         }
         composable(route = DayScreenList.AddIngredient.name) {
             setMainScreen(
+                true,
+                true,
                 false,
                 {},
                 true,
@@ -116,9 +123,7 @@ fun DayNavHost(
                 {
                     dayViewModel.addIngredientToDishInDay(it)
                     navController.navigateUp()
-                },
-                dayViewModel = dayViewModel,
-                dietSettingsViewModel = dietSettingsViewModel
+                }
             )
         }
     }

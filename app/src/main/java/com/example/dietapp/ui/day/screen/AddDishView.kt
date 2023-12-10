@@ -11,8 +11,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.dietapp.ui.AppViewModelProvider
-import com.example.dietapp.ui.common.DietSettingsStatistic
-import com.example.dietapp.ui.day.viewmodel.DayViewModel
 import com.example.dietapp.ui.dietsettings.viewmodel.DietSettingsViewModel
 import com.example.dietapp.ui.dish.screen.DishItem
 import com.example.dietapp.ui.dish.viewmodel.DishViewModel
@@ -24,14 +22,9 @@ fun AddDish(
     onListItemClick: (DishWithIngredientsDetails) -> Unit,
     viewModel: DishViewModel = viewModel(factory = AppViewModelProvider.Factory),
     dietSettingsViewModel: DietSettingsViewModel,
-    dayViewModel: DayViewModel,
 ) {
     val dishUiState by viewModel.dishListUiState.collectAsState()
     Column {
-        Box(modifier = Modifier.weight(1F))
-        {
-            DietSettingsStatistic(dayViewModel, dietSettingsViewModel = dietSettingsViewModel)
-        }
         Box(modifier = Modifier.weight(5F)) {
             LazyColumn(
                 horizontalAlignment = Alignment.CenterHorizontally

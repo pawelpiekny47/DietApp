@@ -121,14 +121,11 @@ fun BasicMacrosStatsV2(
 ) {
 
     Column(
-        modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
         list.forEach {
             Row(
-                modifier = Modifier
-                    .weight(1F),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
