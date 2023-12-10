@@ -8,8 +8,8 @@ import com.example.dietapp.ui.ingredient.screen.IngredientScreenList
 
 class MainScreenViewModel : ViewModel() {
     var isFloatButtonVisible by mutableStateOf(true)
+    var isDietStatisticsVisible by mutableStateOf(false)
     var isDietStatButtonVisible by mutableStateOf(true)
-    var isDietStatVisible by mutableStateOf(true)
     var isSearchButtonVisible by mutableStateOf(true)
     var isSearchVisible by mutableStateOf(true)
     var floatButtonAction by mutableStateOf({ })
@@ -53,5 +53,12 @@ class MainScreenViewModel : ViewModel() {
 
     fun updateFloatButtonOnClick(floatButtonOnClick: () -> Unit) {
         this.floatButtonAction = floatButtonOnClick
+    }
+
+    fun changeVisibleDietStatistics() {
+        isDietStatisticsVisible = !isDietStatisticsVisible
+    }
+    fun setVisibleDietStatisticsToFalse() {
+        isDietStatisticsVisible = false
     }
 }

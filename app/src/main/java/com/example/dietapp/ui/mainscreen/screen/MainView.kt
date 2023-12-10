@@ -93,8 +93,7 @@ fun MainView(
         Scaffold(
             topBar = {
                 DietAppTopBar(
-                    dietStatButtonAction = {viewModel.isDietStatVisible = !viewModel.isDietStatVisible},
-                    searchButtonAction = {viewModel.isSearchVisible = !viewModel.isSearchVisible},
+                    searchButtonAction = { viewModel.isSearchVisible = !viewModel.isSearchVisible },
                     menuButtonAction = { scope.launch { drawerState.open() } },
                     viewModel = viewModel
                 )
@@ -111,7 +110,6 @@ fun MainView(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DietAppTopBar(
-    dietStatButtonAction: () -> Unit,
     searchButtonAction: () -> Unit,
     menuButtonAction: () -> Unit,
     modifier: Modifier = Modifier,
@@ -134,20 +132,20 @@ fun DietAppTopBar(
             }
         },
         actions = {
-            if(viewModel.isDietStatButtonVisible)
-            IconButton(onClick = dietStatButtonAction) {
-                Icon(
-                    imageVector = Icons.Filled.Info,
-                    contentDescription = "Diet statistics"
-                )
-            }
-            if(viewModel.isSearchButtonVisible)
-            IconButton(onClick = searchButtonAction) {
-                Icon(
-                    imageVector = Icons.Filled.Search,
-                    contentDescription = "Search"
-                )
-            }
+            if (viewModel.isDietStatButtonVisible)
+                IconButton(onClick = { viewModel.changeVisibleDietStatistics() }) {
+                    Icon(
+                        imageVector = Icons.Filled.Info,
+                        contentDescription = "Diet statistics"
+                    )
+                }
+            if (viewModel.isSearchButtonVisible)
+                IconButton(onClick = searchButtonAction) {
+                    Icon(
+                        imageVector = Icons.Filled.Search,
+                        contentDescription = "Search"
+                    )
+                }
             IconButton(onClick = menuButtonAction) {
                 Icon(
                     imageVector = Icons.Filled.List,

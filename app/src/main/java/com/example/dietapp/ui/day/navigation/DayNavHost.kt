@@ -24,6 +24,7 @@ import kotlinx.coroutines.launch
 fun DayNavHost(
     setMainScreen: ((isSearchButtonVisible: Boolean, isDietStatisticsButtonVisible: Boolean, isFloatButtonVisible: Boolean, floatButtonAction: () -> Unit, isNavigateBackVisible: Boolean, navigateBackAction: () -> Unit, topBarName: String) -> Unit),
     dayViewModel: DayViewModel,
+    mainScreenViewModel: MainScreenViewModel,
     dishViewModel: DishViewModel = viewModel(factory = AppViewModelProvider.Factory),
     dietSettingsViewModel: DietSettingsViewModel = viewModel(factory = AppViewModelProvider.Factory),
     navController: NavHostController = rememberNavController(),
@@ -36,6 +37,7 @@ fun DayNavHost(
     )
     {
         composable(route = DayScreenList.DayList.name) {
+            mainScreenViewModel.setVisibleDietStatisticsToFalse()
             setMainScreen(
                 true,
                 false,

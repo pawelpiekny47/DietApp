@@ -52,10 +52,11 @@ fun MainHost(
         composable(route = MenuCategories.Dish.name) {
             Column(modifier = Modifier.fillMaxWidth()) {
                 Box {
-                    DietSettingsStatistic(
-                        dietStatisticsViewModel = dishViewModel,
-                        dietSettingsViewModel = dietSettingsViewModel
-                    )
+                    if (mainScreenViewModel.isDietStatisticsVisible)
+                        DietSettingsStatistic(
+                            dietStatisticsViewModel = dishViewModel,
+                            dietSettingsViewModel = dietSettingsViewModel
+                        )
                 }
                 Box {
                     DishNavHost(
@@ -68,13 +69,15 @@ fun MainHost(
         }
         composable(route = MenuCategories.Day.name) {
             Column(modifier = Modifier.fillMaxSize()) {
-                DietSettingsStatistic(
-                    dietStatisticsViewModel = dayViewModel,
-                    dietSettingsViewModel = dietSettingsViewModel
-                )
+                if (mainScreenViewModel.isDietStatisticsVisible)
+                    DietSettingsStatistic(
+                        dietStatisticsViewModel = dayViewModel,
+                        dietSettingsViewModel = dietSettingsViewModel
+                    )
                 DayNavHost(
                     mainScreenViewModel::setMainScreen,
-                    dayViewModel = dayViewModel
+                    dayViewModel = dayViewModel,
+                    mainScreenViewModel = mainScreenViewModel
                 )
             }
         }

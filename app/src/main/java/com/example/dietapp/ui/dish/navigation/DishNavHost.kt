@@ -34,6 +34,7 @@ fun DishNavHost(
         startDestination = DishScreenList.DishList.name,
     ) {
         composable(route = DishScreenList.DishList.name) {
+            mainScreenViewModel.setVisibleDietStatisticsToFalse()
             setMainScreen(
                 true,
                 false,
