@@ -21,6 +21,7 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
@@ -93,7 +94,6 @@ fun MainView(
         Scaffold(
             topBar = {
                 DietAppTopBar(
-                    searchButtonAction = { viewModel.isSearchVisible = !viewModel.isSearchVisible },
                     menuButtonAction = { scope.launch { drawerState.open() } },
                     viewModel = viewModel
                 )
@@ -110,7 +110,6 @@ fun MainView(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DietAppTopBar(
-    searchButtonAction: () -> Unit,
     menuButtonAction: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: MainScreenViewModel
@@ -140,7 +139,11 @@ fun DietAppTopBar(
                     )
                 }
             if (viewModel.isSearchButtonVisible)
-                IconButton(onClick = searchButtonAction) {
+                IconButton(onClick = {
+                    viewModel.changeVisibleFilterBar()
+                    if (!viewModel.isFilterBarVisible)
+                        viewModel.filterText = ""
+                }) {
                     Icon(
                         imageVector = Icons.Filled.Search,
                         contentDescription = "Search"
@@ -174,9 +177,19 @@ fun FloatButton(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun FilterBar(mainScreenViewModel: MainScreenViewModel) {
+    TextField(
+        value = mainScreenViewModel.filterText,
+        onValueChange = { mainScreenViewModel.filterText = it }
+    )
+}
+
 @Preview
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainViewPreview() {
     MainView()
 }
+

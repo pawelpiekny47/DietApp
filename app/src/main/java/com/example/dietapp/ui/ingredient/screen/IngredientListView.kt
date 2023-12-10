@@ -40,7 +40,8 @@ import com.example.dietapp.ui.ingredient.viewmodel.toIngredientDetails
 @Composable
 fun IngredientListScreen(
     onListItemClick: (IngredientDetails) -> Unit,
-    viewModel: IngredientViewModel
+    viewModel: IngredientViewModel,
+    filteredText: String
 ) {
     val ingredientUiState by viewModel.ingredientListUiState.collectAsState()
     LazyColumn(
@@ -48,7 +49,8 @@ fun IngredientListScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         FoodCategory.values().forEach { foodCategory ->
-            if (ingredientUiState.ingredientList.any { it.foodCategory == foodCategory })
+            if (ingredientUiState.ingredientList.filter { it.name.contains(filteredText, true) }
+                    .any { it.foodCategory == foodCategory })
                 stickyHeader {
                     Row(
                         modifier = Modifier
@@ -80,7 +82,7 @@ fun IngredientListScreen(
                     }
                 }
 
-            items(ingredientUiState.ingredientList.sortedBy { it.name }
+            items(ingredientUiState.ingredientList.filter { it.name.contains(filteredText, true) }.sortedBy { it.name }
                 .filter { it.foodCategory == foodCategory }) { ingredient ->
                 IngredientItem(
                     ingredient = ingredient,
@@ -88,7 +90,6 @@ fun IngredientListScreen(
                 )
                 Divider(modifier = Modifier.padding(30.dp, 0.dp))
             }
-            item { Divider(modifier = Modifier.padding(30.dp, 3.dp, 30.dp, 10.dp)) }
         }
     }
 }

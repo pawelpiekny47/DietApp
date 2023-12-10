@@ -47,14 +47,18 @@ import com.example.dietapp.ui.dish.viewmodel.toDishWithIngredientDetails
 fun DishListView(
     onItemClick: (DishWithIngredientsDetails) -> Unit,
     viewModel: DishViewModel,
-    dietSettingsViewModel: DietSettingsViewModel
+    dietSettingsViewModel: DietSettingsViewModel,
+    filteredText: String
 ) {
     val dishUiState by viewModel.dishListUiState.collectAsState()
     LazyColumn(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        items(dishUiState.dishList.sortedBy { it.dish.name }) { dish ->
+        items(dishUiState.dishList.filter { it ->
+            it.dish.name.contains(filteredText, true)
+                    || it.ingredientList.any { it.ingredient.name.contains(filteredText, true) }
+        }.sortedBy { it.dish.name }) { dish ->
             DishItem(
                 onItemClick = onItemClick,
                 dish = dish,

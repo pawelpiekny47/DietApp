@@ -34,7 +34,6 @@ fun DishNavHost(
         startDestination = DishScreenList.DishList.name,
     ) {
         composable(route = DishScreenList.DishList.name) {
-            mainScreenViewModel.setVisibleDietStatisticsToFalse()
             setMainScreen(
                 true,
                 false,
@@ -55,7 +54,8 @@ fun DishNavHost(
                     navController.navigate(DishScreenList.Dish.name)
                 },
                 dishViewModel,
-                dietSettingsViewModel
+                dietSettingsViewModel,
+                mainScreenViewModel.filterText
             )
         }
         composable(route = DishScreenList.Dish.name) {
@@ -96,7 +96,8 @@ fun DishNavHost(
                 {
                     dishViewModel.addToIngredientWithAmountList(it.toIngredientWithAmountDetails())
                     navController.navigateUp()
-                }
+                },
+                filteredText = mainScreenViewModel.filterText
             )
         }
     }

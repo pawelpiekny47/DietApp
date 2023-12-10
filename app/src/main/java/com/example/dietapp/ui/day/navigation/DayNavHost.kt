@@ -37,7 +37,6 @@ fun DayNavHost(
     )
     {
         composable(route = DayScreenList.DayList.name) {
-            mainScreenViewModel.setVisibleDietStatisticsToFalse()
             setMainScreen(
                 true,
                 false,
@@ -58,7 +57,8 @@ fun DayNavHost(
                     navController.navigate(DayScreenList.Day.name)
                 },
                 dayViewModel,
-                dietSettingsViewModel
+                dietSettingsViewModel,
+                mainScreenViewModel.filterText
             )
         }
         composable(route = DayScreenList.Day.name) {
@@ -107,6 +107,7 @@ fun DayNavHost(
                     navController.navigateUp()
                 },
                 dietSettingsViewModel = dietSettingsViewModel,
+                filteredText = mainScreenViewModel.filterText
             )
         }
         composable(route = DayScreenList.AddIngredient.name) {
@@ -125,7 +126,8 @@ fun DayNavHost(
                 {
                     dayViewModel.addIngredientToDishInDay(it)
                     navController.navigateUp()
-                }
+                },
+                filteredText = mainScreenViewModel.filterText
             )
         }
     }

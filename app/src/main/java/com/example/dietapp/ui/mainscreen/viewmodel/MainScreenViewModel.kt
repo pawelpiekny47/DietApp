@@ -8,14 +8,15 @@ import com.example.dietapp.ui.ingredient.screen.IngredientScreenList
 
 class MainScreenViewModel : ViewModel() {
     var isFloatButtonVisible by mutableStateOf(true)
+    var isFilterBarVisible by mutableStateOf(false)
     var isDietStatisticsVisible by mutableStateOf(false)
     var isDietStatButtonVisible by mutableStateOf(true)
     var isSearchButtonVisible by mutableStateOf(true)
-    var isSearchVisible by mutableStateOf(true)
     var floatButtonAction by mutableStateOf({ })
     var isNavigateBackVisible by mutableStateOf(false)
     var navigateBackAction by mutableStateOf({ })
     var topBarName by mutableStateOf(IngredientScreenList.IngredientListScreen.title)
+    var filterText by mutableStateOf("")
 
     fun setMainScreen(
         isSearchButtonVisible: Boolean,
@@ -60,5 +61,8 @@ class MainScreenViewModel : ViewModel() {
     }
     fun setVisibleDietStatisticsToFalse() {
         isDietStatisticsVisible = false
+    }
+    fun changeVisibleFilterBar() {
+        isFilterBarVisible = !isFilterBarVisible
     }
 }

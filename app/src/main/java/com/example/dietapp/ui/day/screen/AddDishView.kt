@@ -22,6 +22,7 @@ fun AddDish(
     onListItemClick: (DishWithIngredientsDetails) -> Unit,
     viewModel: DishViewModel = viewModel(factory = AppViewModelProvider.Factory),
     dietSettingsViewModel: DietSettingsViewModel,
+    filteredText:String
 ) {
     val dishUiState by viewModel.dishListUiState.collectAsState()
     Column {
@@ -29,7 +30,10 @@ fun AddDish(
             LazyColumn(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                items(dishUiState.dishList.filter { it.dish.baseDish == 1 }) { dish ->
+                items(dishUiState.dishList.filter { it.dish.baseDish == 1 }.filter { it ->
+                    it.dish.name.contains(filteredText, true)
+                            || it.ingredientList.any { it.ingredient.name.contains(filteredText, true) }
+                }) { dish ->
                     DishItem(
                         dish = dish,
                         dietSettingsViewModel = dietSettingsViewModel,

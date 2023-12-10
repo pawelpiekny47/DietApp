@@ -21,6 +21,7 @@ fun IngredientNavHost(
     setMainScreen: ((isSearchButtonVisible: Boolean, isDietStatisticsButtonVisible: Boolean, isFloatButtonVisible: Boolean, floatButtonAction: () -> Unit, isNavigateBackVisible: Boolean, navigateBackAction: () -> Unit, topBarName: String) -> Unit),
     viewModel: IngredientViewModel = viewModel(factory = AppViewModelProvider.Factory),
     navController: NavHostController = rememberNavController(),
+    filteredText:String
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -49,7 +50,8 @@ fun IngredientNavHost(
                     viewModel.deleteButtonVisible = true
                     navController.navigate(IngredientScreenList.NewIngredientScreen.name)
                 },
-                viewModel
+                viewModel,
+                filteredText
             )
         }
         composable(route = IngredientScreenList.NewIngredientScreen.name) {

@@ -21,6 +21,7 @@ import com.example.dietapp.ui.dietsettings.viewmodel.DietSettingsViewModel
 import com.example.dietapp.ui.dish.navigation.DishNavHost
 import com.example.dietapp.ui.dish.viewmodel.DishViewModel
 import com.example.dietapp.ui.ingredient.navigation.IngredientNavHost
+import com.example.dietapp.ui.mainscreen.screen.FilterBar
 import com.example.dietapp.ui.mainscreen.viewmodel.MainScreenViewModel
 
 enum class MenuCategories(val title: String) {
@@ -47,16 +48,31 @@ fun MainHost(
     )
     {
         composable(route = MenuCategories.Ingredient.name) {
-            IngredientNavHost(mainScreenViewModel::setMainScreen)
+            Column(modifier = Modifier.fillMaxWidth()) {
+                Box(modifier = Modifier.fillMaxWidth()) {
+                    if (mainScreenViewModel.isFilterBarVisible && mainScreenViewModel.isSearchButtonVisible)
+                        FilterBar(mainScreenViewModel)
+                }
+                Box {
+                    IngredientNavHost(
+                        mainScreenViewModel::setMainScreen,
+                        filteredText = mainScreenViewModel.filterText
+                    )
+                }
+            }
         }
         composable(route = MenuCategories.Dish.name) {
             Column(modifier = Modifier.fillMaxWidth()) {
                 Box {
-                    if (mainScreenViewModel.isDietStatisticsVisible)
+                    if (mainScreenViewModel.isDietStatisticsVisible && mainScreenViewModel.isDietStatButtonVisible)
                         DietSettingsStatistic(
                             dietStatisticsViewModel = dishViewModel,
                             dietSettingsViewModel = dietSettingsViewModel
                         )
+                }
+                Box {
+                    if (mainScreenViewModel.isFilterBarVisible && mainScreenViewModel.isSearchButtonVisible)
+                        FilterBar(mainScreenViewModel)
                 }
                 Box {
                     DishNavHost(
@@ -69,11 +85,17 @@ fun MainHost(
         }
         composable(route = MenuCategories.Day.name) {
             Column(modifier = Modifier.fillMaxSize()) {
-                if (mainScreenViewModel.isDietStatisticsVisible)
-                    DietSettingsStatistic(
-                        dietStatisticsViewModel = dayViewModel,
-                        dietSettingsViewModel = dietSettingsViewModel
-                    )
+                Box {
+                    if (mainScreenViewModel.isDietStatisticsVisible && mainScreenViewModel.isDietStatButtonVisible)
+                        DietSettingsStatistic(
+                            dietStatisticsViewModel = dishViewModel,
+                            dietSettingsViewModel = dietSettingsViewModel
+                        )
+                }
+                Box {
+                    if (mainScreenViewModel.isFilterBarVisible && mainScreenViewModel.isSearchButtonVisible)
+                        FilterBar(mainScreenViewModel)
+                }
                 DayNavHost(
                     mainScreenViewModel::setMainScreen,
                     dayViewModel = dayViewModel,

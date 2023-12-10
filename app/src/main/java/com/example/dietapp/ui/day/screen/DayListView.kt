@@ -38,7 +38,8 @@ import com.example.dietapp.ui.dietsettings.viewmodel.DietSettingsViewModel
 fun DayListView(
     onItemClick: (DayWithDishesDetails) -> Unit,
     viewModel: DayViewModel,
-    dietSettingsViewModel: DietSettingsViewModel
+    dietSettingsViewModel: DietSettingsViewModel,
+    filteredText: String
 ) {
     val dayUiState by viewModel.dayListUiState.collectAsState()
     LazyColumn(
@@ -46,7 +47,20 @@ fun DayListView(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        items(dayUiState.dayList) { day ->
+        items(dayUiState.dayList.filter { day ->
+            day.day.name.contains(filteredText, true) ||
+                    day.dishWithAmountList.any { dish ->
+                        dish.dishWithIngredients.dish.name.contains(filteredText, true)
+                    }
+                    || day.dishWithAmountList.any { dish ->
+                dish.dishWithIngredients.ingredientList.any { ingredient ->
+                    ingredient.ingredient.name.contains(
+                        filteredText, true
+                    )
+                }
+            }
+
+        }) { day ->
             DayItem(
                 onItemClick = onItemClick,
                 day = day,
