@@ -7,8 +7,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
@@ -26,6 +29,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import com.example.dietapp.R
 import com.example.dietapp.data.FoodCategory
 import com.example.dietapp.ui.dietsettings.viewmodel.DietSettingsViewModel
@@ -102,22 +106,29 @@ fun BasicStatistics(
     var extended2 by remember { mutableStateOf(false) }
 
     Row(
-        verticalAlignment = Alignment.CenterVertically
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(100.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         Box(
             modifier = Modifier
-                .clickable { inPercent = !inPercent },
+                .fillMaxHeight()
+                .clickable { inPercent = !inPercent }
+                .weight(1F),
             contentAlignment = Alignment.Center
         ) {
             BasicMacrosStatsV2(listOfStatisticItems, inPercent)
         }
         Box(
             modifier = Modifier
-                .clickable { extended2 = !extended2 },
+                .fillMaxHeight()
+                .clickable { extended2 = !extended2 }
+                .weight(1F),
             contentAlignment = Alignment.Center
         ) {
             LinearBasicStatistics(listOfStatisticItems)
-
         }
     }
 }
@@ -176,12 +187,16 @@ fun FoodTypeStatistics(
     var extended2 by remember { mutableStateOf(false) }
 
     Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(100.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
             modifier = Modifier
-                .clickable { inPercent = !inPercent },
+                .clickable { inPercent = !inPercent }
+                .weight(1F),
             contentAlignment = Alignment.Center
         ) {
             BasicMacrosStatsV2(listOfStatisticItems, inPercent)
@@ -189,7 +204,8 @@ fun FoodTypeStatistics(
 
         Box(
             modifier = Modifier
-                .clickable { extended2 = !extended2 },
+                .clickable { extended2 = !extended2 }
+                .weight(1F),
             contentAlignment = Alignment.Center
         ) {
             LinearBasicStatistics(listOfStatisticItems)
@@ -230,11 +246,16 @@ fun AdditionalInfo(
     var extended2 by remember { mutableStateOf(false) }
 
     Row(
-        verticalAlignment = Alignment.CenterVertically
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(100.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         Box(
             modifier = Modifier
-                .clickable { inPercent = !inPercent },
+                .clickable { inPercent = !inPercent }
+                .weight(1F),
             contentAlignment = Alignment.Center
         ) {
             BasicMacrosStatsV2(listOfStatisticItems, inPercent)
@@ -242,7 +263,8 @@ fun AdditionalInfo(
 
         Box(
             modifier = Modifier
-                .clickable { extended2 = !extended2 },
+                .clickable { extended2 = !extended2 }
+                .weight(1F),
             contentAlignment = Alignment.Center
         ) {
             LinearBasicStatistics(listOfStatisticItems)
@@ -255,44 +277,35 @@ fun AdditionalInfo(
 fun LinearBasicStatistics(
     list: MutableList<DietStatisticItem>,
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
+    Column(
+        modifier = Modifier
+            .fillMaxHeight(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceEvenly
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            list.forEach {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
+        list.forEach {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Box(
+                    modifier = Modifier.weight(4F),
+                    contentAlignment = Alignment.Center
                 ) {
                     LinearProgressIndicator(
                         progress = kotlin.math.min((it.current / it.target), 1.0).toFloat(),
                         color = it.statisticColor
                     )
-                    Box(
-                       contentAlignment = Alignment.Center
-                    ) {
-
-                        Icon(
-                            imageVector = Icons.Outlined.Check,
-                            contentDescription = "info",
-                            tint = when {
-                                (it.current / it.target) < 0.7 -> Color.LightGray
-                                (it.current / it.target) < 0.9 -> Color.Green
-                                (it.current / it.target) < 1.05 -> Color.Yellow
-                                (it.current / it.target) < 1.15 -> Color.Red
-
-                                else -> Color.Red
-                            },
-                            modifier = Modifier
-                                .scale(0.5F),
-                        )
-                    }
                 }
-
+                Box(
+                    modifier = Modifier
+                        .weight(1F)
+                        .scale(0.3F),
+                    contentAlignment = Alignment.Center
+                ) {
+                }
             }
+
         }
     }
 }

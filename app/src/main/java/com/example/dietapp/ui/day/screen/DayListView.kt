@@ -4,10 +4,13 @@ import android.annotation.SuppressLint
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -84,18 +87,24 @@ fun DayItem(
         .fillMaxWidth()
         .animateContentSize()
         .background(MaterialTheme.colorScheme.background)
-        .padding(Dp(5F))
+        .padding(50.dp, 10.dp)
         .clickable { onItemClick(day.toDayDetails()) }) {
 
         Column {
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
                 Text(
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.titleMedium,
                     text = day.day.name
                 )
             }
+            Spacer(modifier = Modifier.height(12.dp))
             DayDishList(day)
+            Spacer(modifier = Modifier.height(20.dp))
             Box(modifier = Modifier.clickable { extended2 = !extended2 }) {
                 val kcalTextValue: String
                 val proteinTextValue: String
@@ -168,7 +177,7 @@ fun DayItem(
 fun DayDishList(day: DayWithDishes) {
     day.dishWithAmountList.forEach { dish ->
         Text(
-            text = "- ${dish.dishWithIngredients.dish.name}",
+            text = "${dish.dishWithIngredients.dish.name}",
             modifier = Modifier
                 .padding(Dp(5F)),
             fontStyle = FontStyle.Italic,

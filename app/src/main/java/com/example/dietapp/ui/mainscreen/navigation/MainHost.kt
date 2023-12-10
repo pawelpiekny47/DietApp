@@ -88,7 +88,7 @@ fun MainHost(
                 Box {
                     if (mainScreenViewModel.isDietStatisticsVisible && mainScreenViewModel.isDietStatButtonVisible)
                         DietSettingsStatistic(
-                            dietStatisticsViewModel = dishViewModel,
+                            dietStatisticsViewModel = dayViewModel,
                             dietSettingsViewModel = dietSettingsViewModel
                         )
                 }

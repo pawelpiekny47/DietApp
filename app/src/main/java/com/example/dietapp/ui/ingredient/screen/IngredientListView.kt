@@ -45,7 +45,7 @@ fun IngredientListScreen(
 ) {
     val ingredientUiState by viewModel.ingredientListUiState.collectAsState()
     LazyColumn(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().padding(0.dp, 10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         FoodCategory.values().forEach { foodCategory ->
@@ -55,8 +55,7 @@ fun IngredientListScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(MaterialTheme.colorScheme.background)
-                            .padding(50.dp, 10.dp),
+                            .background(MaterialTheme.colorScheme.background),
                         horizontalArrangement = Arrangement.Center
                     ) {
                         Icon(
@@ -82,13 +81,14 @@ fun IngredientListScreen(
                     }
                 }
 
-            items(ingredientUiState.ingredientList.filter { it.name.contains(filteredText, true) }.sortedBy { it.name }
+            items(ingredientUiState.ingredientList.filter { it.name.contains(filteredText, true) }
+                .sortedBy { it.name }
                 .filter { it.foodCategory == foodCategory }) { ingredient ->
                 IngredientItem(
                     ingredient = ingredient,
                     onItemClick = onListItemClick
                 )
-                Divider(modifier = Modifier.padding(30.dp, 0.dp))
+                Divider(modifier = Modifier.padding(30.dp, 0.dp, 30.dp, 30.dp))
             }
         }
     }
@@ -98,29 +98,28 @@ fun IngredientListScreen(
 fun IngredientItem(ingredient: Ingredient, onItemClick: (IngredientDetails) -> Unit) {
     Box(modifier = Modifier
         .fillMaxWidth()
-        .padding(7.dp)
         .clickable { onItemClick(ingredient.toIngredientDetails()) }) {
         Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp, 10.dp, 10.dp, 2.dp),
+                .padding(50.dp, 0.dp)
+                .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
             Row(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(0.dp, 0.dp, 0.dp, 5.dp), verticalAlignment = Alignment.Bottom
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.Bottom
             ) {
                 Text(
-                    textAlign = TextAlign.Center,
+                    textAlign = TextAlign.Left,
                     style = MaterialTheme.typography.titleMedium,
                     text = ingredient.name
                 )
             }
 
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(0.dp, 10.dp, 0.dp,0.dp),
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.Top
             ) {
