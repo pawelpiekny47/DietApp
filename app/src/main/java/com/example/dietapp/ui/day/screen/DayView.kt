@@ -54,6 +54,8 @@ import com.example.dietapp.ui.day.viewmodel.DishWithAmountDetails
 @Composable
 fun DayView(
     saveButtonOnClick: () -> Unit,
+    deleteButtonOnClick: () -> Unit,
+    deleteButtonVisible: Boolean,
     dayViewModel: DayViewModel,
     onAddIconClick: (dishWithAmountDetails: DishWithAmountDetails) -> Unit
 ) {
@@ -70,14 +72,32 @@ fun DayView(
             singleLine = true
         )
         DishList(Modifier.weight(4F), dayViewModel, onAddIconClick)
-        Box(modifier = Modifier.weight(1f)) {
-            Button(
-                onClick = saveButtonOnClick,
-                shape = MaterialTheme.shapes.small,
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                Text(text = "Save")
+                Button(
+                    onClick = saveButtonOnClick,
+                    shape = MaterialTheme.shapes.small,
+                ) {
+                    Text(text = "Save")
+                }
+                if (deleteButtonVisible)
+                    Button(
+                        onClick = deleteButtonOnClick,
+                        shape = MaterialTheme.shapes.small,
+                    ) {
+                        Text(text = "Delete")
+                    }
             }
         }
+
     }
 }
 
@@ -125,7 +145,8 @@ fun DishList(
                             modifier = Modifier
                                 .clickable {
                                     dayViewModel.deleteDishFromDay(dish)
-                                }.scale(0.7F)
+                                }
+                                .scale(0.7F)
                         )
                     }
 
@@ -170,7 +191,10 @@ fun DishList(
                                             style = MaterialTheme.typography.bodySmall
                                         )
                                         BasicTextField(
-                                            textStyle = TextStyle(fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurface),
+                                            textStyle = TextStyle(
+                                                fontSize = 12.sp,
+                                                color = MaterialTheme.colorScheme.onSurface
+                                            ),
                                             modifier = Modifier
                                                 .width(IntrinsicSize.Min),
                                             value = ingredientWithAmountDetails.amount,

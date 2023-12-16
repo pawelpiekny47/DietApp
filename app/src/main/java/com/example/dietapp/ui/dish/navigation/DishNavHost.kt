@@ -73,8 +73,6 @@ fun DishNavHost(
                     coroutineScope.launch(Dispatchers.IO) { dishViewModel.saveDishWithIngredients() }
                 },
                 dishViewModel = dishViewModel,
-                mainScreenViewModel = mainScreenViewModel,
-                dietSettingsViewModel = dietSettingsViewModel,
                 deleteButtonVisible = dishViewModel.deleteButtonVisible,
                 deleteButtonOnClick = {
                     coroutineScope.launch(Dispatchers.IO) { dishViewModel.deleteDish() }

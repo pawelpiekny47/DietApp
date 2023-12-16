@@ -20,6 +20,9 @@ interface DayDao {
     @Upsert
     fun upsertDay(day: Day): Long
 
+    @Delete
+    fun deleteDay(day: Day)
+
     @Upsert
     fun saveAll(dayDishCrossRefList: List<DayDishCrossRef>)
 

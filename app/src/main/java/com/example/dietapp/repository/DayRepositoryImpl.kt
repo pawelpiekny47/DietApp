@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.Flow
 class DayRepositoryImpl(private val dayDao: DayDao) : DayRepository {
     override fun getAll(): Flow<List<DayWithDishes>> = dayDao.getAll()
     override suspend fun saveDay(day: Day) = dayDao.upsertDay(day)
+    override suspend fun deleteDay(day: Day) = dayDao.deleteDay(day)
     override suspend fun saveAll(dayDishCrossRefList: List<DayDishCrossRef>) =
         dayDao.saveAll(dayDishCrossRefList)
 

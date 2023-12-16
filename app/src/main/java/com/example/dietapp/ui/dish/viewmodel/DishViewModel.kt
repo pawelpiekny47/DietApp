@@ -257,6 +257,7 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel(), D
 
     suspend fun deleteDish() {
         dishRepository.deleteDish(dishWithIngredientsUiState.dishWithIngredientsDetails.dishDetails.toDish())
+        dishRepository.deleteAllCrossRefForDishId(dishWithIngredientsUiState.dishWithIngredientsDetails.dishDetails.dishId.toInt())
     }
 
     companion object {

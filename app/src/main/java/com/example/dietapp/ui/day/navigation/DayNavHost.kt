@@ -80,6 +80,13 @@ fun DayNavHost(
                         dayViewModel.saveDayWithDishes()
                     }
                 },
+                deleteButtonOnClick = {
+                    coroutineScope.launch(Dispatchers.IO) {
+                        dayViewModel.deleteDayWithDishes()
+                    }
+                    navController.navigate(DayScreenList.DayList.name)
+                },
+                dayViewModel.deleteButtonVisible,
                 dayViewModel = dayViewModel,
                 onAddIconClick = {
                     dayViewModel.editedDishId =

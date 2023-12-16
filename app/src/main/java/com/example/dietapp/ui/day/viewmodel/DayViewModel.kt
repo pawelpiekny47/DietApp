@@ -20,6 +20,7 @@ import com.example.dietapp.ui.dish.viewmodel.DishWithIngredientsDetails
 import com.example.dietapp.ui.dish.viewmodel.toDishWithIngredientDetails
 import com.example.dietapp.ui.common.DietStatistics
 import com.example.dietapp.ui.dish.viewmodel.IngredientWithAmountDetails
+import com.example.dietapp.ui.dish.viewmodel.toDish
 import com.example.dietapp.ui.ingredient.viewmodel.IngredientDetails
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -173,6 +174,38 @@ class DayViewModel(
                     )
                 }
             )
+    }
+
+    suspend fun deleteDayWithDishes(){
+        dayRepository.deleteDay(dayWithDishesUiState.dayWithDishesDetails.day)
+        dayWithDishesUiState.dayWithDishesDetails.dishWithAmountDetails.forEach {
+            dishRepository.deleteDish(it.dishWithIngredientsDetails.dishDetails.toDish())
+            dishRepository.deleteAllCrossRefForDishId(it.dishWithIngredientsDetails.dishDetails.dishId.toInt())
+        }
+        dayRepository.deleteAll(dayWithDishesUiState.toDayDishCrossRefList())
+
+        dayWithDishesUiState.dayDishCrossRefToDelete.forEach {
+            dishRepository.deleteDish(it.dishId)
+            dishRepository.deleteAllCrossRefForDishId(it.dishId)
+        }
+        dayRepository.deleteAll(dayWithDishesUiState.dayDishCrossRefToDelete)
+
+        dishRepository.deleteAll(crossRefListToDelete)
+        crossRefListToDelete = mutableListOf()
+
+        dishRepository.deleteAll(
+            dayWithDishesUiState.dayWithDishesDetails.dishWithAmountDetails.stream()
+                .map { dishWithAmountDetails ->
+                    dishWithAmountDetails.dishWithIngredientsDetails.ingredientList.stream()
+                        .map { ingredientWithAmountDetails ->
+                            DishIngredientCrossRef(
+                                dishWithAmountDetails.dishWithIngredientsDetails.dishDetails.dishId.toInt(),
+                                ingredientWithAmountDetails.ingredientDetails.id,
+                                ingredientWithAmountDetails.amount.toDouble()
+                            )
+                        }.toList()
+                }.toList().flatten()
+        )
     }
 
     fun addIngredientToDishInDay(ingredientDetails: IngredientDetails) {

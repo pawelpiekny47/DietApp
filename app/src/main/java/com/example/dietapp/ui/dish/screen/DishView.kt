@@ -53,8 +53,6 @@ import com.example.dietapp.ui.mainscreen.viewmodel.MainScreenViewModel
 fun DishView(
     saveButtonOnClick: () -> Unit,
     dishViewModel: DishViewModel,
-    dietSettingsViewModel: DietSettingsViewModel,
-    mainScreenViewModel: MainScreenViewModel,
     deleteButtonVisible: Boolean,
     deleteButtonOnClick: () -> Unit
 ) {
