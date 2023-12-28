@@ -36,6 +36,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -110,12 +111,31 @@ fun IngredientList(
     dishViewModel: DishViewModel
 ) {
     var extended by remember { mutableStateOf(0) }
-    LazyColumn(modifier = modifier) {
+    LazyColumn(modifier = modifier.padding(10.dp, 20.dp)) {
         items(dishViewModel.dishWithIngredientsUiState.dishWithIngredientsDetails.ingredientList) { ingredient ->
             Row(
-                modifier = Modifier.fillMaxSize(),
-                verticalAlignment = Alignment.Bottom,
+                verticalAlignment = Alignment.CenterVertically,
             ) {
+                Icon(
+                    modifier = Modifier.size(10.dp, 10.dp),
+                    painter = when (ingredient.ingredientDetails.foodCategory) {
+                        FoodCategory.Fruit -> painterResource(R.drawable.banana)
+                        FoodCategory.Vegetable -> painterResource(R.drawable.lettuce)
+                        FoodCategory.MilkAndReplacement -> painterResource(R.drawable.milk)
+                        FoodCategory.AddedFat -> painterResource(R.drawable.oliveoil)
+                        FoodCategory.Wheet -> painterResource(R.drawable.wheat)
+                        FoodCategory.ProteinSource -> painterResource(R.drawable.meat)
+                    },
+                    contentDescription = null,
+                    tint = when (ingredient.ingredientDetails.foodCategory) {
+                        FoodCategory.Fruit -> com.example.dietapp.ui.theme.lightFruit
+                        FoodCategory.Vegetable -> com.example.dietapp.ui.theme.lightVegetable
+                        FoodCategory.MilkAndReplacement -> com.example.dietapp.ui.theme.lightMilk
+                        FoodCategory.AddedFat -> com.example.dietapp.ui.theme.lightAddedFat
+                        FoodCategory.Wheet -> com.example.dietapp.ui.theme.lightGrain
+                        FoodCategory.ProteinSource -> com.example.dietapp.ui.theme.lightProteinSource
+                    }
+                )
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -132,28 +152,10 @@ fun IngredientList(
                             .fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Icon(
-                            modifier = Modifier.size(10.dp, 10.dp),
-                            painter = when (ingredient.ingredientDetails.foodCategory) {
-                                FoodCategory.Fruit -> painterResource(R.drawable.banana)
-                                FoodCategory.Vegetable -> painterResource(R.drawable.lettuce)
-                                FoodCategory.MilkAndReplacement -> painterResource(R.drawable.milk)
-                                FoodCategory.AddedFat -> painterResource(R.drawable.oliveoil)
-                                FoodCategory.Wheet -> painterResource(R.drawable.wheat)
-                                FoodCategory.ProteinSource -> painterResource(R.drawable.meat)
-                            },
-                            contentDescription = null,
-                            tint = when (ingredient.ingredientDetails.foodCategory) {
-                                FoodCategory.Fruit -> com.example.dietapp.ui.theme.lightFruit
-                                FoodCategory.Vegetable -> com.example.dietapp.ui.theme.lightVegetable
-                                FoodCategory.MilkAndReplacement -> com.example.dietapp.ui.theme.lightMilk
-                                FoodCategory.AddedFat -> com.example.dietapp.ui.theme.lightAddedFat
-                                FoodCategory.Wheet -> com.example.dietapp.ui.theme.lightGrain
-                                FoodCategory.ProteinSource -> com.example.dietapp.ui.theme.lightProteinSource
-                            }
-                        )
+
                         Text(
-                            text = "   ${ingredient.ingredientDetails.name}",
+                            text = ingredient.ingredientDetails.name,
+                            fontStyle = FontStyle.Italic,
                             fontSize = 14.sp,
                         )
                     }

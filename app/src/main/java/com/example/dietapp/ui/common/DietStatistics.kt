@@ -8,15 +8,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Check
-import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -49,6 +44,11 @@ fun DietSettingsStatistic(
     ) {
         item {
             Column(modifier = Modifier.fillParentMaxWidth()) {
+                AllStatistics(dietStatisticsViewModel, dietSettingsViewModel)
+            }
+        }
+        item {
+            Column(modifier = Modifier.fillParentMaxWidth()) {
                 BasicStatistics(dietStatisticsViewModel, dietSettingsViewModel)
             }
         }
@@ -65,6 +65,149 @@ fun DietSettingsStatistic(
     }
 }
 
+@Composable
+fun AllStatistics(
+    dietStatistics: DietStatistics,
+    dietSettingsViewModel: DietSettingsViewModel
+) {
+    val additionalStatistics = mutableListOf(
+        DietStatisticItem(
+            "pufa",
+            dietStatistics.returnCurrentPufa(),
+            dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.polyunsaturatedFats.toDouble(),
+            com.example.dietapp.ui.theme.lightSaturatedFats,
+            painterResource(R.drawable.oilfree)
+        ),
+        DietStatisticItem(
+            "soil",
+            dietStatistics.returnCurrentSoil(),
+            dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.soil.toDouble(),
+            com.example.dietapp.ui.theme.lightSoil,
+            painterResource(R.drawable.salt)
+        ),
+        DietStatisticItem(
+            "fiber",
+            dietStatistics.returnCurrentFiber(),
+            dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.fiber.toDouble(),
+            com.example.dietapp.ui.theme.lightFiber,
+            painterResource(R.drawable.fiber)
+        )
+    )
+    val foodStatistics = mutableListOf(
+        DietStatisticItem(
+            "fruit",
+            dietStatistics.returnCurrentKcalForFoodCategory(FoodCategory.Fruit),
+            dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromFruits.toDouble(),
+            com.example.dietapp.ui.theme.lightFruit,
+            painterResource(R.drawable.banana)
+        ),
+        DietStatisticItem(
+            "vegetable",
+            dietStatistics.returnCurrentKcalForFoodCategory(FoodCategory.Vegetable),
+            dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromVegetables.toDouble(),
+            com.example.dietapp.ui.theme.lightVegetable,
+            painterResource(R.drawable.lettuce)
+        ),
+        DietStatisticItem(
+            "grain",
+            dietStatistics.returnCurrentKcalForFoodCategory(FoodCategory.Wheet),
+            dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromGrain.toDouble(),
+            com.example.dietapp.ui.theme.lightGrain,
+            painterResource(R.drawable.wheat)
+        ),
+        DietStatisticItem(
+            "milk",
+            dietStatistics.returnCurrentKcalForFoodCategory(FoodCategory.MilkAndReplacement),
+            dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromMilkProducts.toDouble(),
+            com.example.dietapp.ui.theme.lightMilk,
+            painterResource(R.drawable.milk)
+        ),
+        DietStatisticItem(
+            "protein source",
+            dietStatistics.returnCurrentKcalForFoodCategory(FoodCategory.ProteinSource),
+            dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromProteinSource.toDouble(),
+            com.example.dietapp.ui.theme.lightProteinSource,
+            painterResource(R.drawable.meat)
+        ),
+        DietStatisticItem(
+            "added fat",
+            dietStatistics.returnCurrentKcalForFoodCategory(FoodCategory.AddedFat),
+            dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.kcalFromAddedFat.toDouble(),
+            com.example.dietapp.ui.theme.lightAddedFat,
+            painterResource(R.drawable.oliveoil)
+        ),
+    )
+
+    val basicStatistics = mutableListOf(
+        DietStatisticItem(
+            "kcal",
+            dietStatistics.returnCurrentKcal(),
+            dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.totalKcal.toDouble(),
+            com.example.dietapp.ui.theme.lightKcal,
+            painterResource(R.drawable.fire)
+        ),
+        DietStatisticItem(
+            "p",
+            dietStatistics.returnCurrentProtein(),
+            dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.protein.toDouble(),
+            com.example.dietapp.ui.theme.lightProtein,
+            painterResource(R.drawable.meat)
+        ),
+        DietStatisticItem(
+            "c",
+            dietStatistics.returnCurrentCarbs(),
+            dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.carbohydrates.toDouble(),
+            com.example.dietapp.ui.theme.lightCarbs,
+            painterResource(R.drawable.wheat)
+        ),
+        DietStatisticItem(
+            "f",
+            dietStatistics.returnCurrentFat(),
+            dietSettingsViewModel.dietSettingsUiState.dietSettingsDetails.fats.toDouble(),
+            com.example.dietapp.ui.theme.lightFats,
+            painterResource(R.drawable.oilbottle)
+        ),
+    )
+
+    var inPercent by remember { mutableStateOf(false) }
+    var extended2 by remember { mutableStateOf(false) }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(100.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceEvenly
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxHeight()
+                .clickable { inPercent = !inPercent }
+                .weight(1F),
+            contentAlignment = Alignment.Center
+        ) {
+            BasicMacrosStatsV2(basicStatistics, inPercent)
+        }
+        Box(
+            modifier = Modifier
+                .fillMaxHeight()
+                .clickable { inPercent = !inPercent }
+                .weight(1F),
+            contentAlignment = Alignment.Center
+        ) {
+            BasicMacrosStatsV2(foodStatistics, inPercent)
+        }
+        Box(
+            modifier = Modifier
+                .fillMaxHeight()
+                .clickable { inPercent = !inPercent }
+                .weight(1F),
+            contentAlignment = Alignment.Center
+        ) {
+            BasicMacrosStatsV2(additionalStatistics, inPercent)
+        }
+    }
+}
 
 @Composable
 fun BasicStatistics(
@@ -132,7 +275,6 @@ fun BasicStatistics(
         }
     }
 }
-
 
 @Composable
 fun FoodTypeStatistics(

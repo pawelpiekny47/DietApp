@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.Dp
@@ -172,7 +173,7 @@ fun MacroDetailsUnderIngredientXAmount(ingredient: IngredientWithAmountDetails) 
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(5.dp, 0.dp),
+            modifier = Modifier.padding(0.dp, 0.dp, 5.dp, 0.dp),
         ) {
             Icon(
                 modifier = Modifier.size(10.dp, 10.dp),
@@ -246,6 +247,12 @@ fun MacroDetailsUnderIngredientXAmount(ingredient: IngredientWithAmountDetails) 
 
             )
         }
+        Text(
+            text = "       /${ingredient.amount.toDoubleEvenWhenEmpty().toInt()}g",
+            fontSize = 8.sp,
+            fontStyle = FontStyle.Italic,
+            color = Color.LightGray
+        )
     }
 }
 
@@ -258,7 +265,7 @@ fun MacroDetailsUnderIngredient(ingredient: IngredientWithAmountDetails) {
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(5.dp, 0.dp),
+            modifier = Modifier.padding(0.dp, 0.dp, 5.dp, 0.dp),
         ) {
             Icon(
                 modifier = Modifier.size(10.dp, 10.dp),
@@ -332,5 +339,11 @@ fun MacroDetailsUnderIngredient(ingredient: IngredientWithAmountDetails) {
 
             )
         }
+        Text(
+            text = "       /100g",
+            fontSize = 8.sp,
+            fontStyle = FontStyle.Italic,
+            color = Color.LightGray
+            )
     }
 }

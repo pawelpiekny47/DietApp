@@ -159,82 +159,87 @@ fun DishList(
                         }) {
                         dish.dishWithIngredientsDetails.ingredientList.sortedBy { it.ingredientDetails.name }
                             .forEach { ingredientWithAmountDetails ->
-                                Column {
-                                    Row(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        verticalAlignment = Alignment.Bottom
-                                    ) {
-                                        Icon(
-                                            modifier = Modifier.size(10.dp, 10.dp),
-                                            painter = when (ingredientWithAmountDetails.ingredientDetails.foodCategory) {
-                                                FoodCategory.Fruit -> painterResource(R.drawable.banana)
-                                                FoodCategory.Vegetable -> painterResource(R.drawable.lettuce)
-                                                FoodCategory.MilkAndReplacement -> painterResource(R.drawable.milk)
-                                                FoodCategory.AddedFat -> painterResource(R.drawable.oliveoil)
-                                                FoodCategory.Wheet -> painterResource(R.drawable.wheat)
-                                                FoodCategory.ProteinSource -> painterResource(R.drawable.meat)
-                                            },
-                                            contentDescription = null,
-                                            tint = when (ingredientWithAmountDetails.ingredientDetails.foodCategory) {
-                                                FoodCategory.Fruit -> com.example.dietapp.ui.theme.lightFruit
-                                                FoodCategory.Vegetable -> com.example.dietapp.ui.theme.lightVegetable
-                                                FoodCategory.MilkAndReplacement -> com.example.dietapp.ui.theme.lightMilk
-                                                FoodCategory.AddedFat -> com.example.dietapp.ui.theme.lightAddedFat
-                                                FoodCategory.Wheet -> com.example.dietapp.ui.theme.lightGrain
-                                                FoodCategory.ProteinSource -> com.example.dietapp.ui.theme.lightProteinSource
-                                            }
-                                        )
-                                        Text(
-                                            text = "   ${ingredientWithAmountDetails.ingredientDetails.name}  ",
-                                            fontStyle = FontStyle.Italic,
-                                            textAlign = TextAlign.Center,
-                                            style = MaterialTheme.typography.bodySmall
-                                        )
-                                        BasicTextField(
-                                            textStyle = TextStyle(
-                                                fontSize = 12.sp,
-                                                color = MaterialTheme.colorScheme.onSurface
-                                            ),
-                                            modifier = Modifier
-                                                .width(IntrinsicSize.Min),
-                                            value = ingredientWithAmountDetails.amount,
-                                            onValueChange = {
-                                                dayViewModel.updateDayUiState(
-                                                    ingredientWithAmountDetails,
-                                                    dish.dishWithIngredientsDetails.dishDetails.dishId,
-                                                    it
-                                                )
-                                            },
-                                            enabled = true,
-                                            singleLine = true,
-                                        )
-                                        Text(
-                                            text = " g   ",
-                                            fontStyle = FontStyle.Italic,
-                                            textAlign = TextAlign.Center,
-                                            style = MaterialTheme.typography.bodySmall
-                                        )
-                                        Box(modifier = Modifier
-                                            .scale(0.6F)
-                                            .clickable {
-                                                dayViewModel.removeIngredientFromDishInDay(
-                                                    ingredientWithAmountDetails.ingredientDetails.id,
-                                                    dish.dishWithIngredientsDetails.dishDetails.dishId.toInt()
-                                                )
-                                            }
-                                            .width(IntrinsicSize.Min),
-                                            contentAlignment = Alignment.BottomStart
-                                        ) {
-                                            Icon(
-                                                imageVector = Icons.Outlined.Clear,
-                                                contentDescription = "Back"
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Icon(
+                                        modifier = Modifier.size(10.dp, 10.dp),
+                                        painter = when (ingredientWithAmountDetails.ingredientDetails.foodCategory) {
+                                            FoodCategory.Fruit -> painterResource(R.drawable.banana)
+                                            FoodCategory.Vegetable -> painterResource(R.drawable.lettuce)
+                                            FoodCategory.MilkAndReplacement -> painterResource(
+                                                R.drawable.milk
                                             )
+
+                                            FoodCategory.AddedFat -> painterResource(R.drawable.oliveoil)
+                                            FoodCategory.Wheet -> painterResource(R.drawable.wheat)
+                                            FoodCategory.ProteinSource -> painterResource(R.drawable.meat)
+                                        },
+                                        contentDescription = null,
+                                        tint = when (ingredientWithAmountDetails.ingredientDetails.foodCategory) {
+                                            FoodCategory.Fruit -> com.example.dietapp.ui.theme.lightFruit
+                                            FoodCategory.Vegetable -> com.example.dietapp.ui.theme.lightVegetable
+                                            FoodCategory.MilkAndReplacement -> com.example.dietapp.ui.theme.lightMilk
+                                            FoodCategory.AddedFat -> com.example.dietapp.ui.theme.lightAddedFat
+                                            FoodCategory.Wheet -> com.example.dietapp.ui.theme.lightGrain
+                                            FoodCategory.ProteinSource -> com.example.dietapp.ui.theme.lightProteinSource
                                         }
+                                    )
+                                    Column(modifier = Modifier.padding(10.dp, 0.dp)) {
+                                        Row(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            Text(
+                                                text = "${ingredientWithAmountDetails.ingredientDetails.name}  ",
+                                                fontStyle = FontStyle.Italic,
+                                                textAlign = TextAlign.Center,
+                                                style = MaterialTheme.typography.bodySmall
+                                            )
+                                            BasicTextField(
+                                                textStyle = TextStyle(
+                                                    fontSize = 12.sp,
+                                                    color = MaterialTheme.colorScheme.onSurface
+                                                ),
+                                                modifier = Modifier
+                                                    .width(IntrinsicSize.Min),
+                                                value = ingredientWithAmountDetails.amount,
+                                                onValueChange = {
+                                                    dayViewModel.updateDayUiState(
+                                                        ingredientWithAmountDetails,
+                                                        dish.dishWithIngredientsDetails.dishDetails.dishId,
+                                                        it
+                                                    )
+                                                },
+                                                enabled = true,
+                                                singleLine = true,
+                                            )
+                                            Text(
+                                                text = " g   ",
+                                                fontStyle = FontStyle.Italic,
+                                                textAlign = TextAlign.Center,
+                                                style = MaterialTheme.typography.bodySmall
+                                            )
+                                            Box(modifier = Modifier
+                                                .scale(0.6F)
+                                                .clickable {
+                                                    dayViewModel.removeIngredientFromDishInDay(
+                                                        ingredientWithAmountDetails.ingredientDetails.id,
+                                                        dish.dishWithIngredientsDetails.dishDetails.dishId.toInt()
+                                                    )
+                                                }
+                                                .width(IntrinsicSize.Min),
+                                                contentAlignment = Alignment.BottomStart
+                                            ) {
+                                                Icon(
+                                                    imageVector = Icons.Outlined.Clear,
+                                                    contentDescription = "Back"
+                                                )
+                                            }
+                                        }
+                                        if (extendedIngredientsDetails)
+                                            MacroDetailsUnderIngredientXAmount(
+                                                ingredientWithAmountDetails
+                                            )
                                     }
-                                    if (extendedIngredientsDetails)
-                                        MacroDetailsUnderIngredientXAmount(
-                                            ingredientWithAmountDetails
-                                        )
                                 }
                             }
                     }
