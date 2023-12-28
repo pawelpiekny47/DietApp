@@ -168,12 +168,13 @@ fun MacroDetailsUnderIngredientXAmount(ingredient: IngredientWithAmountDetails) 
     Row(
         modifier = Modifier
             .fillMaxWidth(),
-        verticalAlignment = Alignment.Bottom
+        verticalAlignment = Alignment.Bottom,
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(0.dp, 0.dp, 5.dp, 0.dp),
+            horizontalArrangement = Arrangement.Start
         ) {
             Icon(
                 modifier = Modifier.size(10.dp, 10.dp),
@@ -192,7 +193,6 @@ fun MacroDetailsUnderIngredientXAmount(ingredient: IngredientWithAmountDetails) 
         }
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(5.dp, 0.dp),
         ) {
             Icon(
                 modifier = Modifier.size(10.dp, 10.dp),
@@ -211,7 +211,6 @@ fun MacroDetailsUnderIngredientXAmount(ingredient: IngredientWithAmountDetails) 
         }
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(5.dp, 0.dp),
         ) {
             Icon(
                 modifier = Modifier.size(10.dp, 10.dp),
@@ -230,7 +229,6 @@ fun MacroDetailsUnderIngredientXAmount(ingredient: IngredientWithAmountDetails) 
         }
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(5.dp, 0.dp),
         ) {
             Icon(
                 modifier = Modifier.size(10.dp, 10.dp),
@@ -261,11 +259,11 @@ fun MacroDetailsUnderIngredient(ingredient: IngredientWithAmountDetails) {
     Row(
         modifier = Modifier
             .fillMaxWidth(),
-        verticalAlignment = Alignment.Bottom
+        verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(0.dp, 0.dp, 5.dp, 0.dp),
+            horizontalArrangement = Arrangement.Start,
         ) {
             Icon(
                 modifier = Modifier.size(10.dp, 10.dp),
@@ -283,7 +281,6 @@ fun MacroDetailsUnderIngredient(ingredient: IngredientWithAmountDetails) {
         }
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(5.dp, 0.dp),
         ) {
             Icon(
                 modifier = Modifier.size(10.dp, 10.dp),
@@ -303,7 +300,6 @@ fun MacroDetailsUnderIngredient(ingredient: IngredientWithAmountDetails) {
         }
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(5.dp, 0.dp),
         ) {
             Icon(
                 modifier = Modifier.size(10.dp, 10.dp),
@@ -322,7 +318,6 @@ fun MacroDetailsUnderIngredient(ingredient: IngredientWithAmountDetails) {
         }
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(5.dp, 0.dp),
         ) {
             Icon(
                 modifier = Modifier.size(10.dp, 10.dp),

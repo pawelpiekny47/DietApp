@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -34,9 +35,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -57,6 +60,7 @@ fun DishView(
     deleteButtonVisible: Boolean,
     deleteButtonOnClick: () -> Unit
 ) {
+    val focusManager = LocalFocusManager.current
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -67,6 +71,8 @@ fun DishView(
                 modifier = Modifier.width(IntrinsicSize.Min),
                 value = dishViewModel.dishWithIngredientsUiState.dishWithIngredientsDetails.dishDetails.name,
                 onValueChange = { dishViewModel.updateDishName(it) },
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Go),
+                keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
                 label = { Text("name") },
                 enabled = true,
                 singleLine = true,
@@ -110,6 +116,7 @@ fun IngredientList(
     modifier: Modifier,
     dishViewModel: DishViewModel
 ) {
+    val focusManager = LocalFocusManager.current
     var extended by remember { mutableStateOf(0) }
     LazyColumn(modifier = modifier.padding(10.dp, 20.dp)) {
         items(dishViewModel.dishWithIngredientsUiState.dishWithIngredientsDetails.ingredientList) { ingredient ->
@@ -188,7 +195,8 @@ fun IngredientList(
                             },
                             enabled = true,
                             maxLines = 1,
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal,imeAction = ImeAction.Go),
+                            keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
                             singleLine = true
                         )
                         Text(

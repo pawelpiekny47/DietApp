@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
@@ -37,9 +39,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -59,6 +63,7 @@ fun DayView(
     dayViewModel: DayViewModel,
     onAddIconClick: (dishWithAmountDetails: DishWithAmountDetails) -> Unit
 ) {
+    val focusManager = LocalFocusManager.current
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -66,6 +71,8 @@ fun DayView(
     ) {
         OutlinedTextField(
             value = dayViewModel.dayWithDishesUiState.dayWithDishesDetails.day.name,
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Go),
+            keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
             onValueChange = { dayViewModel.updateDayName(it) },
             label = { Text("name") },
             enabled = true,
@@ -108,8 +115,7 @@ fun DishList(
     dayViewModel: DayViewModel,
     onAddIconClick: (dishWithAmountDetails: DishWithAmountDetails) -> Unit
 ) {
-
-
+    val focusManager = LocalFocusManager.current
     LazyColumn(modifier = modifier) {
         items(dayViewModel.dayWithDishesUiState.dayWithDishesDetails.dishWithAmountDetails) { dish ->
             var extendedIngredients by remember { mutableStateOf(true) }
@@ -149,7 +155,6 @@ fun DishList(
                                 .scale(0.7F)
                         )
                     }
-
                 }
                 if (extendedIngredients) {
                     Column(modifier = Modifier
@@ -159,7 +164,10 @@ fun DishList(
                         }) {
                         dish.dishWithIngredientsDetails.ingredientList.sortedBy { it.ingredientDetails.name }
                             .forEach { ingredientWithAmountDetails ->
-                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth().padding(10.dp, 0.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
                                     Icon(
                                         modifier = Modifier.size(10.dp, 10.dp),
                                         painter = when (ingredientWithAmountDetails.ingredientDetails.foodCategory) {
@@ -183,9 +191,12 @@ fun DishList(
                                             FoodCategory.ProteinSource -> com.example.dietapp.ui.theme.lightProteinSource
                                         }
                                     )
-                                    Column(modifier = Modifier.padding(10.dp, 0.dp)) {
+                                    Column(
+                                        modifier = Modifier
+                                            .padding(10.dp, 0.dp)
+                                            .weight(4F)
+                                    ) {
                                         Row(
-                                            modifier = Modifier.fillMaxWidth(),
                                             verticalAlignment = Alignment.CenterVertically
                                         ) {
                                             Text(
@@ -194,62 +205,70 @@ fun DishList(
                                                 textAlign = TextAlign.Center,
                                                 style = MaterialTheme.typography.bodySmall
                                             )
-                                            BasicTextField(
-                                                textStyle = TextStyle(
-                                                    fontSize = 12.sp,
-                                                    color = MaterialTheme.colorScheme.onSurface
-                                                ),
-                                                modifier = Modifier
-                                                    .width(IntrinsicSize.Min),
-                                                value = ingredientWithAmountDetails.amount,
-                                                onValueChange = {
-                                                    dayViewModel.updateDayUiState(
-                                                        ingredientWithAmountDetails,
-                                                        dish.dishWithIngredientsDetails.dishDetails.dishId,
-                                                        it
-                                                    )
-                                                },
-                                                enabled = true,
-                                                singleLine = true,
-                                            )
-                                            Text(
-                                                text = " g   ",
-                                                fontStyle = FontStyle.Italic,
-                                                textAlign = TextAlign.Center,
-                                                style = MaterialTheme.typography.bodySmall
-                                            )
-                                            Box(modifier = Modifier
-                                                .scale(0.6F)
-                                                .clickable {
-                                                    dayViewModel.removeIngredientFromDishInDay(
-                                                        ingredientWithAmountDetails.ingredientDetails.id,
-                                                        dish.dishWithIngredientsDetails.dishDetails.dishId.toInt()
-                                                    )
-                                                }
-                                                .width(IntrinsicSize.Min),
-                                                contentAlignment = Alignment.BottomStart
-                                            ) {
-                                                Icon(
-                                                    imageVector = Icons.Outlined.Clear,
-                                                    contentDescription = "Back"
-                                                )
-                                            }
                                         }
                                         if (extendedIngredientsDetails)
                                             MacroDetailsUnderIngredientXAmount(
                                                 ingredientWithAmountDetails
                                             )
                                     }
+
+                                    Row(
+                                        verticalAlignment = Alignment.Bottom,
+                                        horizontalArrangement = Arrangement.End,
+                                        modifier = Modifier.weight(1F)
+                                    ) {
+                                        BasicTextField(
+                                            textStyle = TextStyle(
+                                                fontSize = 12.sp,
+                                                color = MaterialTheme.colorScheme.onSurface
+                                            ),
+                                            modifier = Modifier
+                                                .width(IntrinsicSize.Min),
+                                            value = ingredientWithAmountDetails.amount,
+                                            onValueChange = {
+                                                dayViewModel.updateDayUiState(
+                                                    ingredientWithAmountDetails,
+                                                    dish.dishWithIngredientsDetails.dishDetails.dishId,
+                                                    it
+                                                )
+                                            },
+                                            enabled = true,
+                                            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Go),
+                                            keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
+                                            singleLine = true,
+                                        )
+                                        Text(
+                                            text = " g",
+                                            fontStyle = FontStyle.Italic,
+                                            textAlign = TextAlign.Center,
+                                            style = MaterialTheme.typography.bodySmall
+                                        )
+                                    }
+                                    Icon(
+                                        modifier = Modifier
+                                            .scale(0.6F)
+                                            .clickable {
+                                                dayViewModel.removeIngredientFromDishInDay(
+                                                    ingredientWithAmountDetails.ingredientDetails.id,
+                                                    dish.dishWithIngredientsDetails.dishDetails.dishId.toInt()
+                                                )
+                                            },
+                                        imageVector = Icons.Outlined.Clear,
+                                        contentDescription = "Back"
+                                    )
                                 }
                             }
                     }
                 }
+
             }
-            IconButton(onClick = { onAddIconClick(dish) }) {
-                Icon(
-                    imageVector = Icons.Filled.Add,
-                    contentDescription = "Back"
-                )
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                IconButton(onClick = { onAddIconClick(dish) }) {
+                    Icon(
+                        imageVector = Icons.Filled.Add,
+                        contentDescription = "Back"
+                    )
+                }
             }
         }
     }

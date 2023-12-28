@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -31,6 +33,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -63,7 +67,7 @@ fun DietGenerator(viewModel: DietSettingsViewModel) {
 @Composable
 fun DietGeneratorFields() {
     var sliderPosition by remember { mutableStateOf(0f) }
-
+    val focusManager = LocalFocusManager.current
     Column(modifier = Modifier.fillMaxWidth()) {
         Row {
             BasicTextField(
@@ -71,6 +75,8 @@ fun DietGeneratorFields() {
                 onValueChange = { },
                 enabled = true,
                 singleLine = true,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Go),
+                keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
                 modifier = Modifier.width(IntrinsicSize.Min).height(IntrinsicSize.Min)
 
             ){
@@ -94,6 +100,8 @@ fun DietGeneratorFields() {
             TextField(
                 value = "80",
                 onValueChange = { },
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Go),
+                keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
                 label = { Text("weight") },
                 enabled = true,
                 singleLine = true,
@@ -103,6 +111,8 @@ fun DietGeneratorFields() {
         TextField(
             value = "2",
             onValueChange = { },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Go),
+            keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
             label = { Text("protein g/kg") },
             enabled = true,
             singleLine = true,

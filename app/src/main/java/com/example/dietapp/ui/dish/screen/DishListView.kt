@@ -136,7 +136,7 @@ fun DishItem(
                         kcalTextValue = "${
                             dish.ingredientList.sumOf { it.ingredient.totalKcal * it.amount / 100 }
                                 .toInt()
-                        }"
+                        }kcal"
                         proteinTextValue = "${
                             dish.ingredientList.sumOf { it.ingredient.protein * it.amount / 100 }
                                 .toInt()

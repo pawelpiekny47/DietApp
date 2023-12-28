@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.KeyboardActionScope
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ShoppingCart
@@ -30,8 +32,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -51,6 +56,7 @@ fun IngredientView(
     barcodeScannerButtonOnClick: () -> Unit
 ) {
     Column {
+        if(viewModel.pictureUrl != "")
         AsyncImage(
             model = viewModel.pictureUrl,
             contentDescription = null,
@@ -107,12 +113,15 @@ fun IngredientForm(
     ingredientDetailsState: IngredientDetails,
     onValueChange: (IngredientDetails) -> Unit,
 ) {
+    val focusManager = LocalFocusManager.current
     OutlinedTextField(
         modifier = Modifier
             .fillMaxWidth()
             .padding(Dp(10F)),
         value = ingredientDetailsState.name,
         onValueChange = { onValueChange(ingredientDetailsState.copy(name = it)) },
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Go),
+        keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
         label = { Text("name") },
         enabled = true,
         singleLine = true
@@ -130,7 +139,8 @@ fun IngredientForm(
                 .padding(Dp(10F)),
             value = ingredientDetailsState.totalKcal,
             onValueChange = { onValueChange(ingredientDetailsState.copy(totalKcal = it)) },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Go),
+            keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
             label = { Text(text = "kcal") },
             enabled = true,
             singleLine = true,
@@ -155,7 +165,8 @@ fun IngredientForm(
                 .padding(Dp(10F)),
             value = ingredientDetailsState.protein,
             onValueChange = { onValueChange(ingredientDetailsState.copy(protein = it)) },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal,imeAction = ImeAction.Go),
+            keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
             label = { Text("proteins") },
             enabled = true,
             singleLine = true,
@@ -173,7 +184,8 @@ fun IngredientForm(
                 .padding(Dp(10F)),
             value = ingredientDetailsState.carbohydrates,
             onValueChange = { onValueChange(ingredientDetailsState.copy(carbohydrates = it)) },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal,imeAction = ImeAction.Go),
+            keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
             label = { Text("carbs") },
             enabled = true,
             singleLine = true,
@@ -191,7 +203,8 @@ fun IngredientForm(
                 .padding(Dp(10F)),
             value = ingredientDetailsState.fats,
             onValueChange = { onValueChange(ingredientDetailsState.copy(fats = it)) },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal,imeAction = ImeAction.Go),
+            keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
             label = { Text("fats") },
             enabled = true,
             singleLine = true,
@@ -212,7 +225,8 @@ fun IngredientForm(
                 .padding(Dp(10F)),
             value = ingredientDetailsState.polyunsaturatedFats,
             onValueChange = { onValueChange(ingredientDetailsState.copy(polyunsaturatedFats = it)) },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal,imeAction = ImeAction.Go),
+            keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
             label = { Text(text = "PUFA") },
             enabled = true,
             singleLine = true,
@@ -230,7 +244,8 @@ fun IngredientForm(
                 .padding(Dp(10F)),
             value = ingredientDetailsState.soil,
             onValueChange = { onValueChange(ingredientDetailsState.copy(soil = it)) },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal,imeAction = ImeAction.Go),
+            keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
             label = { Text("soil") },
             enabled = true,
             singleLine = true,
@@ -248,7 +263,8 @@ fun IngredientForm(
                 .padding(Dp(10F)),
             value = ingredientDetailsState.fiber,
             onValueChange = { onValueChange(ingredientDetailsState.copy(fiber = it)) },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal,imeAction = ImeAction.Go),
+            keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
             label = { Text("fiber") },
             enabled = true,
             singleLine = true,
@@ -265,6 +281,7 @@ fun FoodCategoryDropdownMenu(
     onValueChange: (IngredientDetails) -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
+    val focusManager = LocalFocusManager.current
     Row(
         modifier = Modifier
             .defaultMinSize(minHeight = 48.dp)
@@ -287,6 +304,8 @@ fun FoodCategoryDropdownMenu(
                 readOnly = true,
                 modifier = Modifier.menuAnchor(),
                 value = ingredientDetailsState.foodCategory.name,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Go),
+                keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
                 onValueChange = { },
                 label = { Text("Food Category") },
                 trailingIcon = {

@@ -115,7 +115,7 @@ fun DayItem(
                         kcalTextValue = "${
                             day.dishWithAmountList.sumOf { it -> it.dishWithIngredients.ingredientList.sumOf { it.ingredient.totalKcal * it.amount / 100 } }
                                 .toInt()
-                        }g"
+                        }kcal"
                         proteinTextValue = "${
                             day.dishWithAmountList.sumOf { it -> it.dishWithIngredients.ingredientList.sumOf { it.ingredient.protein * it.amount / 100 } }
                                 .toInt()

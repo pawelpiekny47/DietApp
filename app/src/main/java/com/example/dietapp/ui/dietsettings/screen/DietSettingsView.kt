@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -19,7 +20,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.dietapp.R
@@ -67,8 +70,8 @@ fun DietSettingsForm(
     dietSettingsDetails: DietSettingsDetails,
     onValueChange: (DietSettingsDetails) -> Unit,
 ) {
+    val focusManager = LocalFocusManager.current
     Column(modifier = Modifier.fillMaxWidth()) {
-
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly,
@@ -91,7 +94,8 @@ fun DietSettingsForm(
                     onValueChange = { onValueChange(dietSettingsDetails.copy(totalKcal = it)) },
                     label = { Text("kcal") },
                     enabled = true,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal,imeAction = ImeAction.Go),
+                    keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
                     singleLine = true,
                     colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
                 )
@@ -120,7 +124,8 @@ fun DietSettingsForm(
                     onValueChange = { onValueChange(dietSettingsDetails.copy(protein = it)) },
                     label = { Text("protein") },
                     enabled = true,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal,imeAction = ImeAction.Go),
+                    keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
                     singleLine = true,
                     colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
                 )
@@ -142,7 +147,8 @@ fun DietSettingsForm(
                     onValueChange = { onValueChange(dietSettingsDetails.copy(carbohydrates = it)) },
                     label = { Text("carbs") },
                     enabled = true,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal,imeAction = ImeAction.Go),
+                    keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
                     singleLine = true,
                     colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
                 )
@@ -164,7 +170,8 @@ fun DietSettingsForm(
                     onValueChange = { onValueChange(dietSettingsDetails.copy(fats = it)) },
                     label = { Text("fats") },
                     enabled = true,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal,imeAction = ImeAction.Go),
+                    keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
                     singleLine = true,
                     colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
                 )
@@ -192,7 +199,8 @@ fun DietSettingsForm(
                     onValueChange = { onValueChange(dietSettingsDetails.copy(kcalFromFruits = it)) },
                     label = { Text("fruits") },
                     enabled = true,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal,imeAction = ImeAction.Go),
+                    keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
                     singleLine = true,
                     colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
                 )
@@ -214,7 +222,8 @@ fun DietSettingsForm(
                     onValueChange = { onValueChange(dietSettingsDetails.copy(kcalFromVegetables = it)) },
                     label = { Text("vegetables") },
                     enabled = true,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal,imeAction = ImeAction.Go),
+                    keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
                     singleLine = true,
                     colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
                 )
@@ -236,7 +245,8 @@ fun DietSettingsForm(
                     onValueChange = { onValueChange(dietSettingsDetails.copy(kcalFromProteinSource = it)) },
                     label = { Text("protein source") },
                     enabled = true,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal,imeAction = ImeAction.Go),
+                    keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
                     singleLine = true,
                     colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
                 )
@@ -265,7 +275,8 @@ fun DietSettingsForm(
                     onValueChange = { onValueChange(dietSettingsDetails.copy(kcalFromMilkProducts = it)) },
                     label = { Text("milk") },
                     enabled = true,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal,imeAction = ImeAction.Go),
+                    keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
                     singleLine = true,
                     colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
                 )
@@ -287,7 +298,8 @@ fun DietSettingsForm(
                     onValueChange = { onValueChange(dietSettingsDetails.copy(kcalFromGrain = it)) },
                     label = { Text("grain") },
                     enabled = true,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal,imeAction = ImeAction.Go),
+                    keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
                     singleLine = true,
                     colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
                 )
@@ -309,7 +321,8 @@ fun DietSettingsForm(
                     onValueChange = { onValueChange(dietSettingsDetails.copy(kcalFromAddedFat = it)) },
                     label = { Text("added fat") },
                     enabled = true,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal,imeAction = ImeAction.Go),
+                    keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
                     singleLine = true,
                     colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
                 )
@@ -338,7 +351,8 @@ fun DietSettingsForm(
                     onValueChange = { onValueChange(dietSettingsDetails.copy(fiber = it)) },
                     label = { Text("fiber") },
                     enabled = true,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal,imeAction = ImeAction.Go),
+                    keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
                     singleLine = true,
                     colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
                 )
@@ -360,7 +374,8 @@ fun DietSettingsForm(
                     onValueChange = { onValueChange(dietSettingsDetails.copy(polyunsaturatedFats = it)) },
                     label = { Text("saturated fat") },
                     enabled = true,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal,imeAction = ImeAction.Go),
+                    keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
                     singleLine = true,
                     colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
                 )
