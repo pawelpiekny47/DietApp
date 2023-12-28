@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -32,7 +31,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -123,8 +121,7 @@ fun IngredientForm(
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Go),
         keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
         label = { Text("name") },
-        enabled = true,
-        singleLine = true
+        enabled = true
     )
     Row(modifier = Modifier.padding(10.dp, 0.dp), verticalAlignment = Alignment.CenterVertically) {
         Icon(
@@ -143,7 +140,6 @@ fun IngredientForm(
             keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
             label = { Text(text = "kcal") },
             enabled = true,
-            singleLine = true,
             colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
         )
         Box(
@@ -169,7 +165,6 @@ fun IngredientForm(
             keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
             label = { Text("proteins") },
             enabled = true,
-            singleLine = true,
             colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
         )
         Icon(
@@ -188,7 +183,6 @@ fun IngredientForm(
             keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
             label = { Text("carbs") },
             enabled = true,
-            singleLine = true,
             colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
         )
         Icon(
@@ -207,7 +201,6 @@ fun IngredientForm(
             keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
             label = { Text("fats") },
             enabled = true,
-            singleLine = true,
             colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
         )
     }
@@ -229,7 +222,6 @@ fun IngredientForm(
             keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
             label = { Text(text = "PUFA") },
             enabled = true,
-            singleLine = true,
             colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
         )
         Icon(
@@ -248,7 +240,6 @@ fun IngredientForm(
             keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
             label = { Text("soil") },
             enabled = true,
-            singleLine = true,
             colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
         )
         Icon(
@@ -267,7 +258,6 @@ fun IngredientForm(
             keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
             label = { Text("fiber") },
             enabled = true,
-            singleLine = true,
             colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
         )
     }

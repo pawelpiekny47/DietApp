@@ -75,8 +75,7 @@ fun DayView(
             keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
             onValueChange = { dayViewModel.updateDayName(it) },
             label = { Text("name") },
-            enabled = true,
-            singleLine = true
+            enabled = true
         )
         DishList(Modifier.weight(4F), dayViewModel, onAddIconClick)
         Box(
@@ -235,7 +234,6 @@ fun DishList(
                                             enabled = true,
                                             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Go),
                                             keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
-                                            singleLine = true,
                                         )
                                         Text(
                                             text = " g",

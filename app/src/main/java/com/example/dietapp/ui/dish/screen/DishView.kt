@@ -48,9 +48,7 @@ import com.example.dietapp.R
 import com.example.dietapp.data.FoodCategory
 import com.example.dietapp.ui.common.MacroDetailsUnderIngredient
 import com.example.dietapp.ui.common.MacroDetailsUnderIngredientXAmount
-import com.example.dietapp.ui.dietsettings.viewmodel.DietSettingsViewModel
 import com.example.dietapp.ui.dish.viewmodel.DishViewModel
-import com.example.dietapp.ui.mainscreen.viewmodel.MainScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -72,10 +70,9 @@ fun DishView(
                 value = dishViewModel.dishWithIngredientsUiState.dishWithIngredientsDetails.dishDetails.name,
                 onValueChange = { dishViewModel.updateDishName(it) },
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Go),
-                keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
+                keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus() }),
                 label = { Text("name") },
                 enabled = true,
-                singleLine = true,
                 colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
 
             )
@@ -195,9 +192,11 @@ fun IngredientList(
                             },
                             enabled = true,
                             maxLines = 1,
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal,imeAction = ImeAction.Go),
-                            keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
-                            singleLine = true
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Decimal,
+                                imeAction = ImeAction.Go
+                            ),
+                            keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus() })
                         )
                         Text(
                             text = " g",

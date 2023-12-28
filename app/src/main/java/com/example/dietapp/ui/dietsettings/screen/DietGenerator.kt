@@ -1,10 +1,8 @@
 package com.example.dietapp.ui.dietsettings.screen
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -74,7 +72,6 @@ fun DietGeneratorFields() {
                 value = "1500",
                 onValueChange = { },
                 enabled = true,
-                singleLine = true,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Go),
                 keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
                 modifier = Modifier.width(IntrinsicSize.Min).height(IntrinsicSize.Min)
@@ -86,14 +83,14 @@ fun DietGeneratorFields() {
                     value = "text",
                     visualTransformation = VisualTransformation.None,
                     innerTextField = it,
-                    singleLine = true,
                     enabled = true,
                     interactionSource = interactionSource,
                     // keep vertical paddings but change the horizontal
                     contentPadding = TextFieldDefaults.textFieldWithoutLabelPadding(
                         start = 8.dp, end = 8.dp, bottom = 2.dp
                     ),
-                    colors = outlinedTextFieldColors()
+                    colors = outlinedTextFieldColors(),
+                    singleLine = false,
                 )
             }
 
@@ -104,7 +101,6 @@ fun DietGeneratorFields() {
                 keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
                 label = { Text("weight") },
                 enabled = true,
-                singleLine = true,
                 colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
             )
         }
@@ -115,7 +111,6 @@ fun DietGeneratorFields() {
             keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
             label = { Text("protein g/kg") },
             enabled = true,
-            singleLine = true,
             colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
         )
         Row(

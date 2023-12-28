@@ -37,7 +37,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -199,7 +198,6 @@ fun FilterBar(mainScreenViewModel: MainScreenViewModel) {
             keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
             label = { Text("filter") },
             enabled = true,
-            singleLine = true,
             colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
         )
     }

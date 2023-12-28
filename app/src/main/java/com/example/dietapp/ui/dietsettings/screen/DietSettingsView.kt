@@ -96,7 +96,6 @@ fun DietSettingsForm(
                     enabled = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal,imeAction = ImeAction.Go),
                     keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
-                    singleLine = true,
                     colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
                 )
             }
@@ -126,7 +125,6 @@ fun DietSettingsForm(
                     enabled = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal,imeAction = ImeAction.Go),
                     keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
-                    singleLine = true,
                     colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
                 )
             }
@@ -149,7 +147,6 @@ fun DietSettingsForm(
                     enabled = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal,imeAction = ImeAction.Go),
                     keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
-                    singleLine = true,
                     colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
                 )
             }
@@ -172,7 +169,6 @@ fun DietSettingsForm(
                     enabled = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal,imeAction = ImeAction.Go),
                     keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
-                    singleLine = true,
                     colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
                 )
             }
@@ -201,7 +197,6 @@ fun DietSettingsForm(
                     enabled = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal,imeAction = ImeAction.Go),
                     keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
-                    singleLine = true,
                     colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
                 )
             }
@@ -224,7 +219,6 @@ fun DietSettingsForm(
                     enabled = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal,imeAction = ImeAction.Go),
                     keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
-                    singleLine = true,
                     colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
                 )
             }
@@ -247,7 +241,6 @@ fun DietSettingsForm(
                     enabled = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal,imeAction = ImeAction.Go),
                     keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
-                    singleLine = true,
                     colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
                 )
             }
@@ -277,7 +270,6 @@ fun DietSettingsForm(
                     enabled = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal,imeAction = ImeAction.Go),
                     keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
-                    singleLine = true,
                     colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
                 )
             }
@@ -300,7 +292,6 @@ fun DietSettingsForm(
                     enabled = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal,imeAction = ImeAction.Go),
                     keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
-                    singleLine = true,
                     colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
                 )
             }
@@ -323,7 +314,6 @@ fun DietSettingsForm(
                     enabled = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal,imeAction = ImeAction.Go),
                     keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
-                    singleLine = true,
                     colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
                 )
             }
@@ -353,7 +343,6 @@ fun DietSettingsForm(
                     enabled = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal,imeAction = ImeAction.Go),
                     keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
-                    singleLine = true,
                     colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
                 )
             }
@@ -376,7 +365,6 @@ fun DietSettingsForm(
                     enabled = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal,imeAction = ImeAction.Go),
                     keyboardActions = KeyboardActions(onGo = { focusManager.clearFocus()}),
-                    singleLine = true,
                     colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
                 )
             }
@@ -397,7 +385,6 @@ fun DietSettingsForm(
                     onValueChange = { onValueChange(dietSettingsDetails.copy(soil = it)) },
                     label = { Text("soil") },
                     enabled = true,
-                    singleLine = true,
                     colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
                 )
             }
