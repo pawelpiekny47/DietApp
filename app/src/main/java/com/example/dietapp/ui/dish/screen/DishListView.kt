@@ -15,8 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -28,7 +26,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -65,8 +62,7 @@ fun DishListView(
                 onItemClick = onItemClick,
                 dish = dish,
                 dietSettingsViewModel = dietSettingsViewModel
-            )
-            Divider(modifier = Modifier.padding(30.dp, 0.dp, 30.dp, 20.dp))
+            ) 
 
         }
     }
@@ -84,13 +80,14 @@ fun DishItem(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(50.dp, 10.dp)
+            .padding(20.dp, 10.dp)
             .animateContentSize()
-            .clickable { onItemClick(dish.toDishWithIngredientDetails()) },
-        colors = CardDefaults.cardColors(containerColor = Color.Transparent)
+            .clickable { onItemClick(dish.toDishWithIngredientDetails()) }
     ) {
 
-        Column {
+        Column(modifier = Modifier
+            .fillMaxWidth()
+            .padding(30.dp, 10.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,

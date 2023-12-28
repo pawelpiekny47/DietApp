@@ -13,7 +13,7 @@ interface DishRepository {
     fun getAllBaseDish(): Flow<List<DishWithIngredients>>
     fun getAllVariantDish(): Flow<List<DishWithIngredients>>
     suspend fun saveDish(dish: Dish): Long
-    suspend fun upsertDish(dish: Dish)
+    suspend fun upsertDish(dish: Dish): Long
     suspend fun deleteDish(dish: Dish)
     suspend fun deleteDish(id: Int)
     suspend fun saveAll(dishIngredientCrossRefList: List<DishIngredientCrossRef>)

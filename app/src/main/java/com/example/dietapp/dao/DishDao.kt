@@ -32,7 +32,7 @@ interface DishDao {
     fun insertDish(dish: Dish): Long
 
     @Upsert
-    fun upsertDish(dish: Dish)
+    fun upsertDish(dish: Dish): Long
 
     @Delete
     fun deleteDish(dish: Dish)

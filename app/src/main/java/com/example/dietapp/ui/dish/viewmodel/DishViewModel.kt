@@ -47,12 +47,6 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel(), D
 
     }
 
-    fun updateDishWithIngredientUiStateForVariantDish(dishDetails: DishWithIngredientsDetails) {
-        dishWithIngredientsUiState =
-            DishWithIngredientsDetailsUiState(dishWithIngredientsDetails = dishDetails)
-
-    }
-
     fun updateDishWithIngredientUiState(ingredientId: Int, amount: String) {
         dishWithIngredientsUiState =
             DishWithIngredientsDetailsUiState(
@@ -217,12 +211,13 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel(), D
     }
 
     override fun returnCurrentKcalForFoodCategory(foodType: FoodCategory): Double {
-        return dishWithIngredientsUiState.dishWithIngredientsDetails.ingredientList.stream().filter {
-            (it.ingredientDetails.foodCategory == foodType)
-        }.map {
-            (it.ingredientDetails.totalKcal.toDoubleEvenWhenEmpty() * (it.amount.toDoubleEvenWhenEmpty()
-                ?: 0.0)) / (100)
-        }
+        return dishWithIngredientsUiState.dishWithIngredientsDetails.ingredientList.stream()
+            .filter {
+                (it.ingredientDetails.foodCategory == foodType)
+            }.map {
+                (it.ingredientDetails.totalKcal.toDoubleEvenWhenEmpty() * (it.amount.toDoubleEvenWhenEmpty()
+                    ?: 0.0)) / (100)
+            }
             .collect(Collectors.summingDouble { d -> d }).toBigDecimal().setScale(
                 2,
                 RoundingMode.HALF_DOWN
@@ -230,9 +225,30 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel(), D
     }
 
     suspend fun saveDishWithIngredients() {
-        dishRepository.upsertDish(dishWithIngredientsUiState.dishWithIngredientsDetails.dishDetails.toDish())
-        dishRepository.saveAll(dishWithIngredientsUiState.toDishIngredientCrossRefList())
-        dishRepository.deleteAll(dishWithIngredientsUiState.dishIngredientCrossRefToDelete)
+        if (dishWithIngredientsUiState.dishWithIngredientsDetails.dishDetails.dishId.toInt() == 0) {
+            val newId =
+                dishRepository.upsertDish(dishWithIngredientsUiState.dishWithIngredientsDetails.dishDetails.toDish())
+
+            updateDishWithIngredientUiState(
+                DishWithIngredientsDetails(
+                    dishWithIngredientsUiState.dishWithIngredientsDetails.dishDetails.copy(
+                        dishId = newId.toString()
+                    ), dishWithIngredientsUiState.dishWithIngredientsDetails.ingredientList
+                )
+            )
+
+            val dishIngredientCrossRefList = mutableListOf<DishIngredientCrossRef>()
+            for (ingredient in dishWithIngredientsUiState.toDishIngredientCrossRefList())
+                DishIngredientCrossRef(newId.toInt(), ingredient.ingredientId, ingredient.amount)
+            dishRepository.saveAll(dishIngredientCrossRefList)
+            dishRepository.deleteAll(dishWithIngredientsUiState.dishIngredientCrossRefToDelete)
+        } else {
+            dishRepository.upsertDish(dishWithIngredientsUiState.dishWithIngredientsDetails.dishDetails.toDish())
+            dishRepository.saveAll(dishWithIngredientsUiState.toDishIngredientCrossRefList())
+            dishRepository.deleteAll(dishWithIngredientsUiState.dishIngredientCrossRefToDelete)
+        }
+
+
     }
 
     suspend fun copyDishWithIngredientsAsVariant(dishWithIngredientsDetails: DishWithIngredientsDetails): Long {
@@ -243,7 +259,8 @@ class DishViewModel(private val dishRepository: DishRepository) : ViewModel(), D
                 )
             )
         )
-        val id = dishRepository.saveDish(dishWithIngredientsUiState.dishWithIngredientsDetails.dishDetails.toDish())
+        val id =
+            dishRepository.saveDish(dishWithIngredientsUiState.dishWithIngredientsDetails.dishDetails.toDish())
         updateDishWithIngredientUiState(
             dishWithIngredientsDetails.copy(
                 dishDetails = dishWithIngredientsDetails.dishDetails.copy(

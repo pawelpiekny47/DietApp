@@ -12,7 +12,7 @@ class DishRepositoryImpl(private val dishDao: DishDao) : DishRepository {
     override fun getDishWithAmount(id: Int): Flow<DishWithIngredients> = dishDao.getDishWithAmount(id)
     override fun getAllVariantDish(): Flow<List<DishWithIngredients>> = dishDao.getAllVariantDish()
     override suspend fun saveDish(dish: Dish): Long = dishDao.insertDish(dish)
-    override suspend fun upsertDish(dish: Dish) = dishDao.upsertDish(dish)
+    override suspend fun upsertDish(dish: Dish): Long = dishDao.upsertDish(dish)
     override suspend fun deleteDish(dish: Dish) = dishDao.deleteDish(dish)
     override suspend fun deleteDish(id: Int) = dishDao.deleteByUserId(id)
 
